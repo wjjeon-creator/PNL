@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6월 대리점 수익성 분석 대시보드</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<style>
+  :root{
+    --bg:#f4f6fa; --panel:#ffffff; --panel2:#eef1f6; --line:#dde3ec;
+    --ink:#1a2333; --mut:#5a6a7f; --dim:#8a97a8;
+    --pos:#1f9d73; --posg:#17805d; --neg:#d1503f; --acc:#d98a1a; --acc2:#2b7fc4;
+    --grad:linear-gradient(135deg,#1f9d73 0%,#2b7fc4 100%);
+    --font:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',-apple-system,sans-serif;
+  }
+  html[data-theme="dark"]{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#2a3441;
+    --ink:#e8edf4; --mut:#8492a6; --dim:#5c6b7f;
+    --pos:#3fb98f; --posg:#2d8f6c; --neg:#e06b5c; --acc:#f2a93b; --acc2:#4a9de0;
+    --grad:linear-gradient(135deg,#3fb98f 0%,#4a9de0 100%);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1240px;margin:0 auto;padding:32px 24px 80px}
+  @media(prefers-reduced-motion:no-preference){.reveal{opacity:0;transform:translateY(12px);animation:up .6s cubic-bezier(.2,.7,.3,1) forwards}}
+  @keyframes up{to{opacity:1;transform:none}}
+
+  header.top{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:32px}
+  .eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);font-weight:700}
+  h1{font-size:30px;font-weight:800;letter-spacing:-.02em;margin-top:6px}
+  h1 .mo{color:var(--acc)}
+  .sub{color:var(--mut);font-size:13px;margin-top:4px}
+  .stamp{text-align:right;color:var(--dim);font-size:12px;line-height:1.7}
+  .stamp b{color:var(--mut);font-weight:600}
+
+  section{margin-bottom:44px}
+  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .sec-num{font-size:12px;font-weight:800;color:var(--bg);background:var(--acc);width:26px;height:26px;border-radius:7px;display:grid;place-items:center;flex-shrink:0}
+  .sec-head h2{font-size:19px;font-weight:750;letter-spacing:-.01em}
+  .sec-num.sub-mark{background:transparent;color:var(--acc2);font-size:16px;width:auto;height:auto}
+  .sec-head .note{color:var(--dim);font-size:12px;margin-left:auto}
+
+  /* KPI */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;position:relative;overflow:hidden}
+  .kpi::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--grad)}
+  .kpi .lab{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);font-weight:600}
+  .kpi .val{font-size:27px;font-weight:800;letter-spacing:-.02em;margin-top:8px}
+  .kpi .val small{font-size:14px;font-weight:600;color:var(--mut);margin-left:2px}
+  .kpi .foot{font-size:12px;color:var(--dim);margin-top:5px}
+  .kpi.good .val{color:var(--pos)}
+  .kpi.warn .val{color:var(--acc)}
+
+  .grid2{display:grid;grid-template-columns:1.35fr 1fr;gap:18px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .card h3{font-size:14px;font-weight:700;margin-bottom:2px}
+  .card .cap{font-size:12px;color:var(--dim);margin-bottom:14px}
+  .chart-box{position:relative;height:300px}
+  .chart-box.tall{height:360px}
+
+  /* insight list */
+  .insights{display:grid;gap:12px}
+  .ins{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px 16px 15px 44px;position:relative}
+  .ins::before{content:attr(data-i);position:absolute;left:14px;top:15px;font-size:12px;font-weight:800;color:var(--acc)}
+  .ins b{color:var(--ink)}
+  .ins .h{font-weight:700;font-size:13.5px;margin-bottom:3px}
+  .ins .d{color:var(--mut);font-size:12.5px}
+  .ins.derive::before{color:var(--acc2)}
+  .tag{display:inline-block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:2px 7px;border-radius:5px;margin-left:6px;vertical-align:middle}
+  .tag.d{background:rgba(74,157,224,.15);color:var(--acc2)}
+  .tag.s{background:rgba(242,169,59,.15);color:var(--acc)}
+
+  /* tables */
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:right;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--mut);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line)}
+  th:first-child,td:first-child{text-align:left}
+  th.c,td.c{text-align:center}
+  td{padding:10px;border-bottom:1px solid var(--line)}
+  tr:last-child td{border-bottom:none}
+  .rank{width:26px;height:26px;border-radius:7px;display:inline-grid;place-items:center;font-weight:800;font-size:12px;background:var(--panel2);color:var(--mut)}
+  tr.top1 .rank{background:var(--acc);color:var(--bg)}
+  tr.top2 .rank{background:#c7913a;color:var(--bg)}
+  tr.top3 .rank{background:#a97b34;color:#fff}
+  .nm{font-weight:650}
+  .pos{color:var(--pos);font-weight:650}
+  .neg{color:var(--neg);font-weight:650}
+  .mono{font-variant-numeric:tabular-nums}
+  .bar-cell{position:relative}
+  .minibar{height:5px;border-radius:3px;background:var(--grad);margin-top:5px}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+  /* funnel */
+  .funnel{display:grid;gap:7px;margin-top:4px}
+  .frow{display:grid;grid-template-columns:150px 1fr 96px;align-items:center;gap:12px}
+  .frow .fl{font-size:12px;color:var(--mut);text-align:right;font-variant-numeric:tabular-nums}
+  .ftrack{background:var(--panel2);border-radius:7px;height:30px;position:relative;overflow:hidden}
+  .ffill{height:100%;border-radius:7px;display:flex;align-items:center;padding-left:12px;font-size:12px;font-weight:700;color:#08110d;transition:width 1s cubic-bezier(.2,.7,.3,1)}
+  .fr{font-size:12px;font-weight:700;text-align:left;font-variant-numeric:tabular-nums}
+  .fr small{color:var(--dim);font-weight:500}
+  .flist{margin-top:16px;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .flist .ft{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);font-weight:700;margin-bottom:8px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{font-size:11.5px;padding:3px 9px;border-radius:20px;background:var(--panel);border:1px solid var(--line);color:var(--mut)}
+  .chip.hi{border-color:var(--posg);color:var(--pos)}
+  .chip.lo{border-color:#5a3430;color:var(--neg)}
+
+  .foot-note{color:var(--dim);font-size:11.5px;margin-top:10px;line-height:1.7}
+
+  /* tabs */
+  .tabbar{display:flex;gap:4px;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:5px;margin-bottom:30px;position:sticky;top:10px;z-index:20;backdrop-filter:blur(6px)}
+  .tab{flex:1;min-width:130px;border:none;background:transparent;color:var(--mut);font-family:var(--font);font-size:13px;font-weight:650;padding:11px 12px;border-radius:8px;cursor:pointer;transition:all .18s;letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+  .tab .tn{font-size:11px;font-weight:800;width:19px;height:19px;border-radius:5px;background:var(--panel2);color:var(--dim);display:grid;place-items:center;transition:all .18s}
+  .tab:hover{color:var(--ink);background:var(--panel2)}
+  .tab.on{background:var(--grad);color:#08110d}
+  .tab.on .tn{background:rgba(8,17,13,.25);color:#08110d}
+  .tabpanel{display:none}
+  .tabpanel.on{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .panel-lead{color:var(--mut);font-size:13px;margin:-6px 0 22px;padding-left:2px}
+  .panel-lead b{color:var(--ink)}
+  .theme-toggle{position:fixed;top:16px;right:18px;z-index:50;display:inline-flex;align-items:center;gap:7px;padding:8px 13px;border-radius:20px;background:var(--panel);border:1px solid var(--line);color:var(--ink);font-family:var(--font);font-size:12.5px;font-weight:650;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:all .18s}
+  .theme-toggle:hover{border-color:var(--acc2);box-shadow:0 3px 14px rgba(0,0,0,.14)}
+  .theme-toggle .tt-ico{font-size:14px;line-height:1}
+  .sec-summary{font-size:13px;line-height:1.65;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--acc2);border-radius:10px;padding:12px 15px;margin:0 0 16px}
+  .sec-summary.warn{border-left-color:var(--acc)}
+  .sec-summary b{font-weight:700}
+  .sec-summary ul{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+  .sec-summary li{position:relative;padding-left:15px;line-height:1.6}
+  .sec-summary li::before{content:'•';position:absolute;left:2px;color:var(--acc2);font-weight:800}
+  .sec-summary.warn li::before{color:var(--acc)}
+  .rawlink{display:inline-flex;align-items:center;gap:8px;margin:-14px 0 22px;padding:8px 14px;border-radius:9px;background:var(--panel);border:1px solid var(--line);color:var(--acc2);font-size:12.5px;font-weight:650;text-decoration:none;transition:all .18s}
+  .rawlink:hover{background:var(--panel2);border-color:var(--acc2)}
+  .rawlink .ext{color:var(--dim);font-weight:800}
+  .callout{display:flex;gap:12px;align-items:flex-start;margin-top:14px;padding:14px 16px;border-radius:11px;background:rgba(242,169,59,.09);border:1px solid rgba(242,169,59,.32)}
+  .callout .co-tag{flex-shrink:0;font-size:11px;font-weight:800;letter-spacing:.05em;color:var(--acc);background:rgba(242,169,59,.18);padding:3px 9px;border-radius:6px;margin-top:1px}
+  .callout .co-body{font-size:12.5px;line-height:1.65;color:var(--ink)}
+  .callout .co-body ul{list-style:none;padding:0;margin:0;display:grid;gap:7px}
+  .callout .co-body li{position:relative;padding-left:15px;line-height:1.6}
+  .callout .co-body li::before{content:'•';position:absolute;left:2px;color:var(--acc);font-weight:800}
+
+  /* P&L breakdown table */
+  .pnl{width:100%;border-collapse:collapse;font-size:13.5px}
+  .pnl td{padding:9px 14px;border-bottom:1px solid var(--line)}
+  .pnl .grp td{font-weight:800;font-size:14px}
+  .pnl .grp.cost td{background:rgba(209,80,63,.12);color:var(--neg)}
+  .pnl .grp.rev td{background:rgba(43,127,196,.12);color:var(--acc2)}
+  .pnl .sub td{font-weight:700;background:rgba(0,0,0,.025)}
+  .pnl .sub td:first-child{padding-left:26px}
+  .pnl .leaf td:first-child{padding-left:42px;color:var(--mut)}
+  .pnl .leaf td.amt{color:var(--ink)}
+  .pnl .kpi-row td{font-weight:800;font-size:14px}
+  .pnl .kpi-row.perf td{background:rgba(31,157,115,.12);color:var(--posg)}
+  .pnl .kpi-row.net td{background:rgba(63,185,143,.10);color:var(--pos)}
+  .pnl .kpi-row.roi td{background:rgba(242,169,59,.12);color:var(--acc)}
+  .pnl .memo td{color:var(--dim);font-size:11.5px;padding-top:5px;padding-bottom:5px;border:none}
+  .pnl .share{color:var(--dim);font-weight:500;font-size:11px;margin-left:7px}
+
+  /* stage funnel (blue vertical funnel) */
+  #stageFunnel svg{display:block}
+  .sf-bname{fill:#fff;font-size:13.5px;font-weight:750;font-family:var(--font)}
+  .sf-bnum{fill:rgba(255,255,255,.95);font-size:13px;font-weight:800;font-family:var(--font)}
+  .sf-bpct{fill:rgba(255,255,255,.85);font-size:11.5px;font-weight:600;font-family:var(--font)}
+  .sf-drop{fill:var(--neg);font-size:11.5px;font-weight:700;font-family:var(--font)}
+
+  /* reward summary box */
+  .reward{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px}
+  .rcard{border-radius:12px;padding:16px 18px;border:1px solid var(--line);position:relative;overflow:hidden}
+  .rcard .rl{font-size:11.5px;font-weight:700;letter-spacing:.04em;color:var(--mut);text-transform:uppercase}
+  .rcard .rv{font-size:24px;font-weight:800;letter-spacing:-.02em;margin-top:6px;font-variant-numeric:tabular-nums}
+  .rcard .rs{font-size:12px;color:var(--dim);margin-top:4px}
+  .rcard.done{background:rgba(63,185,143,.10);border-color:rgba(63,185,143,.35)}
+  .rcard.done .rv{color:var(--pos)}
+  .rcard.todo{background:rgba(242,169,59,.10);border-color:rgba(242,169,59,.38)}
+  .rcard.todo .rv{color:var(--acc)}
+  .rcard.total{background:rgba(74,157,224,.08);border-color:rgba(74,157,224,.3)}
+  .rcard.total .rv{color:var(--acc2)}
+  .rprog{height:9px;border-radius:6px;background:var(--panel2);margin-top:14px;overflow:hidden;display:flex}
+  .rprog .pd{background:var(--pos)}
+  .rprog .pt{background:var(--acc)}
+  .rdeadline{display:inline-flex;align-items:center;gap:7px;margin-top:14px;padding:7px 13px;border-radius:8px;background:rgba(209,80,63,.10);border:1px solid rgba(209,80,63,.35);color:var(--neg);font-size:12.5px;font-weight:700}
+  @media(max-width:720px){.reward{grid-template-columns:1fr}}
+
+  /* action items & notice */
+  .notice-card{background:linear-gradient(135deg,rgba(74,157,224,.10),rgba(63,185,143,.06));border:1px solid rgba(74,157,224,.32);border-radius:14px;padding:22px 24px;margin-top:4px}
+  .notice-card .nc-tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--acc2);background:rgba(74,157,224,.15);padding:3px 10px;border-radius:6px;margin-bottom:12px}
+  .notice-card h4{font-size:21px;font-weight:800;letter-spacing:-.01em;margin-bottom:8px}
+  .notice-card .nc-sub{color:var(--mut);font-size:13px;margin-bottom:16px}
+  .nc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:8px}
+  .nc-stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;text-align:center}
+  .nc-stat .s-v{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .nc-stat .s-l{font-size:11.5px;color:var(--mut);margin-top:4px;font-weight:600}
+  .nc-stat.g .s-v{color:var(--pos)}
+  .nc-stat.b .s-v{color:var(--acc2)}
+  .nc-stat.o .s-v{color:var(--acc)}
+  .nc-msg{background:var(--panel2);border-left:3px solid var(--acc2);border-radius:8px;padding:14px 16px;margin-top:14px;font-size:13px;line-height:1.7}
+  .nc-msg .mt{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);margin-bottom:8px}
+  .action-list{display:grid;gap:10px;margin-top:14px}
+  .act{display:grid;grid-template-columns:26px 1fr;gap:12px;align-items:start;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+  .act .ai{width:26px;height:26px;border-radius:7px;background:var(--acc2);color:var(--bg);font-weight:800;font-size:13px;display:grid;place-items:center}
+  .act .at{font-weight:700;font-size:13.5px;margin-bottom:2px}
+  .act .ad{color:var(--mut);font-size:12.5px}
+  @media(max-width:720px){.nc-stats{grid-template-columns:1fr}}
+
+  /* revenue structure flow */
+  .flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:0;margin-top:6px}
+  .flow-node{border-radius:12px;padding:18px 18px;border:1px solid var(--line);text-align:center;display:flex;flex-direction:column;justify-content:center}
+  .flow-node .fl{font-size:11.5px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
+  .flow-node .fv{font-size:23px;font-weight:800;letter-spacing:-.02em;margin-top:6px;font-variant-numeric:tabular-nums}
+  .flow-node .fs{font-size:11.5px;color:var(--dim);margin-top:4px}
+  .flow-node.in{background:rgba(74,157,224,.10);border-color:rgba(74,157,224,.35)}
+  .flow-node.in .fv{color:var(--acc2)}
+  .flow-node.out{background:rgba(242,169,59,.10);border-color:rgba(242,169,59,.38)}
+  .flow-node.out .fv{color:var(--acc)}
+  .flow-node.net{background:rgba(63,185,143,.12);border-color:rgba(63,185,143,.4)}
+  .flow-node.net .fv{color:var(--pos)}
+  .flow-op{display:grid;place-items:center;font-size:24px;font-weight:800;color:var(--dim);padding:0 14px}
+  @media(max-width:720px){.flow{grid-template-columns:1fr}.flow-op{padding:8px 0;transform:rotate(90deg)}}
+
+  /* dealer promo table */
+  .promo-tbl{width:100%;border-collapse:collapse;font-size:12.5px;min-width:720px}
+  .promo-tbl th{position:sticky;top:0;background:var(--panel);z-index:1}
+  .promo-tbl td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .promo-tbl td:first-child{text-align:left;font-weight:600}
+  .promo-tbl .rbar{display:inline-block;min-width:44px;text-align:right}
+  .promo-tbl .r100{color:var(--pos);font-weight:700}
+  .promo-tbl .rmid{color:var(--acc2)}
+  .promo-tbl .rlow{color:var(--acc)}
+  .promo-tbl .rzero{color:var(--neg)}
+
+  /* question tooltip */
+  .qtip{display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;background:var(--panel2);border:1px solid var(--line);color:var(--mut);font-size:10px;font-weight:800;margin-left:5px;cursor:help;position:relative;vertical-align:middle}
+  .qtip:hover,.qtip:focus{background:var(--acc2);color:var(--bg);border-color:var(--acc2);outline:none}
+  .qbox{visibility:hidden;opacity:0;position:absolute;top:130%;right:-6px;width:220px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:11.5px;font-weight:500;line-height:1.55;color:var(--ink);text-align:left;white-space:normal;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:30;transition:opacity .15s;text-transform:none;letter-spacing:0}
+  .qtip:hover .qbox,.qtip:focus .qbox{visibility:visible;opacity:1}
+  .promo-scroll{max-height:400px;overflow:auto}
+  .rpill{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+  .rpill.r100{background:rgba(63,185,143,.15);color:var(--pos)}
+  .rpill.rmid{background:rgba(74,157,224,.15);color:var(--acc2)}
+  .rpill.rlow{background:rgba(242,169,59,.15);color:var(--acc)}
+  .rpill.rzero{background:rgba(224,107,92,.15);color:var(--neg)}
+
+  @media(max-width:860px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2,.split{grid-template-columns:1fr}.frow{grid-template-columns:110px 1fr 78px}.tab{min-width:calc(50% - 4px)}.tab .tn{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <button id="themeToggle" class="theme-toggle" aria-label="테마 전환"><span class="tt-ico">🌙</span><span class="tt-txt">다크 모드</span></button>
+
+
+  <header class="top reveal">
+    <div>
+      <div class="eyebrow">iShopCARE · 대리점 운영 분석</div>
+      <h1><span class="mo">6월</span> 대리점 수익성 대시보드</h1>
+      <div class="sub">6월 대리점별 상세 · 상생 프로모션 충족률</div>
+    </div>
+    <div class="stamp">
+      단위 <b>원 (VAT 제외)</b><br>
+      집계 대리점 <b>118개사</b> · 활성 <b>39개사</b><br>
+      <span style="color:var(--dim)">*인건비 제외 · CAC 170,000원(4~5월 기준)</span>
+    </div>
+  </header>
+
+  <nav class="tabbar reveal" style="animation-delay:.03s" role="tablist">
+    <button class="tab on" data-tab="t2" role="tab"><span class="tn">1</span>6월 대리점 수익성 요약</button>
+    <button class="tab" data-tab="t5" role="tab"><span class="tn">2</span>6월 대리점별 상세</button>
+    <button class="tab" data-tab="t4" role="tab"><span class="tn">3</span>상생 프로모션 충족률</button>
+  </nav>
+
+  <!-- ===== TAB 1: 6월 대리점별 상세 ===== -->
+  <div class="tabpanel on" id="t2">
+  <p class="panel-lead"><b>6월 전사 수익성</b> 집계입니다. 대리점별 상세는 다음 탭에서 확인하세요. (단위: 원, VAT 제외)</p>
+  <a class="rawlink" href="https://docs.google.com/spreadsheets/d/1AoOYsaucePCEqNh_L_9W8PLkDng_nUyj-FWKmD9Fqx8/edit?gid=1330973851#gid=1330973851" target="_blank" rel="noopener">📄 전체 raw data 보기 (Google Sheets)<span class="ext">↗</span></a>
+  <div class="sec-summary"><ul>
+    <li>6월 실적 <b>411건</b>으로 순이익 <b>37.0M</b>(ROI 27.0%)을 기록. 수익은 <b>토스수수료가 56%</b>(설치·청약·유지)로 절반 이상을 차지합니다.</li>
+    <li>비용은 <b>장비 원가가 98%</b>(무상임대 프론트 + CMS 감가)로 사실상 전부 — 대리점 프로모션 보상금은 6월엔 <b>미지급(0원)</b>이라 비용이 낮게 집계됐고, 현 실적분은 <b>8월 말 지급 예정</b>(토스플레이스 상생 프로모션 정산 기준·정산일과 동일)입니다.</li>
+  </ul></div>
+
+  <!-- 전사 KPI -->
+  <section class="reveal" style="animation-delay:.05s">
+    <div class="sec-head"><span class="sec-num">1</span><h2>6월 수익성 요약</h2><span class="note">요약 시트 · 전사 집계</span></div>
+    <div class="kpis">
+      <div class="kpi"><div class="lab">6월 실적 (승인)</div><div class="val mono">411<small>건</small></div><div class="foot">활성 대리점 39개사</div></div>
+      <div class="kpi good"><div class="lab">순이익</div><div class="val mono">37,010,728</div><div class="foot">총수익 − 총비용</div></div>
+      <div class="kpi warn"><div class="lab">ROI</div><div class="val mono">27.03<small>%</small></div><div class="foot">순이익 ÷ 총비용</div></div>
+      <div class="kpi"><div class="lab">건당 순이익</div><div class="val mono">9.0<small>만원</small></div><div class="foot">37.01M ÷ 411건 = 90,050원</div></div>
+    </div>
+  </section>
+
+  <!-- 6월 수익성 분석 표 -->
+  <section class="reveal" style="animation-delay:.1s">
+    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>6월 수익성 분석 (전체 내역)</h2><span class="note">총비용 · 총수익 항목별 · 요약 시트 기반</span></div>
+    <div class="card" style="overflow-x:auto;padding:6px 8px">
+      <table class="pnl">
+        <tr class="kpi-row perf"><td>실적</td><td class="amt">411 건</td></tr>
+        <tr class="kpi-row net"><td>순이익</td><td class="amt">37,010,728</td></tr>
+        <tr class="kpi-row roi"><td>ROI</td><td class="amt">27.03%</td></tr>
+
+        <tr class="grp cost"><td>총 비용</td><td class="amt">136,944,942</td></tr>
+        <tr class="sub"><td>프로모션</td><td class="amt">700,000</td></tr>
+        <tr class="leaf"><td>프로모션 보상금</td><td class="amt">0</td></tr>
+        <tr class="leaf"><td>마케팅 지원금</td><td class="amt">700,000</td></tr>
+        <tr class="sub"><td>장비 원가</td><td class="amt">134,304,242</td></tr>
+        <tr class="leaf"><td>무상임대 (프론트만)</td><td class="amt">106,860,000</td></tr>
+        <tr class="leaf"><td>CMS 장비 (감가)</td><td class="amt">27,444,242</td></tr>
+        <tr class="sub"><td>물류비</td><td class="amt">1,940,700</td></tr>
+        <tr class="leaf"><td>물류비</td><td class="amt">1,940,700</td></tr>
+
+        <tr class="grp rev"><td>총 수익</td><td class="amt">173,955,670</td></tr>
+        <tr class="sub"><td>토스수수료</td><td class="amt">97,500,490</td></tr>
+        <tr class="leaf"><td>설치수수료</td><td class="amt">77,250,000</td></tr>
+        <tr class="leaf"><td>청약수수료</td><td class="amt">11,850,000</td></tr>
+        <tr class="leaf"><td>유지수수료</td><td class="amt">8,400,490</td></tr>
+        <tr class="sub"><td>토스프로모션</td><td class="amt">50,720,000</td></tr>
+        <tr class="leaf"><td>300대 이상 설치</td><td class="amt">28,720,000</td></tr>
+        <tr class="leaf"><td>포스앱 설치</td><td class="amt">22,000,000</td></tr>
+        <tr class="leaf"><td>상생 프로모션</td><td class="amt">0</td></tr>
+        <tr class="sub"><td>밴피 <span style="color:var(--dim);font-weight:500;font-size:11px">(추정 E)</span></td><td class="amt">7,281,164</td></tr>
+        <tr class="leaf"><td>아샵 밴피 수익 <span style="color:var(--dim);font-size:10px">(추정 E)</span></td><td class="amt">7,281,164</td></tr>
+        <tr class="sub"><td>CMS</td><td class="amt">17,894,016</td></tr>
+        <tr class="leaf"><td>구CMS + NEW CMS</td><td class="amt">17,894,016</td></tr>
+        <tr class="sub"><td>장비판매대금</td><td class="amt">560,000</td></tr>
+        <tr class="leaf"><td>중고장비판매대금</td><td class="amt">560,000</td></tr>
+        <tr class="memo"><td colspan="2">*인건비 확인 불가로 제외 · *아이샵케어 CAC (4~5월 기준) 170,000 · *밴피 수익은 추정치(E)<br>*수익성 분석 미포함: CRM 영업 제휴 수수료(+) 2,258,000원, 뉴비즈 수수료(+) 802,726원</td></tr>
+      </table>
+    </div>
+    <div class="foot-note"><b>실적</b> 411건은 6월 승인건수 합계, <b>순이익</b> 37,010,728원 = 총수익 173,955,670 − 총비용 136,944,942, <b>ROI</b> 27.03% = 순이익 ÷ 총비용. 비용은 <b>장비 원가가 98%</b>(무상임대 프론트 106.9M + CMS 감가 27.4M)를 차지하고, 수익은 <b>토스수수료가 56%</b>(설치·청약·유지)로 가장 큼. 상생 프로모션 수익은 0원.</div>
+  </section>
+
+  <!-- 수익·비용 구성 도넛 -->
+  <section class="reveal" style="animation-delay:.15s">
+    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>수익·비용 구성</h2><span class="note">항목별 비중</span></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>총수익 구성</h3><div class="cap">173.96M · 토스수수료가 절반 이상</div>
+        <div class="chart-box"><canvas id="revMix"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>총비용 구성</h3><div class="cap">136.9M · 무상임대 장비가 비용의 78%</div>
+        <div class="chart-box"><canvas id="costMix"></canvas></div>
+      </div>
+    </div>
+  </section>
+  </div><!-- /t2 -->
+
+  <!-- ===== TAB 2: 6월 대리점별 상세 ===== -->
+  <div class="tabpanel" id="t5">
+  <p class="panel-lead">6월에 <b>설치 실적이 있는 39개 대리점</b>을 수익성(순매출)과 설치 건수 기준으로 분석했습니다. (단위: 원)</p>
+
+  <!-- 핵심 인사이트 -->
+  <section class="reveal" style="animation-delay:.05s">
+    <div class="sec-head"><span class="sec-num">2</span><h2>핵심 인사이트</h2><span class="note">6월 상세 데이터에서 직접 계산 <span class="tag d">분석 도출</span></span></div>
+    <div class="insights">
+      <div class="ins derive" data-i="●"><div class="h">계약 대리점 3곳 중 1곳만 실제 활동 <span class="tag d">도출</span></div><div class="d">계약된 <b>118개사 중 6월에 설치 실적이 있는 곳은 39개사(33%)</b>뿐입니다. 나머지 79개사는 계약만 돼 있고 실적은 0건. <b>계약을 몇 개 맺었는지보다, 실제로 몇 곳이 움직이는지</b>가 더 중요한 지표입니다.</div></div>
+      <div class="ins derive" data-i="●"><div class="h">수익이 소수 대리점에 쏠려 있음 <span class="tag d">도출</span></div><div class="d">활동 중인 39개사가 벌어들인 순매출의 <b>89%를 상위 5개사가 차지</b>합니다(우리편·엠제이통신·현은시스템·미르네프로·비에이치소프트). 특히 <b>우리편 한 곳이 전체의 43%</b>(14.7백만원). 소수에 지나치게 의존하는 구조입니다.</div></div>
+      <div class="ins derive" data-i="●"><div class="h">실적 순위 ≠ 순매출 순위 <span class="tag d">도출</span></div><div class="d">설치 건수 2위인 <b>비에이치소프트(71건)</b>는 토스플레이스 프로모션 충족률이 낮아(39%) 부가 수익이 적고, 장비원가까지 빠지면서 <b>순매출은 5위</b>(1건당 3.6만원)로 내려갑니다. 반대로 <b>미르네프로(19건)</b>는 프로모션을 충실히 충족(포스앱·300대 이상)해 부가 수익이 커, 설치가 적어도 <b>순매출 4위</b>(1건당 18.3만원). <b>토스플레이스 프로모션 충족이 건당 수익을 크게 끌어올립니다.</b></div></div>
+      <div class="ins derive" data-i="●"><div class="h">활동 대리점 10곳 중 4곳이 적자 <span class="tag d">도출</span></div><div class="d">실적이 있는 39개사 중 <b>15개사(38%)가 적자</b>입니다. 대부분 장비는 깔았으나 <b>설치·청약 조건을 충족하지 못해</b>, 돌려받을 설치·청약 수수료(건당 약 23만원)를 회수하지 못한 탓입니다.</div></div>
+    </div>
+  </section>
+
+  <!-- 순매출 상위 -->
+  <section class="reveal" style="animation-delay:.1s">
+    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>수익성 상위 대리점</h2><span class="note">순매출 상위 10개사</span></div>
+    <div class="sec-summary"><ul>
+      <li><b>설치수수료 + 토스플레이스 프로모션(포스앱·300대 이상) 수익을 함께 크게</b> 확보한 곳들입니다.</li>
+      <li>즉 <b>설치를 많이 하면서 프로모션 조건까지 충족</b>해, 건당 부가 수익을 얹은 대리점이 순매출 상위를 차지합니다.</li>
+    </ul></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>순매출 상위 대리점</h3><div class="cap">순매출 기준 · 원</div>
+        <div class="chart-box tall"><canvas id="juneNet"></canvas></div>
+      </div>
+      <div class="card" style="overflow-x:auto">
+        <h3>실적 대비 순매출 효율</h3><div class="cap">건수·순매출·건당</div>
+        <table id="juneTbl"><thead><tr><th>대리점</th><th class="c">실적</th><th>순매출</th><th>건당</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+    <div class="foot-note">* <b>순매출</b> = 대리점이 벌어들인 수익에서 장비원가(프론트 장비 포함) 등 원가를 뺀 실제 손익입니다. 활동 중인 39개사의 순매출 합계는 <b>34.3백만원</b>.</div>
+  </section>
+
+  <!-- 순매출 하위(적자) -->
+  <section class="reveal" style="animation-delay:.1s">
+    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>수익성 하위 대리점 (적자)</h2><span class="note">순매출 마이너스 · 하위 8개사</span></div>
+    <div class="sec-summary warn"><b>프론트 설치 수 대비 설치수수료 20만원·청약수수료 3만원 회수가 제대로 이루어지지 않고 있음.</b> 이로 인한 <b>장비 원가 부담 ↑</b></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>순매출 적자 대리점</h3><div class="cap">순매출 마이너스 · 원</div>
+        <div class="chart-box tall"><canvas id="juneNeg"></canvas></div>
+      </div>
+      <div class="card" style="overflow-x:auto">
+        <h3>적자 대리점 상세</h3><div class="cap">실적·수익·순매출</div>
+        <table id="negTbl"><thead><tr><th>대리점</th><th class="c">실적</th><th>수익</th><th>순매출</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+    <div class="foot-note">* 활동 중인 39개사 중 <b>15개사가 적자</b>입니다. 대부분 장비는 깔았으나 <b>설치·청약 조건을 충족하지 못해 돌려받을 수수료(건당 약 23만원)를 회수하지 못한</b> 경우입니다. 뱅크랜드·동아·나이스포스처럼 설치수수료가 0원인 곳이 대표적. 단 <b>지앤비시스템(14건)</b>은 설치가 적지 않은데도 일부만 조건을 채워 적자라, 별도 점검이 필요합니다.</div>
+  </section>
+
+  <!-- 실적 vs 순매출 산점도 -->
+  <section class="reveal" style="animation-delay:.15s">
+    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>실적 대비 순매출 분포</h2><span class="note">활성 39개사 · 실적(X) · 순매출(Y)</span></div>
+    <div class="card">
+      <div class="chart-box tall"><canvas id="scatterChart"></canvas></div>
+      <div class="foot-note" style="margin-top:8px">* 가로축은 설치 건수, 세로축은 순매출입니다. <b>0선 아래는 적자</b>. 우리편처럼 오른쪽 위(많이 팔고 많이 남김)가 이상적이지만, <b>설치 건수가 비슷해도 남는 돈은 크게 다릅니다</b> — 예: 둘 다 14건인데 케이씨정보통신은 +1.4백만원, 지앤비시스템은 −0.7백만원. <b>설치량만 보고 수익을 예측할 수 없다</b>는 뜻입니다.</div>
+    </div>
+  </section>
+
+  </div><!-- /t5 -->
+
+  <!-- ===== TAB 4: 상생 프로모션 충족률 ===== -->
+  <div class="tabpanel" id="t4">
+  <p class="panel-lead">상생 프로모션 <b>조건 달성 퍼널</b>과 대리점별 충족 현황, 그리고 구간별 분포입니다.</p>
+
+  <!-- 조건 달성 퍼널 -->
+  <section class="reveal" style="animation-delay:.05s">
+    <div class="sec-head"><span class="sec-num">2</span><h2>조건 달성 퍼널</h2><span class="note">설치 → 청약 → 결제 → 조건 달성</span></div>
+    <div class="card">
+      <div id="stageFunnel" style="width:100%;overflow-x:auto"></div>
+
+      <div class="reward" style="grid-template-columns:1fr 1fr">
+        <div class="rcard done">
+          <div class="rl">확보 (조건 달성)</div>
+          <div class="rv">59,100,000원</div>
+          <div class="rs">394건 × 15만원 · 달성률 65.7%</div>
+        </div>
+        <div class="rcard todo">
+          <div class="rl">미충족 (관리 필요)</div>
+          <div class="rv">30,900,000원</div>
+          <div class="rs">206건 × 15만원 · 미달 34.3%</div>
+        </div>
+      </div>
+      <div class="rprog"><div class="pd" style="width:65.7%"></div><div class="pt" style="width:34.3%"></div></div>
+      <div class="rdeadline">⏳ 마감 <b>7/31</b>까지 — 미충족 206건 충족 시 <b>+30,900,000원</b> 추가 확보 가능</div>
+
+      <div class="foot-note" style="margin-top:14px">* 상생 프로모션은 <b>조건 달성 건당 15만원</b> 보상. 현재 <b>394건 충족으로 59,100,000원 확보</b>, 나머지 <b>206건은 미충족(30,900,000원)</b> 상태입니다. 이 206건은 <b>7월 31일까지 조건(토스페이 청약 + 통합결제창 5건 이상)을 충족</b>해야 보상 확보가 가능하므로, 마감 전 집중 관리가 필요합니다. 청약(539) 대비 결제(431) 구간에서 108건이 이탈한 만큼, <b>결제 5건 미달 대리점의 결제 유도</b>가 핵심 레버입니다.</div>
+    </div>
+  </section>
+
+  <!-- 대리점별 충족 현황 표 -->
+  <section class="reveal" style="animation-delay:.1s">
+    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>대리점별 충족 현황</h2><span class="note">44개사 · 충족률 내림차순</span></div>
+    <div class="card" style="padding:8px">
+      <div class="promo-scroll">
+        <table class="promo-tbl">
+          <thead><tr>
+            <th style="text-align:left">대리점</th>
+            <th>설치수</th><th>토스페이 청약</th><th>통합결제 5건↑</th><th>조건 달성</th><th>충족률</th>
+            <th>최대 보상금<span class="qtip" tabindex="0">?<span class="qbox">대리점에서 조건을 모두 달성할 경우 지급되는 최대 금액이에요. 추정치(E)입니다.</span></span></th>
+          </tr></thead>
+          <tbody id="promoBody"></tbody>
+          <tfoot><tr style="border-top:2px solid var(--line);font-weight:800">
+            <td style="text-align:left">총합계</td>
+            <td>600</td><td>539</td><td>431</td><td>394</td>
+            <td><span class="rpill rmid">65.7%</span></td>
+            <td>26,840,000</td>
+          </tr></tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 수익 구조 요약 -->
+  <section class="reveal" style="animation-delay:.1s">
+    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>프로모션 수익 구조</h2><span class="note">최대 가정 · 설치 600건 전량 달성 시</span></div>
+    <div class="card">
+      <div class="flow">
+        <div class="flow-node in">
+          <div class="fl">아이샵케어 수령</div>
+          <div class="fv">90,000,000원</div>
+          <div class="fs">600건 × 15만원 (플레이스 프로모션)</div>
+        </div>
+        <div class="flow-op">−</div>
+        <div class="flow-node out">
+          <div class="fl">대리점 지급 <span style="color:var(--dim);font-weight:600">(추정 E)</span></div>
+          <div class="fv">26,840,000원</div>
+          <div class="fs">구간별 차등 보상금 (수령액의 약 30%)</div>
+        </div>
+        <div class="flow-op">=</div>
+        <div class="flow-node net">
+          <div class="fl">아이샵케어 순수익</div>
+          <div class="fv">63,160,000원</div>
+          <div class="fs">최대 달성 시</div>
+        </div>
+      </div>
+      <div class="foot-note" style="margin-top:14px">* 아이샵케어는 플레이스 프로모션 조건 달성 시 <b>건당 15만원</b>을 받고, 이 중 일부를 대리점 프로모션 보상금으로 지급합니다. <b>설치된 600건을 대리점이 모두 조건 달성했다고 가정</b>하면 아이샵케어가 <b>9,000만원</b>을 수령하고, 대리점 구분·설치 구간별 차등 정책에 따라 <b>2,684만원(추정치 E)</b>이 대리점에 지급되어, <b>순수익 6,316만원</b>이 남습니다. 프로모션 비용은 <b>아직 미지급</b> 상태입니다.</div>
+      <div class="foot-note" style="margin-top:6px">※ 현재 실제 조건 달성분은 <b>394건 = 아이샵 수령 5,910만원</b>이며, 나머지 <b>206건(잠재 3,090만원)</b>이 7/31까지 충족되어야 위 최대 수치에 도달합니다.</div>
+    </div>
+  </section>
+
+  <!-- 액션 아이템: 대리점 중간 공지 -->
+  <section class="reveal" style="animation-delay:.12s">
+    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>방향성 · 액션 아이템</h2><span class="note">대리점 대상 중간 공지 제안</span></div>
+    <div class="notice-card">
+      <span class="nc-tag">중간 공지 필요</span>
+      <h4>대리점에 중간 공지 필요 <span style="color:var(--acc2)">(대리점별 현황 공유)</span></h4>
+      <div class="nc-sub">보상금 조건은 <b>토스플레이스 조건(토스페이 청약 + 통합결제 5건 이상)</b>을 그대로 따릅니다. 마감(7/31) 전 대리점별 현황을 공지해 남은 <b>206건(30,900,000원)</b> 충족을 유도해야 합니다.</div>
+      <div class="action-list">
+        <div class="act"><div class="ai">1</div><div><div class="at">대리점별 현황 개별 공지</div><div class="ad">인정 건수·충족 건수·달성률을 <b>대리점별 충족 현황 표</b>에서 채워 발송.</div></div></div>
+        <div class="act"><div class="ai">2</div><div><div class="at">'청약 완료 · 결제 미달' 건 우선 관리</div><div class="ad">청약(539)→결제(431) 구간 <b>108건 이탈</b> — 전환이 가장 쉬운 대상.</div></div></div>
+        <div class="act"><div class="ai">3</div><div><div class="at">7/31 마감 리마인드</div><div class="ad">마감 후 미충족 보상(30.9M) 소멸 — 중간·마감 임박 2회 공지 권장.</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 충족률 구간 분포 -->
+  <section class="reveal" style="animation-delay:.15s">
+    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>충족률 구간 분포</h2><span class="note">44개사 · 구간별 분포</span></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>충족률 구간 퍼널</h3><div class="cap">달성 구간별 대리점 수 · 막대 = 대리점 수</div>
+        <div class="funnel" id="funnel"></div>
+      </div>
+      <div class="card">
+        <h3>구간 요약</h3><div class="cap">전체 44개사 분포</div>
+        <div class="chart-box" style="height:210px"><canvas id="funnelDonut"></canvas></div>
+        <div class="flist">
+          <div class="ft">100% 완전 달성 (14개사)</div>
+          <div class="chips" id="chipsHi"></div>
+        </div>
+        <div class="flist" style="margin-top:10px">
+          <div class="ft">50% 이하 저조 (18개사)</div>
+          <div class="chips" id="chipsLo"></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot-note">* 완전 달성 그룹(14곳)과 30% 미만 그룹(14곳)으로 <b>양극화</b>. 중간 구간(40~90%)은 얇음 → 프로모션 설계가 "전부 또는 전무"로 작동. 실적 상위사의 낮은 참여율은 별도 인센티브 검토 필요.</div>
+  </section>
+  </div><!-- /t4 -->
+
+</div>
+
+<script>
+const won = v => v>=1e8 ? (v/1e8).toFixed(2)+'억' : v>=1e4 ? Math.round(v/1e4).toLocaleString()+'만' : Math.round(v).toLocaleString();
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const C=new Proxy({},{get:(_,k)=>{const map={ink:'--ink',mut:'--mut',line:'--line',pos:'--pos',neg:'--neg',acc:'--acc',acc2:'--acc2'};return cssv(map[k]);}});
+const _charts=[];
+Chart.defaults.font.family="'Pretendard','Malgun Gothic',sans-serif";
+Chart.defaults.color=C.mut;
+Chart.register(ChartDataLabels);
+Chart.defaults.set('plugins.datalabels',{display:false});
+const pct = (v,arr)=>Math.round(v/arr.reduce((a,b)=>a+b,0)*100);
+
+/* revenue mix */
+_charts.push(new Chart(revMix,{type:'doughnut',data:{labels:['토스수수료(설치·청약·유지)','토스프로모션(300대·포스앱)','CMS','밴피(추정)','장비판매대금'],
+ datasets:[{data:[97500490,50720000,17894015,7281164,560000],backgroundColor:['#3fb98f','#4a9de0','#f2a93b','#8492a6','#5c6b7f'],borderColor:"#ffffff",borderWidth:2}]},
+ options:{cutout:'58%',layout:{padding:6},plugins:{legend:{position:'right',labels:{boxWidth:11,padding:10,font:{size:11}}},
+ tooltip:{callbacks:{label:c=>' '+c.label+': '+won(c.raw)+'원'}},
+ datalabels:{display:c=>c.dataset.data[c.dataIndex]/c.dataset.data.reduce((a,b)=>a+b)>0.04,color:'#08110d',font:{weight:800,size:12},
+  formatter:(v,c)=>pct(v,c.dataset.data)+'%'}}}}));
+
+/* cost mix */
+_charts.push(new Chart(costMix,{type:'doughnut',data:{labels:['무상임대 장비(프론트)','CMS 장비 감가','물류비','프로모션·마케팅'],
+ datasets:[{data:[106860000,27444241,1940700,700000],backgroundColor:['#e06b5c','#c7913a','#4a9de0','#5c6b7f'],borderColor:"#ffffff",borderWidth:2}]},
+ options:{cutout:'58%',layout:{padding:6},plugins:{legend:{position:'right',labels:{boxWidth:11,padding:10,font:{size:11}}},
+ tooltip:{callbacks:{label:c=>' '+c.label+': '+won(c.raw)+'원'}},
+ datalabels:{display:c=>c.dataset.data[c.dataIndex]/c.dataset.data.reduce((a,b)=>a+b)>0.04,color:'#08110d',font:{weight:800,size:12},
+  formatter:(v,c)=>pct(v,c.dataset.data)+'%'}}}}));
+
+/* June per dealer */
+const june=[{name:'우리편',perf:92,net:14741237},{name:'엠제이통신',perf:46,net:5867081},{name:'현은시스템',perf:32,net:3810790},{name:'미르네프로',perf:19,net:3472351},{name:'비에이치소프트',perf:71,net:2580795},{name:'제이투시스템',perf:1,net:1939803},{name:'케이씨정보통신',perf:14,net:1427163},{name:'샘랩',perf:4,net:1175144},{name:'푸딘코',perf:1,net:923035},{name:'케이알정보통신',perf:11,net:789210}];
+june.forEach(d=>d.per=Math.round(d.net/d.perf));
+_charts.push(new Chart(juneNet,{type:'bar',data:{labels:june.map(d=>d.name),datasets:[
+ {label:'순매출',data:june.map(d=>d.net),backgroundColor:'#1f9d73',borderRadius:5,barPercentage:.72}]},
+ options:{indexAxis:'y',layout:{padding:{right:52}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' 순매출 '+won(c.raw)+'원'}},
+ datalabels:{display:true,anchor:'end',align:'end',offset:2,color:C.pos,font:{weight:700,size:11},formatter:v=>won(v)}},
+ scales:{x:{grid:{color:()=>C.line},ticks:{callback:v=>won(v)}},y:{grid:{display:false},ticks:{font:{size:11.5}}}}}}));
+
+const jb=document.querySelector('#juneTbl tbody');const mx=Math.max(...june.map(d=>d.net));
+june.forEach((d,i)=>{jb.insertAdjacentHTML('beforeend',
+ `<tr class="${i<3?'top'+(i+1):''}"><td><span class="rank">${i+1}</span> <span class="nm">${d.name}</span></td>
+  <td class="c mono">${d.perf}</td>
+  <td class="mono bar-cell pos">${won(d.net)}<div class="minibar" style="width:${d.net/mx*100}%"></div></td>
+  <td class="mono">${d.per.toLocaleString()}</td></tr>`)});
+
+/* 적자 대리점 (하위 8) */
+const juneNegData=[{name:'어시스트핏',perf:5,rev:790588,net:-903097},{name:'지앤비시스템',perf:14,rev:3092905,net:-660068},{name:'뱅크랜드',perf:2,rev:11885,net:-601275},{name:'소프트커머스',perf:2,rev:142965,net:-559306},{name:'동아정보통신',perf:2,rev:575,net:-545075},{name:'포스트렌드',perf:2,rev:127995,net:-494050},{name:'나이스포스',perf:1,rev:15130,net:-375260},{name:'페이플레이 안양센터',perf:1,rev:374605,net:-357528}];
+_charts.push(new Chart(juneNeg,{type:'bar',data:{labels:juneNegData.map(d=>d.name),datasets:[
+ {label:'순매출',data:juneNegData.map(d=>d.net),backgroundColor:'#d1503f',borderRadius:5,barPercentage:.72}]},
+ options:{indexAxis:'y',layout:{padding:{left:52}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' 순매출 '+won(c.raw)+'원'}},
+ datalabels:{display:true,anchor:'start',align:'start',offset:2,color:C.neg,font:{weight:700,size:11},formatter:v=>'−'+won(Math.abs(v))}},
+ scales:{x:{grid:{color:()=>C.line},ticks:{callback:v=>won(v)}},y:{grid:{display:false},ticks:{font:{size:11.5}}}}}}));
+const ngb=document.querySelector('#negTbl tbody');
+juneNegData.forEach((d,i)=>ngb.insertAdjacentHTML('beforeend',
+ `<tr><td><span class="nm">${d.name}</span></td>
+  <td class="c mono">${d.perf}</td><td class="mono">${won(d.rev)}</td>
+  <td class="mono neg">−${won(Math.abs(d.net))}</td></tr>`));
+
+/* 실적 vs 순매출 산점도 */
+const scat=[{"n":"비에이치소프트","p":71,"net":2580795},{"n":"미르네프로","p":19,"net":3472351},{"n":"우리편","p":92,"net":14741237},{"n":"엠제이통신","p":46,"net":5867081},{"n":"제이투시스템","p":1,"net":1939803},{"n":"현은시스템","p":32,"net":3810790},{"n":"샘랩","p":4,"net":1175144},{"n":"케이씨정보통신","p":14,"net":1427163},{"n":"전라정보통신","p":1,"net":406220},{"n":"코스모스컴퍼니","p":38,"net":395821},{"n":"스피드","p":4,"net":49920},{"n":"화인정보통신","p":5,"net":-43175},{"n":"케이알정보통신","p":11,"net":789210},{"n":"그린정보통신","p":3,"net":135114},{"n":"페이플레이 안양센터","p":1,"net":-357528},{"n":"페이닷","p":5,"net":417331},{"n":"현페이먼트","p":2,"net":-45801},{"n":"뱅크랜드","p":2,"net":-601275},{"n":"어시스트핏","p":5,"net":-903097},{"n":"원정보통신","p":5,"net":368656},{"n":"나나정보통신","p":1,"net":139691},{"n":"신우정보통신","p":3,"net":70674},{"n":"트윈스정보통신","p":1,"net":33318},{"n":"나이스포스","p":1,"net":-375260},{"n":"연합정보통신","p":1,"net":-75060},{"n":"미르컴퍼니","p":1,"net":224525},{"n":"푸딘코","p":1,"net":923035},{"n":"포스트렌드","p":2,"net":-494050},{"n":"우성포스","p":2,"net":-217944},{"n":"씨앤씨일신","p":1,"net":-250065},{"n":"와이즈웹정보통신","p":1,"net":7646},{"n":"디에스이엔씨","p":8,"net":-166959},{"n":"미래통신","p":1,"net":227085},{"n":"동아정보통신","p":2,"net":-545075},{"n":"스타정보","p":1,"net":553346},{"n":"지앤비시스템","p":14,"net":-660068},{"n":"소프트커머스","p":2,"net":-559306},{"n":"에스정보","p":4,"net":-325155},{"n":"토브제이","p":3,"net":142125}];
+_charts.push(new Chart(scatterChart,{type:'scatter',data:{datasets:[
+ {label:'흑자',data:scat.filter(d=>d.net>=0).map(d=>({x:d.p,y:d.net,n:d.n})),backgroundColor:'#1f9d73',pointRadius:5,pointHoverRadius:7},
+ {label:'적자',data:scat.filter(d=>d.net<0).map(d=>({x:d.p,y:d.net,n:d.n})),backgroundColor:'#d1503f',pointRadius:5,pointHoverRadius:7}
+]},options:{plugins:{legend:{position:'top',labels:{boxWidth:11,font:{size:11}}},
+ datalabels:{display:false},
+ tooltip:{callbacks:{label:c=>' '+c.raw.n+' · 실적 '+c.raw.x+'건 · 순매출 '+won(c.raw.y)+'원'}}},
+ scales:{x:{title:{display:true,text:'6월 실적(건)',color:()=>C.mut,font:{size:11}},grid:{color:()=>C.line},ticks:{color:()=>C.mut}},
+  y:{title:{display:true,text:'순매출(원)',color:()=>C.mut,font:{size:11}},grid:{color:c=>c.tick.value===0?C.mut:C.line},ticks:{callback:v=>won(v),color:()=>C.mut}}}}}));
+
+/* funnel */
+const fun=[['100% 달성',14],['90~100%',1],['80~90%',4],['70~80%',3],['60~70%',4],['50~60%',2],['40~50%',2],['30~40%',4],['20~30%',0],['10~20%',2],['0~10%',8]];
+const total=44,fmax=14;
+const gcol=v=>{const p=parseInt(v);return p>=80?'#3fb98f':p>=50?'#4a9de0':p>=30?'#f2a93b':'#e06b5c'};
+const fu=document.getElementById('funnel');
+fun.forEach(([lab,n])=>{const w=n/fmax*100;
+ fu.insertAdjacentHTML('beforeend',
+ `<div class="frow"><div class="fl">${lab}</div>
+  <div class="ftrack"><div class="ffill" style="width:0;background:${gcol(lab)}" data-w="${w}">${n||''}</div></div>
+  <div class="fr">${n}<small> / 44</small></div></div>`)});
+setTimeout(()=>document.querySelectorAll('.ffill').forEach(e=>e.style.width=e.dataset.w+'%'),100);
+
+/* funnel donut grouped */
+_charts.push(new Chart(funnelDonut,{type:'doughnut',data:{labels:['80% 이상 (달성권)','50~80% (중간)','30~50% (미흡)','30% 미만 (저조)'],
+ datasets:[{data:[19,9,4,12],backgroundColor:['#3fb98f','#4a9de0','#f2a93b','#e06b5c'],borderColor:"#ffffff",borderWidth:2}]},
+ options:{cutout:'55%',layout:{padding:6},plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:10,font:{size:10.5}}},
+ tooltip:{callbacks:{label:c=>' '+c.label+': '+c.raw+'개사'}},
+ datalabels:{display:c=>c.dataset.data[c.dataIndex]>0,color:'#08110d',font:{weight:800,size:12},formatter:v=>v}}}}));
+
+const hi='나나정보통신,미래통신,베라 영남총판,스타정보,와이즈웹정보통신,전라정보통신,제이엔디아이정보통신,케이씨정보통신,케이알정보통신,토브제이,트윈스정보통신,페이플레이 안양센터,푸딘코,현페이먼트'.split(',');
+const lo='비에이치소프트,소프트커머스,스피드,화인정보통신,샘랩,지앤비시스템,이레페이,포스트렌드,그린정보통신,어시스트핏,경인포스시스템,나이스포스,동아정보통신,미르컴퍼니,뱅크랜드,씨앤씨일신,오토뱅킹서비스,제이투시스템'.split(',');
+document.getElementById('chipsHi').innerHTML=hi.map(x=>`<span class="chip hi">${x}</span>`).join('');
+document.getElementById('chipsLo').innerHTML=lo.map(x=>`<span class="chip lo">${x}</span>`).join('');
+
+/* stage funnel: 설치 → 청약 → 결제5+ → 조건달성 (column + slope style) */
+const stages=[
+ {name:'설치수',num:600,pct:100},
+ {name:'토스페이 청약',num:539,pct:89.83},
+ {name:'통합결제 5건↑',num:431,pct:79.96},
+ {name:'조건 달성',num:394,pct:65.67}];
+function drawStageFunnel(){
+  const host=document.getElementById('stageFunnel');
+  const W=Math.max(host.clientWidth||760,640), H=300;
+  const padX=12, padT=44, padB=40;
+  const n=stages.length;
+  const maxV=stages[0].num;
+  const bandW=(W-padX*2)/n;              // each stage occupies a vertical band, left→right
+  const cy=(padT+(H-padB))/2;            // vertical center
+  const maxHalf=(H-padT-padB)/2;         // max half-height at left
+  const halfOf=v=>v/maxV*maxHalf;
+  const blues=['#5aa9e6','#4a97d8','#3a82c4','#2b6cae'];
+  let bands='', labels='';
+  for(let i=0;i<n;i++){
+    const leftV=stages[i].num;
+    const rightV = i<n-1 ? stages[i+1].num : stages[i].num*0.72;
+    const xL=padX+i*bandW, xR=xL+bandW-6;
+    const lH=halfOf(leftV), rH=halfOf(rightV);
+    const pts=`${xL},${cy-lH} ${xR},${cy-rH} ${xR},${cy+rH} ${xL},${cy+lH}`;
+    bands+=`<polygon class="sf-band" points="${pts}" fill="${blues[i]}" opacity="0" style="transform-box:fill-box;transform-origin:center;transform:scaleX(.6)"/>`;
+    const midX=(xL+xR)/2;
+    labels+=`<text x="${midX}" y="26" text-anchor="middle" class="sf-bname" data-fade>${stages[i].name}</text>`;
+    labels+=`<text x="${midX}" y="${cy+5}" text-anchor="middle" class="sf-bnum" data-fade>${stages[i].num.toLocaleString()}건</text>`;
+    labels+=`<text x="${midX}" y="${cy+22}" text-anchor="middle" class="sf-bpct" data-fade>${stages[i].pct.toFixed(1)}%</text>`;
+    if(i>0){
+      const drop=stages[i-1].num-stages[i].num;
+      labels+=`<text x="${xL+2}" y="${H-16}" text-anchor="middle" class="sf-drop" data-fade>−${drop}건</text>`;
+    }
+  }
+  host.innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:100%">${bands}${labels}</svg>`;
+}
+function animateStages(){
+  drawStageFunnel();
+  const bands=document.querySelectorAll('#stageFunnel .sf-band');
+  const fades=document.querySelectorAll('#stageFunnel [data-fade]');
+  bands.forEach((b,i)=>{
+    setTimeout(()=>{b.style.transition='opacity .5s ease, transform .6s cubic-bezier(.2,.7,.3,1)';
+      b.style.opacity='1';b.style.transform='scaleX(1)';},60+i*110);});
+  fades.forEach(f=>{f.style.opacity='0';setTimeout(()=>{f.style.transition='opacity .5s ease';f.style.opacity='1';},400);});
+}
+setTimeout(animateStages,150);
+window.addEventListener('resize',()=>{clearTimeout(window._sfR);window._sfR=setTimeout(()=>{if(document.getElementById('t4').classList.contains('on'))animateStages();},200);});
+
+/* dealer promo table */
+const promo=[{"n": "나나정보통신", "i": 1, "t": 1, "p": 1, "a": 1, "r": 100.0, "m": 0}, {"n": "미래통신", "i": 2, "t": 2, "p": 2, "a": 2, "r": 100.0, "m": 0}, {"n": "베라 영남총판", "i": 1, "t": 1, "p": 1, "a": 1, "r": 100.0, "m": 0}, {"n": "트윈스정보통신", "i": 1, "t": 1, "p": 1, "a": 1, "r": 100.0, "m": 0}, {"n": "푸딘코", "i": 2, "t": 2, "p": 2, "a": 2, "r": 100.0, "m": 0}, {"n": "제이엔디아이정보통신", "i": 1, "t": 1, "p": 1, "a": 1, "r": 100.0, "m": 0}, {"n": "케이알정보통신", "i": 11, "t": 11, "p": 11, "a": 11, "r": 100.0, "m": 550000}, {"n": "케이씨정보통신", "i": 20, "t": 20, "p": 20, "a": 20, "r": 100.0, "m": 1400000}, {"n": "토브제이", "i": 3, "t": 3, "p": 3, "a": 3, "r": 100.0, "m": 0}, {"n": "현페이먼트", "i": 4, "t": 4, "p": 4, "a": 4, "r": 100.0, "m": 0}, {"n": "와이즈웹정보통신", "i": 1, "t": 1, "p": 1, "a": 1, "r": 100.0, "m": 0}, {"n": "스타정보", "i": 6, "t": 6, "p": 6, "a": 6, "r": 100.0, "m": 300000}, {"n": "전라정보통신", "i": 1, "t": 1, "p": 1, "a": 1, "r": 100.0, "m": 0}, {"n": "페이플레이 안양센터", "i": 1, "t": 1, "p": 1, "a": 1, "r": 100.0, "m": 0}, {"n": "미르네프로", "i": 31, "t": 30, "p": 29, "a": 28, "r": 90.3, "m": 3100000}, {"n": "코스모스컴퍼니", "i": 42, "t": 41, "p": 36, "a": 35, "r": 83.3, "m": 4200000}, {"n": "현은시스템", "i": 47, "t": 40, "p": 44, "a": 39, "r": 83.0, "m": 4700000}, {"n": "페이닷", "i": 5, "t": 4, "p": 5, "a": 4, "r": 80.0, "m": 250000}, {"n": "신우정보통신", "i": 5, "t": 4, "p": 4, "a": 4, "r": 80.0, "m": 250000}, {"n": "우리편", "i": 142, "t": 142, "p": 107, "a": 107, "r": 75.4, "m": 4260000}, {"n": "우성포스", "i": 4, "t": 3, "p": 3, "a": 3, "r": 75.0, "m": 0}, {"n": "원정보통신", "i": 7, "t": 7, "p": 5, "a": 5, "r": 71.4, "m": 350000}, {"n": "연합정보통신", "i": 3, "t": 2, "p": 3, "a": 2, "r": 66.7, "m": 0}, {"n": "에스정보", "i": 6, "t": 4, "p": 5, "a": 4, "r": 66.7, "m": 300000}, {"n": "엠제이통신", "i": 66, "t": 65, "p": 43, "a": 43, "r": 65.2, "m": 1320000}, {"n": "디에스이엔씨", "i": 8, "t": 8, "p": 5, "a": 5, "r": 62.5, "m": 400000}, {"n": "이레페이", "i": 2, "t": 2, "p": 1, "a": 1, "r": 50.0, "m": 0}, {"n": "포스트렌드", "i": 2, "t": 1, "p": 1, "a": 1, "r": 50.0, "m": 0}, {"n": "지앤비시스템", "i": 15, "t": 14, "p": 7, "a": 7, "r": 46.7, "m": 750000}, {"n": "샘랩", "i": 7, "t": 6, "p": 3, "a": 3, "r": 42.9, "m": 350000}, {"n": "비에이치소프트", "i": 97, "t": 87, "p": 41, "a": 38, "r": 39.2, "m": 1940000}, {"n": "스피드", "i": 6, "t": 5, "p": 3, "a": 2, "r": 33.3, "m": 300000}, {"n": "소프트커머스", "i": 3, "t": 2, "p": 1, "a": 1, "r": 33.3, "m": 0}, {"n": "화인정보통신", "i": 13, "t": 5, "p": 11, "a": 4, "r": 30.8, "m": 650000}, {"n": "어시스트핏", "i": 7, "t": 5, "p": 1, "a": 1, "r": 14.3, "m": 350000}, {"n": "그린정보통신", "i": 16, "t": 3, "p": 14, "a": 2, "r": 12.5, "m": 1120000}, {"n": "미르컴퍼니", "i": 1, "t": 1, "p": 0, "a": 0, "r": 0.0, "m": 0}, {"n": "뱅크랜드", "i": 2, "t": 0, "p": 1, "a": 0, "r": 0.0, "m": 0}, {"n": "동아정보통신", "i": 2, "t": 0, "p": 1, "a": 0, "r": 0.0, "m": 0}, {"n": "나이스포스", "i": 2, "t": 0, "p": 1, "a": 0, "r": 0.0, "m": 0}, {"n": "경인포스시스템", "i": 1, "t": 1, "p": 0, "a": 0, "r": 0.0, "m": 0}, {"n": "씨앤씨일신", "i": 1, "t": 0, "p": 1, "a": 0, "r": 0.0, "m": 0}, {"n": "오토뱅킹서비스", "i": 1, "t": 1, "p": 0, "a": 0, "r": 0.0, "m": 0}, {"n": "제이투시스템", "i": 1, "t": 1, "p": 0, "a": 0, "r": 0.0, "m": 0}];
+const rcls=r=>r>=100?'r100':r>=50?'rmid':r>0?'rlow':'rzero';
+document.getElementById('promoBody').innerHTML=promo.map(d=>
+ `<tr><td>${d.n}</td><td>${d.i}</td><td>${d.t}</td><td>${d.p}</td><td>${d.a}</td>
+  <td><span class="rpill ${rcls(d.r)}">${d.r}%</span></td>
+  <td class="${d.m>0?'':'mono'}" style="${d.m>0?'font-weight:700':'color:var(--dim)'}">${d.m>0?d.m.toLocaleString():'—'}</td></tr>`).join('');
+
+/* tab switching */
+const tabs=document.querySelectorAll('.tab'), panels=document.querySelectorAll('.tabpanel');
+function animateFunnel(){document.querySelectorAll('#t4 .ffill').forEach(e=>{e.style.width='0';requestAnimationFrame(()=>requestAnimationFrame(()=>e.style.width=e.dataset.w+'%'))})}
+tabs.forEach(t=>t.addEventListener('click',()=>{
+  const id=t.dataset.tab;
+  tabs.forEach(x=>x.classList.toggle('on',x===t));
+  panels.forEach(p=>p.classList.toggle('on',p.id===id));
+  window.dispatchEvent(new Event('resize'));
+  if(id==='t4'){animateFunnel();animateStages();}
+  document.querySelector('.wrap').scrollIntoView({behavior:'smooth',block:'start'});
+}));
+
+/* theme toggle */
+const _tt=document.getElementById('themeToggle');
+function applyTheme(mode){
+  document.documentElement.setAttribute('data-theme',mode);
+  Chart.defaults.color = C.mut;
+  _tt.querySelector('.tt-ico').textContent = mode==='dark'?'☀️':'🌙';
+  _tt.querySelector('.tt-txt').textContent = mode==='dark'?'라이트 모드':'다크 모드';
+  _charts.forEach(c=>{try{c.update();}catch(e){}});
+  if(typeof animateStages==='function' && document.getElementById('t4').classList.contains('on')) animateStages();
+}
+_tt.addEventListener('click',()=>{
+  const cur=document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light';
+  applyTheme(cur==='dark'?'light':'dark');
+});
+</script>
+</body>
+</html>
