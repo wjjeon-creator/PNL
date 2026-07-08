@@ -455,6 +455,63 @@
     </div>
     <div class="foot-note">* B2B 대리점은 <b>비에이치소프트·우리편·샘랩·엠제이통신·푸딘코·어시스트핏</b>으로 묶었고, 나머지는 일반 대리점으로 분류했습니다.</div>
   </section>
+
+  <section class="reveal" style="animation-delay:.08s">
+    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>B2B vs 일반 대리점 수익·비용 구조 차이</h2><span class="note">실적·순매출 기준 비교</span></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>대분류별 실적·순매출 비교</h3>
+        <div class="cap">B2B 대리점과 일반 대리점의 상대적 차이</div>
+        <div class="chart-box"><canvas id="groupCompareChart"></canvas></div>
+      </div>
+      <div class="card" style="overflow-x:auto">
+        <h3>대분류 요약</h3>
+        <div class="cap">대리점 수 · 총 실적 · 총 순매출</div>
+        <table id="groupCompareTbl">
+          <thead><tr><th>대분류</th><th class="c">대리점 수</th><th class="c">총 실적</th><th>총 순매출</th><th>대리점당 평균</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal" style="animation-delay:.1s">
+    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>B2B 세부 스킴별 실적·수익</h2><span class="note">계약 / 위탁운영 / ALL 위탁운영</span></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>세부 스킴별 실적·순매출</h3>
+        <div class="cap">B2B 대리점이 속한 3개 스킴 비교</div>
+        <div class="chart-box"><canvas id="b2bSchemeChart"></canvas></div>
+      </div>
+      <div class="card" style="overflow-x:auto">
+        <h3>세부 스킴별 대리점 목록</h3>
+        <div class="cap">각 스킴에 속한 대리점과 핵심 지표</div>
+        <table id="b2bSchemeTbl">
+          <thead><tr><th>스킴</th><th class="c">대리점 수</th><th class="c">총 실적</th><th>총 순매출</th><th>대리점당 평균</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal" style="animation-delay:.12s">
+    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>일반 대리점 4개 구간 분석</h2><span class="note">실적·순매출 기준 분류</span></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>일반 대리점 구간별 실적·순매출</h3>
+        <div class="cap">4개 구간으로 나누어 비교</div>
+        <div class="chart-box"><canvas id="generalSegChart"></canvas></div>
+      </div>
+      <div class="card" style="overflow-x:auto">
+        <h3>구간별 요약</h3>
+        <div class="cap">구간 기준 · 대리점 수 · 실적 · 순매출</div>
+        <table id="generalSegTbl">
+          <thead><tr><th>구간</th><th class="c">대리점 수</th><th class="c">총 실적</th><th>총 순매출</th><th>대리점명</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
   </div><!-- /t6 -->
 
   <!-- ===== TAB 4: 상생 프로모션 충족률 ===== -->
@@ -669,6 +726,51 @@ contractRows.forEach(r=>{
 });
 document.getElementById('b2bMembers').innerHTML=b2bMembersList.map(x=>`<span class="chip hi">${x}</span>`).join('');
 document.getElementById('generalMembers').innerHTML=generalMembersList.map(x=>`<span class="chip">${x}</span>`).join('');
+
+const groupCompareRows=contractRows.map(r=>({
+  label:r.label,
+  count:r.count,
+  perf:r.perf,
+  net:r.net,
+  avg:r.avg
+}));
+const groupCompareBody=document.querySelector('#groupCompareTbl tbody');
+groupCompareRows.forEach(r=>groupCompareBody.insertAdjacentHTML('beforeend',`<tr><td><span class="nm">${r.label}</span></td><td class="c mono">${r.count}</td><td class="c mono">${r.perf.toLocaleString()}</td><td class="mono ${r.net>=0?'pos':'neg'}">${won(r.net)}</td><td class="mono">${won(r.avg)}</td></tr>`));
+
+const b2bSchemeRows=[
+ {label:'일반 대리점 계약', members:['비에이치소프트']},
+ {label:'위탁운영 계약', members:['우리편','샘랩','엠제이통신']},
+ {label:'ALL 위탁운영', members:['푸딘코','어시스트핏']}
+];
+const b2bSchemeBody=document.querySelector('#b2bSchemeTbl tbody');
+b2bSchemeRows.forEach(r=>{
+  const items=scat.filter(d=>r.members.includes(d.n));
+  const perf=items.reduce((sum,d)=>sum+d.p,0);
+  const net=items.reduce((sum,d)=>sum+d.net,0);
+  const avg=items.length ? Math.round(net/items.length) : 0;
+  b2bSchemeBody.insertAdjacentHTML('beforeend',`<tr><td><span class="nm">${r.label}</span></td><td class="c mono">${items.length}</td><td class="c mono">${perf.toLocaleString()}</td><td class="mono ${net>=0?'pos':'neg'}">${won(net)}</td><td class="mono">${won(avg)}</td></tr>`);
+});
+
+const generalSegRows=[
+ {label:'구간 1 · 고실적·고수익', members:generalMembersList.filter(d=>scat.find(x=>x.n===d).p>=20 && scat.find(x=>x.n===d).net>=2000000)},
+ {label:'구간 2 · 고실적·저수익', members:generalMembersList.filter(d=>scat.find(x=>x.n===d).p>=20 && scat.find(x=>x.n===d).net<2000000)},
+ {label:'구간 3 · 저실적·고수익', members:generalMembersList.filter(d=>scat.find(x=>x.n===d).p<20 && scat.find(x=>x.n===d).net>=2000000)},
+ {label:'구간 4 · 저실적·저수익', members:generalMembersList.filter(d=>scat.find(x=>x.n===d).p<20 && scat.find(x=>x.n===d).net<2000000)}
+];
+const generalSegBody=document.querySelector('#generalSegTbl tbody');
+generalSegRows.forEach(r=>generalSegBody.insertAdjacentHTML('beforeend',`<tr><td><span class="nm">${r.label}</span></td><td class="c mono">${r.members.length}</td><td class="c mono">${r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).p,0).toLocaleString()}</td><td class="mono">${won(r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).net,0))}</td><td>${r.members.join(', ')||'없음'}</td></tr>`));
+
+const groupCompareData=[
+ {label:'B2B 대리점', perf:contractRows[0].perf, net:contractRows[0].net},
+ {label:'일반 대리점', perf:contractRows[1].perf, net:contractRows[1].net}
+];
+_charts.push(new Chart(groupCompareChart,{type:'bar',data:{labels:groupCompareData.map(d=>d.label),datasets:[{label:'총 실적',data:groupCompareData.map(d=>d.perf),backgroundColor:'#4a9de0'},{label:'총 순매출',data:groupCompareData.map(d=>d.net),backgroundColor:'#1f9d73'}]},options:{plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.dataset.label+' '+(c.dataset.label.includes('실적')?c.raw.toLocaleString()+'건':won(c.raw)+'원')}}},scales:{y:{ticks:{callback:v=>typeof v==='number' && Math.abs(v)>=1e6?won(v):v}}}}}));
+
+const b2bSchemeData=b2bSchemeRows.map(r=>({label:r.label, perf:scat.filter(d=>r.members.includes(d.n)).reduce((s,d)=>s+d.p,0), net:scat.filter(d=>r.members.includes(d.n)).reduce((s,d)=>s+d.net,0)}));
+_charts.push(new Chart(b2bSchemeChart,{type:'bar',data:{labels:b2bSchemeData.map(d=>d.label),datasets:[{label:'총 실적',data:b2bSchemeData.map(d=>d.perf),backgroundColor:'#4a9de0'},{label:'총 순매출',data:b2bSchemeData.map(d=>d.net),backgroundColor:'#1f9d73'}]},options:{plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.dataset.label+' '+(c.dataset.label.includes('실적')?c.raw.toLocaleString()+'건':won(c.raw)+'원')}}},scales:{y:{ticks:{callback:v=>typeof v==='number' && Math.abs(v)>=1e6?won(v):v}}}}}));
+
+const generalSegData=generalSegRows.map(r=>({label:r.label, perf:r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).p,0), net:r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).net,0)}));
+_charts.push(new Chart(generalSegChart,{type:'bar',data:{labels:generalSegData.map(d=>d.label),datasets:[{label:'총 실적',data:generalSegData.map(d=>d.perf),backgroundColor:'#4a9de0'},{label:'총 순매출',data:generalSegData.map(d=>d.net),backgroundColor:'#1f9d73'}]},options:{plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.dataset.label+' '+(c.dataset.label.includes('실적')?c.raw.toLocaleString()+'건':won(c.raw)+'원')}}},scales:{y:{ticks:{callback:v=>typeof v==='number' && Math.abs(v)>=1e6?won(v):v}}}}}));
 _charts.push(new Chart(scatterChart,{type:'scatter',data:{datasets:[
  {label:'흑자',data:scat.filter(d=>d.net>=0).map(d=>({x:d.p,y:d.net,n:d.n})),backgroundColor:'#1f9d73',pointRadius:5,pointHoverRadius:7},
  {label:'적자',data:scat.filter(d=>d.net<0).map(d=>({x:d.p,y:d.net,n:d.n})),backgroundColor:'#d1503f',pointRadius:5,pointHoverRadius:7}
