@@ -106,6 +106,13 @@
   .chip{font-size:11.5px;padding:3px 9px;border-radius:20px;background:var(--panel);border:1px solid var(--line);color:var(--mut)}
   .chip.hi{border-color:var(--posg);color:var(--pos)}
   .chip.lo{border-color:#5a3430;color:var(--neg)}
+  .seg-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .seg-card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
+  .seg-card .seg-title{font-size:13px;font-weight:750;margin-bottom:6px}
+  .seg-card .seg-meta{font-size:12px;color:var(--mut);margin-bottom:8px;line-height:1.55}
+  .seg-card .seg-members{display:flex;flex-wrap:wrap;gap:6px}
+  .seg-card .seg-members .chip{background:var(--panel)}
+  @media(max-width:720px){.seg-grid{grid-template-columns:1fr}}
 
   .foot-note{color:var(--dim);font-size:11.5px;margin-top:10px;line-height:1.7}
 
@@ -457,6 +464,22 @@
   </section>
 
   <section class="reveal" style="animation-delay:.08s">
+    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>수익·비용 상세 구조</h2><span class="note">어떤 항목이 큰 비중을 차지하는지</span></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>수익 상세 비중</h3>
+        <div class="cap">토스수수료·토스프로모션·밴피·CMS·장비판매대금</div>
+        <div class="chart-box"><canvas id="revenueDetailChart"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>비용 상세 비중</h3>
+        <div class="cap">프로모션·장비원가·물류비</div>
+        <div class="chart-box"><canvas id="costDetailChart"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal" style="animation-delay:.08s">
     <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>B2B vs 일반 대리점 수익·비용 구조 차이</h2><span class="note">실적·순매출 기준 비교</span></div>
     <div class="grid2">
       <div class="card">
@@ -496,21 +519,12 @@
 
   <section class="reveal" style="animation-delay:.12s">
     <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>일반 대리점 4개 구간 분석</h2><span class="note">실적·순매출 기준 분류</span></div>
-    <div class="grid2">
-      <div class="card">
-        <h3>일반 대리점 구간별 실적·순매출</h3>
-        <div class="cap">4개 구간으로 나누어 비교</div>
-        <div class="chart-box"><canvas id="generalSegChart"></canvas></div>
-      </div>
-      <div class="card" style="overflow-x:auto">
-        <h3>구간별 요약</h3>
-        <div class="cap">구간 기준 · 대리점 수 · 실적 · 순매출</div>
-        <table id="generalSegTbl">
-          <thead><tr><th>구간</th><th class="c">대리점 수</th><th class="c">총 실적</th><th>총 순매출</th><th>대리점명</th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
+    <div class="card">
+      <h3>일반 대리점 구간별 실적·순매출</h3>
+      <div class="cap">4개 구간으로 나누어 비교</div>
+      <div class="chart-box"><canvas id="generalSegChart"></canvas></div>
     </div>
+    <div class="seg-grid" id="generalSegCards" style="margin-top:12px"></div>
   </section>
   </div><!-- /t6 -->
 
@@ -757,8 +771,13 @@ const generalSegRows=[
  {label:'구간 3 · 저실적·고수익', members:generalMembersList.filter(d=>scat.find(x=>x.n===d).p<20 && scat.find(x=>x.n===d).net>=2000000)},
  {label:'구간 4 · 저실적·저수익', members:generalMembersList.filter(d=>scat.find(x=>x.n===d).p<20 && scat.find(x=>x.n===d).net<2000000)}
 ];
-const generalSegBody=document.querySelector('#generalSegTbl tbody');
-generalSegRows.forEach(r=>generalSegBody.insertAdjacentHTML('beforeend',`<tr><td><span class="nm">${r.label}</span></td><td class="c mono">${r.members.length}</td><td class="c mono">${r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).p,0).toLocaleString()}</td><td class="mono">${won(r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).net,0))}</td><td>${r.members.join(', ')||'없음'}</td></tr>`));
+const generalSegCards=document.getElementById('generalSegCards');
+generalSegCards.innerHTML=generalSegRows.map(r=>{
+  const perf=r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).p,0);
+  const net=r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).net,0);
+  const members=r.members.length ? r.members.map(x=>`<span class="chip">${x}</span>`).join('') : '<span class="chip">없음</span>';
+  return `<div class="seg-card"><div class="seg-title">${r.label}</div><div class="seg-meta">대리점 ${r.members.length}곳 · 실적 ${perf.toLocaleString()}건 · 순매출 ${won(net)}</div><div class="seg-members">${members}</div></div>`;
+}).join('');
 
 const groupCompareData=[
  {label:'B2B 대리점', perf:contractRows[0].perf, net:contractRows[0].net},
@@ -768,6 +787,11 @@ _charts.push(new Chart(groupCompareChart,{type:'bar',data:{labels:groupCompareDa
 
 const b2bSchemeData=b2bSchemeRows.map(r=>({label:r.label, perf:scat.filter(d=>r.members.includes(d.n)).reduce((s,d)=>s+d.p,0), net:scat.filter(d=>r.members.includes(d.n)).reduce((s,d)=>s+d.net,0)}));
 _charts.push(new Chart(b2bSchemeChart,{type:'bar',data:{labels:b2bSchemeData.map(d=>d.label),datasets:[{label:'총 실적',data:b2bSchemeData.map(d=>d.perf),backgroundColor:'#4a9de0'},{label:'총 순매출',data:b2bSchemeData.map(d=>d.net),backgroundColor:'#1f9d73'}]},options:{plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.dataset.label+' '+(c.dataset.label.includes('실적')?c.raw.toLocaleString()+'건':won(c.raw)+'원')}}},scales:{y:{ticks:{callback:v=>typeof v==='number' && Math.abs(v)>=1e6?won(v):v}}}}}));
+
+const revenueDetailData=[{label:'토스수수료',value:97500490},{label:'토스프로모션',value:50720000},{label:'밴피(추정)',value:7281164},{label:'CMS',value:17894016},{label:'장비판매대금',value:560000}];
+const costDetailData=[{label:'장비 원가',value:134304242},{label:'프로모션',value:700000},{label:'물류비',value:1940700}];
+_charts.push(new Chart(revenueDetailChart,{type:'doughnut',data:{labels:revenueDetailData.map(d=>d.label),datasets:[{data:revenueDetailData.map(d=>d.value),backgroundColor:['#4a9de0','#1f9d73','#8a97a8','#f2a93b','#d1503f'],borderColor:'#ffffff',borderWidth:2}]},options:{cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:10,font:{size:10.5}}},tooltip:{callbacks:{label:c=>' '+c.label+': '+won(c.raw)+'원'}}}}}));
+_charts.push(new Chart(costDetailChart,{type:'doughnut',data:{labels:costDetailData.map(d=>d.label),datasets:[{data:costDetailData.map(d=>d.value),backgroundColor:['#e06b5c','#4a9de0','#f2a93b'],borderColor:'#ffffff',borderWidth:2}]},options:{cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:10,font:{size:10.5}}},tooltip:{callbacks:{label:c=>' '+c.label+': '+won(c.raw)+'원'}}}}}));
 
 const generalSegData=generalSegRows.map(r=>({label:r.label, perf:r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).p,0), net:r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).net,0)}));
 _charts.push(new Chart(generalSegChart,{type:'bar',data:{labels:generalSegData.map(d=>d.label),datasets:[{label:'총 실적',data:generalSegData.map(d=>d.perf),backgroundColor:'#4a9de0'},{label:'총 순매출',data:generalSegData.map(d=>d.net),backgroundColor:'#1f9d73'}]},options:{plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.dataset.label+' '+(c.dataset.label.includes('실적')?c.raw.toLocaleString()+'건':won(c.raw)+'원')}}},scales:{y:{ticks:{callback:v=>typeof v==='number' && Math.abs(v)>=1e6?won(v):v}}}}}));
