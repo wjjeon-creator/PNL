@@ -474,6 +474,18 @@
       </div>
     </div>
     <div class="foot-note">* B2B 대리점은 <b>비에이치소프트·우리편·샘랩·엠제이통신·푸딘코·어시스트핏</b>으로 묶었고, 나머지는 일반 대리점으로 분류했습니다.</div>
+    <div class="card contract-panel" data-contract-panel="all general" style="margin-top:14px" id="generalProfitCard">
+      <h3>일반 대리점 수익 분석 포인트</h3>
+      <div class="cap">실적과 순매출이 동시에 높은 구간과 낮은 구간의 차이</div>
+      <div class="contract-summary" id="generalProfitSummary"></div>
+      <div class="foot-note" style="margin-top:10px">* 일반 대리점은 대리점 수가 많아도, 실적과 순매출이 분산돼 있어 구간별 수익성 차이가 크게 나타납니다.</div>
+    </div>
+    <div class="card contract-panel" data-contract-panel="all b2b" style="margin-top:14px" id="b2bModelCard">
+      <h3>B2B 운영 방식과 VAN FEE 구조</h3>
+      <div class="cap">스킴별 업무 진행 방식과 평균 수수료 구조</div>
+      <div class="contract-summary" id="b2bModelSummary"></div>
+      <div class="foot-note" style="margin-top:10px">* VAN FEE는 현재 수익 구조를 바탕으로 한 분석용 추정치이며, 스킴마다 운영 책임 범위와 쉐어 구조가 달라 수익성에 차이를 줍니다.</div>
+    </div>
   </section>
 
   <section class="reveal contract-panel" data-contract-panel="all" style="animation-delay:.08s">
@@ -748,6 +760,8 @@ const b2bMembersCard=document.getElementById('b2bMembersCard');
 const generalMembersCard=document.getElementById('generalMembersCard');
 const contractStructureGrid=document.getElementById('contractStructureGrid');
 const contractStructureSummary=document.getElementById('contractStructureSummary');
+const generalProfitSummary=document.getElementById('generalProfitSummary');
+const b2bModelSummary=document.getElementById('b2bModelSummary');
 const contractViewButtons=document.querySelectorAll('.contract-view-btn');
 const contractPanels=document.querySelectorAll('.contract-panel');
 
@@ -780,10 +794,24 @@ function renderContractView(view){
 
   if(view==='general'){
     contractOverviewSummary.innerHTML=`<ul><li><b>일반 대리점</b>은 대리점 수가 많지만, 실적이 분산돼 평균 수익성은 상대적으로 낮게 나타날 가능성이 큽니다.</li><li><b>4개 구간 분류</b>를 보면, 고실적·저수익 구간과 저실적·저수익 구간이 특히 관리 포인트가 됩니다.</li></ul>`;
+    const generalSegRows=getGeneralSegRows();
+    generalProfitSummary.innerHTML=generalSegRows.map(r=>{
+      const perf=r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).p,0);
+      const net=r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).net,0);
+      return `<div class="mini"><span>${r.label}</span><strong>${r.members.length}개사 · ${perf.toLocaleString()}건</strong></div>`;
+    }).join('');
   } else if(view==='b2b'){
     contractOverviewSummary.innerHTML=`<ul><li><b>B2B 대리점</b>은 스킴별로 수익성이 불균형하게 쏠려 있어, 스킴 구조가 결과를 크게 좌우합니다.</li><li><b>일반 대리점 계약</b>과 <b>위탁운영</b>, <b>ALL 위탁운영</b>의 차이를 보면, 어떤 스킴이 더 집중도가 높은지 바로 확인할 수 있습니다.</li></ul>`;
+    const b2bBlocks=[
+      {label:'일반 대리점 계약', mode:'직접 계약형 · 단순 수수료 구조', avgFee:'약 1,400,000원/대리점', avgNet:'약 2,580,000원/대리점', note:'계약은 단순하지만 수익은 한 곳에 집중되는 편'},
+      {label:'위탁운영 계약', mode:'운영 위탁형 · 설치·청약·결제까지 분담', avgFee:'약 2,200,000원/대리점', avgNet:'약 7,140,000원/대리점', note:'실적이 커질수록 수익성 확대 폭이 크다'},
+      {label:'ALL 위탁운영', mode:'전체 운영 위탁형 · 관리 의존도가 높음', avgFee:'약 900,000원/대리점', avgNet:'약 10,000원/대리점', note:'실행력이 낮으면 당장 수익이 거의 남지 않는다'}
+    ];
+    b2bModelSummary.innerHTML=b2bBlocks.map(b=>`<div class="mini"><span>${b.label}</span><strong>${b.avgFee}</strong><div class="foot-note" style="margin-top:6px">${b.mode}<br>${b.note}</div></div>`).join('');
   } else {
     contractOverviewSummary.innerHTML=`<ul><li><b>B2B 대리점</b>은 상대적으로 실적과 순매출이 쏠려 있고, 수익성 집중도가 높은 편입니다.</li><li><b>일반 대리점</b>은 대리점 수는 많지만, 개별 실적이 분산돼 있어 평균 수익성은 더 낮게 나타날 가능성이 큽니다.</li></ul>`;
+    generalProfitSummary.innerHTML='';
+    b2bModelSummary.innerHTML='';
   }
 
   if(view==='all'){
