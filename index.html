@@ -417,21 +417,20 @@
   <p class="panel-lead">6월 대리점별 상세 데이터를 기준으로, <b>계약 스킴별로 수익성이 어떻게 달라지는지</b> 분석했습니다. (단위: 원)</p>
 
   <section class="reveal" style="animation-delay:.05s">
-    <div class="sec-head"><span class="sec-num">3</span><h2>계약 스킴별 수익성</h2><span class="note">일반 / B2B / 위탁운영 / ALL 위탁운영</span></div>
+    <div class="sec-head"><span class="sec-num">3</span><h2>대분류별 수익성</h2><span class="note">B2B 대리점 vs 일반 대리점</span></div>
     <div class="sec-summary">
       <ul>
-        <li><b>일반 대리점 계약</b>은 대리점 수가 많지만, 대체로 실적이 분산돼 있어 평균 순매출은 중간 수준으로 보입니다.</li>
-        <li><b>B2B 위탁운영 계약</b>은 실적과 순매출이 가장 크게 나오는 스킴으로, 수익성 중심의 운영 구조에 더 적합해 보입니다.</li>
-        <li><b>ALL 위탁운영</b>은 소수 대리점이지만 평균 효율이 높고, 흑자 비중이 비교적 우수합니다.</li>
+        <li><b>B2B 대리점</b>은 상대적으로 실적과 순매출이 쏠려 있고, 수익성 집중도가 높은 편입니다.</li>
+        <li><b>일반 대리점</b>은 대리점 수는 많지만, 개별 실적이 분산돼 있어 평균 수익성은 더 낮게 나타날 가능성이 큽니다.</li>
       </ul>
     </div>
     <div class="card" style="overflow-x:auto">
-      <h3>계약 유형별 실적·순매출 요약</h3>
+      <h3>대분류별 실적·순매출 요약</h3>
       <div class="cap">활성 39개사 기준 · 원</div>
       <table id="contractTypeTbl">
         <thead>
           <tr>
-            <th>계약 유형</th>
+            <th>대분류</th>
             <th class="c">대리점 수</th>
             <th class="c">설치 건수</th>
             <th>순매출</th>
@@ -442,7 +441,19 @@
         <tbody></tbody>
       </table>
     </div>
-    <div class="foot-note">* 분류 기준: <b>비에이치소프트</b>는 B2B 일반 대리점, <b>우리편·샘랩·엠제이통신</b>은 B2B 위탁운영, <b>푸딘코·어시스트핏</b>은 ALL 위탁운영, 나머지는 일반 대리점으로 집계했습니다.</div>
+    <div class="grid2" style="margin-top:14px">
+      <div class="card">
+        <h3>B2B 대리점 포함 대리점</h3>
+        <div class="cap">비에이치소프트 · 우리편 · 샘랩 · 엠제이통신 · 푸딘코 · 어시스트핏</div>
+        <div class="chips" id="b2bMembers"></div>
+      </div>
+      <div class="card">
+        <h3>일반 대리점 포함 대리점</h3>
+        <div class="cap">나머지 대리점 전체</div>
+        <div class="chips" id="generalMembers"></div>
+      </div>
+    </div>
+    <div class="foot-note">* B2B 대리점은 <b>비에이치소프트·우리편·샘랩·엠제이통신·푸딘코·어시스트핏</b>으로 묶었고, 나머지는 일반 대리점으로 분류했습니다.</div>
   </section>
   </div><!-- /t6 -->
 
@@ -628,15 +639,14 @@ juneNegData.forEach((d,i)=>ngb.insertAdjacentHTML('beforeend',
 
 /* 실적 vs 순매출 산점도 */
 const scat=[{"n":"비에이치소프트","p":71,"net":2580795},{"n":"미르네프로","p":19,"net":3472351},{"n":"우리편","p":92,"net":14741237},{"n":"엠제이통신","p":46,"net":5867081},{"n":"제이투시스템","p":1,"net":1939803},{"n":"현은시스템","p":32,"net":3810790},{"n":"샘랩","p":4,"net":1175144},{"n":"케이씨정보통신","p":14,"net":1427163},{"n":"전라정보통신","p":1,"net":406220},{"n":"코스모스컴퍼니","p":38,"net":395821},{"n":"스피드","p":4,"net":49920},{"n":"화인정보통신","p":5,"net":-43175},{"n":"케이알정보통신","p":11,"net":789210},{"n":"그린정보통신","p":3,"net":135114},{"n":"페이플레이 안양센터","p":1,"net":-357528},{"n":"페이닷","p":5,"net":417331},{"n":"현페이먼트","p":2,"net":-45801},{"n":"뱅크랜드","p":2,"net":-601275},{"n":"어시스트핏","p":5,"net":-903097},{"n":"원정보통신","p":5,"net":368656},{"n":"나나정보통신","p":1,"net":139691},{"n":"신우정보통신","p":3,"net":70674},{"n":"트윈스정보통신","p":1,"net":33318},{"n":"나이스포스","p":1,"net":-375260},{"n":"연합정보통신","p":1,"net":-75060},{"n":"미르컴퍼니","p":1,"net":224525},{"n":"푸딘코","p":1,"net":923035},{"n":"포스트렌드","p":2,"net":-494050},{"n":"우성포스","p":2,"net":-217944},{"n":"씨앤씨일신","p":1,"net":-250065},{"n":"와이즈웹정보통신","p":1,"net":7646},{"n":"디에스이엔씨","p":8,"net":-166959},{"n":"미래통신","p":1,"net":227085},{"n":"동아정보통신","p":2,"net":-545075},{"n":"스타정보","p":1,"net":553346},{"n":"지앤비시스템","p":14,"net":-660068},{"n":"소프트커머스","p":2,"net":-559306},{"n":"에스정보","p":4,"net":-325155},{"n":"토브제이","p":3,"net":142125}];
-const contractTypeNames=new Set(['비에이치소프트','우리편','샘랩','엠제이통신','푸딘코','어시스트핏']);
+const b2bMembersList=['비에이치소프트','우리편','샘랩','엠제이통신','푸딘코','어시스트핏'];
+const generalMembersList=scat.map(d=>d.n).filter(n=>!b2bMembersList.includes(n));
 const contractTypeRows=[
- {label:'일반 대리점 계약', members:null},
- {label:'B2B 대리점 계약 → 일반 대리점 계약', members:['비에이치소프트']},
- {label:'B2B 대리점 계약 → 위탁운영 계약', members:['우리편','샘랩','엠제이통신']},
- {label:'B2B 대리점 계약 → ALL 위탁운영', members:['푸딘코','어시스트핏']}
+ {label:'B2B 대리점', members:b2bMembersList},
+ {label:'일반 대리점', members:generalMembersList}
 ];
 const contractRows=contractTypeRows.map(r=>{
-  const items = r.members ? scat.filter(d=>r.members.includes(d.n)) : scat.filter(d=>!contractTypeNames.has(d.n));
+  const items = scat.filter(d=>r.members.includes(d.n));
   const perf=items.reduce((sum,d)=>sum+d.p,0);
   const net=items.reduce((sum,d)=>sum+d.net,0);
   const avg=items.length ? Math.round(net/items.length) : 0;
@@ -657,6 +667,8 @@ contractRows.forEach(r=>{
       <td class="c mono ${r.net>=0?'pos':'neg'}">${status}</td>
     </tr>`);
 });
+document.getElementById('b2bMembers').innerHTML=b2bMembersList.map(x=>`<span class="chip hi">${x}</span>`).join('');
+document.getElementById('generalMembers').innerHTML=generalMembersList.map(x=>`<span class="chip">${x}</span>`).join('');
 _charts.push(new Chart(scatterChart,{type:'scatter',data:{datasets:[
  {label:'흑자',data:scat.filter(d=>d.net>=0).map(d=>({x:d.p,y:d.net,n:d.n})),backgroundColor:'#1f9d73',pointRadius:5,pointHoverRadius:7},
  {label:'적자',data:scat.filter(d=>d.net<0).map(d=>({x:d.p,y:d.net,n:d.n})),backgroundColor:'#d1503f',pointRadius:5,pointHoverRadius:7}
