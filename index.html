@@ -268,7 +268,8 @@
   <nav class="tabbar reveal" style="animation-delay:.03s" role="tablist">
     <button class="tab on" data-tab="t2" role="tab"><span class="tn">1</span>6월 대리점 수익성 요약</button>
     <button class="tab" data-tab="t5" role="tab"><span class="tn">2</span>6월 대리점별 상세</button>
-    <button class="tab" data-tab="t4" role="tab"><span class="tn">3</span>상생 프로모션 충족률</button>
+    <button class="tab" data-tab="t6" role="tab"><span class="tn">3</span>6월 대리점 계약 유형별 상세</button>
+    <button class="tab" data-tab="t4" role="tab"><span class="tn">4</span>상생 프로모션 충족률</button>
   </nav>
 
   <!-- ===== TAB 1: 6월 대리점별 상세 ===== -->
@@ -400,13 +401,28 @@
     <div class="foot-note">* 활동 중인 39개사 중 <b>15개사가 적자</b>입니다. 대부분 장비는 깔았으나 <b>설치·청약 조건을 충족하지 못해 돌려받을 수수료(건당 약 23만원)를 회수하지 못한</b> 경우입니다. 뱅크랜드·동아·나이스포스처럼 설치수수료가 0원인 곳이 대표적. 단 <b>지앤비시스템(14건)</b>은 설치가 적지 않은데도 일부만 조건을 채워 적자라, 별도 점검이 필요합니다.</div>
   </section>
 
-  <!-- 계약 유형별 상세 -->
+  <!-- 실적 vs 순매출 산점도 -->
   <section class="reveal" style="animation-delay:.15s">
-    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>6월 대리점 계약 유형별 상세</h2><span class="note">계약 형태별 수익성</span></div>
+    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>실적 대비 순매출 분포</h2><span class="note">활성 39개사 · 실적(X) · 순매출(Y)</span></div>
+    <div class="card">
+      <div class="chart-box tall"><canvas id="scatterChart"></canvas></div>
+      <div class="foot-note" style="margin-top:8px">* 가로축은 설치 건수, 세로축은 순매출입니다. <b>0선 아래는 적자</b>. 우리편처럼 오른쪽 위(많이 팔고 많이 남김)가 이상적이지만, <b>설치 건수가 비슷해도 남는 돈은 크게 다릅니다</b> — 예: 둘 다 14건인데 케이씨정보통신은 +1.4백만원, 지앤비시스템은 −0.7백만원. <b>설치량만 보고 수익을 예측할 수 없다</b>는 뜻입니다.</div>
+    </div>
+  </section>
+
+  </div><!-- /t5 -->
+
+  <!-- ===== TAB 3: 6월 대리점 계약 유형별 상세 ===== -->
+  <div class="tabpanel" id="t6">
+  <p class="panel-lead">6월 대리점별 상세 데이터를 기준으로, <b>계약 스킴별로 수익성이 어떻게 달라지는지</b> 분석했습니다. (단위: 원)</p>
+
+  <section class="reveal" style="animation-delay:.05s">
+    <div class="sec-head"><span class="sec-num">3</span><h2>계약 스킴별 수익성</h2><span class="note">일반 / B2B / 위탁운영 / ALL 위탁운영</span></div>
     <div class="sec-summary">
       <ul>
-        <li><b>일반 대리점 계약</b>은 대부분 소규모·비활성 대리점이 많고, <b>B2B 위탁운영 계열</b>이 실적과 순매출을 주도합니다.</li>
-        <li><b>ALL 위탁운영</b>은 대리점 수는 적지만 평균 순매출 효율이 높아, 계약 유형별로 수익성 차이가 분명합니다.</li>
+        <li><b>일반 대리점 계약</b>은 대리점 수가 많지만, 대체로 실적이 분산돼 있어 평균 순매출은 중간 수준으로 보입니다.</li>
+        <li><b>B2B 위탁운영 계약</b>은 실적과 순매출이 가장 크게 나오는 스킴으로, 수익성 중심의 운영 구조에 더 적합해 보입니다.</li>
+        <li><b>ALL 위탁운영</b>은 소수 대리점이지만 평균 효율이 높고, 흑자 비중이 비교적 우수합니다.</li>
       </ul>
     </div>
     <div class="card" style="overflow-x:auto">
@@ -428,17 +444,7 @@
     </div>
     <div class="foot-note">* 분류 기준: <b>비에이치소프트</b>는 B2B 일반 대리점, <b>우리편·샘랩·엠제이통신</b>은 B2B 위탁운영, <b>푸딘코·어시스트핏</b>은 ALL 위탁운영, 나머지는 일반 대리점으로 집계했습니다.</div>
   </section>
-
-  <!-- 실적 vs 순매출 산점도 -->
-  <section class="reveal" style="animation-delay:.15s">
-    <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>실적 대비 순매출 분포</h2><span class="note">활성 39개사 · 실적(X) · 순매출(Y)</span></div>
-    <div class="card">
-      <div class="chart-box tall"><canvas id="scatterChart"></canvas></div>
-      <div class="foot-note" style="margin-top:8px">* 가로축은 설치 건수, 세로축은 순매출입니다. <b>0선 아래는 적자</b>. 우리편처럼 오른쪽 위(많이 팔고 많이 남김)가 이상적이지만, <b>설치 건수가 비슷해도 남는 돈은 크게 다릅니다</b> — 예: 둘 다 14건인데 케이씨정보통신은 +1.4백만원, 지앤비시스템은 −0.7백만원. <b>설치량만 보고 수익을 예측할 수 없다</b>는 뜻입니다.</div>
-    </div>
-  </section>
-
-  </div><!-- /t5 -->
+  </div><!-- /t6 -->
 
   <!-- ===== TAB 4: 상생 프로모션 충족률 ===== -->
   <div class="tabpanel" id="t4">
