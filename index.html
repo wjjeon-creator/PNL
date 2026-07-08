@@ -112,7 +112,15 @@
   .seg-card .seg-meta{font-size:12px;color:var(--mut);margin-bottom:8px;line-height:1.55}
   .seg-card .seg-members{display:flex;flex-wrap:wrap;gap:6px}
   .seg-card .seg-members .chip{background:var(--panel)}
-  @media(max-width:720px){.seg-grid{grid-template-columns:1fr}}
+  .contract-view-switch{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+  .contract-view-btn{border:1px solid var(--line);background:var(--panel);color:var(--mut);padding:8px 12px;border-radius:999px;font-size:12.5px;font-weight:700;cursor:pointer;transition:all .18s}
+  .contract-view-btn.on{background:var(--grad);color:#08110d;border-color:transparent}
+  .contract-panel.is-hidden{display:none}
+  .contract-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+  .contract-summary .mini{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+  .contract-summary .mini span{display:block;font-size:11px;color:var(--dim);margin-bottom:4px}
+  .contract-summary .mini strong{font-size:16px;color:var(--ink)}
+  @media(max-width:720px){.seg-grid{grid-template-columns:1fr}.contract-summary{grid-template-columns:1fr}}
 
   .foot-note{color:var(--dim);font-size:11.5px;margin-top:10px;line-height:1.7}
 
@@ -422,10 +430,15 @@
   <!-- ===== TAB 3: 6월 대리점 계약 유형별 상세 ===== -->
   <div class="tabpanel" id="t6">
   <p class="panel-lead">6월 대리점별 상세 데이터를 기준으로, <b>계약 스킴별로 수익성이 어떻게 달라지는지</b> 분석했습니다. (단위: 원)</p>
+  <div class="contract-view-switch" role="tablist" aria-label="계약 유형별 보기">
+    <button class="contract-view-btn on" data-view="all" type="button">전체 비교</button>
+    <button class="contract-view-btn" data-view="general" type="button">일반 대리점</button>
+    <button class="contract-view-btn" data-view="b2b" type="button">B2B 대리점</button>
+  </div>
 
-  <section class="reveal" style="animation-delay:.05s">
+  <section class="reveal contract-panel" data-contract-panel="all general b2b" style="animation-delay:.05s">
     <div class="sec-head"><span class="sec-num">3</span><h2>대분류별 수익성</h2><span class="note">B2B 대리점 vs 일반 대리점</span></div>
-    <div class="sec-summary">
+    <div class="sec-summary" id="contractOverviewSummary">
       <ul>
         <li><b>B2B 대리점</b>은 상대적으로 실적과 순매출이 쏠려 있고, 수익성 집중도가 높은 편입니다.</li>
         <li><b>일반 대리점</b>은 대리점 수는 많지만, 개별 실적이 분산돼 있어 평균 수익성은 더 낮게 나타날 가능성이 큽니다.</li>
@@ -448,13 +461,13 @@
         <tbody></tbody>
       </table>
     </div>
-    <div class="grid2" style="margin-top:14px">
-      <div class="card">
+    <div class="grid2" id="contractMembersGrid" style="margin-top:14px">
+      <div class="card" id="b2bMembersCard">
         <h3>B2B 대리점 포함 대리점</h3>
         <div class="cap">비에이치소프트 · 우리편 · 샘랩 · 엠제이통신 · 푸딘코 · 어시스트핏</div>
         <div class="chips" id="b2bMembers"></div>
       </div>
-      <div class="card">
+      <div class="card" id="generalMembersCard">
         <h3>일반 대리점 포함 대리점</h3>
         <div class="cap">나머지 대리점 전체</div>
         <div class="chips" id="generalMembers"></div>
@@ -463,9 +476,9 @@
     <div class="foot-note">* B2B 대리점은 <b>비에이치소프트·우리편·샘랩·엠제이통신·푸딘코·어시스트핏</b>으로 묶었고, 나머지는 일반 대리점으로 분류했습니다.</div>
   </section>
 
-  <section class="reveal" style="animation-delay:.08s">
+  <section class="reveal contract-panel" data-contract-panel="all" style="animation-delay:.08s">
     <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>수익·비용 상세 구조</h2><span class="note">어떤 항목이 큰 비중을 차지하는지</span></div>
-    <div class="grid2">
+    <div id="contractStructureGrid" class="grid2">
       <div class="card">
         <h3>수익 상세 비중</h3>
         <div class="cap">토스수수료·토스프로모션·밴피·CMS·장비판매대금</div>
@@ -477,9 +490,10 @@
         <div class="chart-box"><canvas id="costDetailChart"></canvas></div>
       </div>
     </div>
+    <div id="contractStructureSummary" class="card is-hidden"></div>
   </section>
 
-  <section class="reveal" style="animation-delay:.08s">
+  <section class="reveal contract-panel" data-contract-panel="all" style="animation-delay:.08s">
     <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>B2B vs 일반 대리점 수익·비용 구조 차이</h2><span class="note">실적·순매출 기준 비교</span></div>
     <div class="grid2">
       <div class="card">
@@ -498,7 +512,7 @@
     </div>
   </section>
 
-  <section class="reveal" style="animation-delay:.1s">
+  <section class="reveal contract-panel" data-contract-panel="all b2b" style="animation-delay:.1s">
     <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>B2B 세부 스킴별 실적·수익</h2><span class="note">계약 / 위탁운영 / ALL 위탁운영</span></div>
     <div class="grid2">
       <div class="card">
@@ -517,7 +531,7 @@
     </div>
   </section>
 
-  <section class="reveal" style="animation-delay:.12s">
+  <section class="reveal contract-panel" data-contract-panel="all general" style="animation-delay:.12s">
     <div class="sec-head"><span class="sec-num sub-mark">▸</span><h2>일반 대리점 4개 구간 분석</h2><span class="note">실적·순매출 기준 분류</span></div>
     <div class="card">
       <h3>일반 대리점 구간별 실적·순매출</h3>
@@ -726,58 +740,95 @@ const contractRows=contractTypeRows.map(r=>{
   return {...r, count:items.length, perf, net, avg, profit, loss};
 });
 const contractBody=document.querySelector('#contractTypeTbl tbody');
-contractRows.forEach(r=>{
-  const status=r.net>=0?`흑자 (${r.profit}개사)`:`적자 (${r.loss}개사)`;
-  contractBody.insertAdjacentHTML('beforeend',`
-    <tr>
-      <td><span class="nm">${r.label}</span></td>
-      <td class="c mono">${r.count}</td>
-      <td class="c mono">${r.perf.toLocaleString()}</td>
-      <td class="mono ${r.net>=0?'pos':'neg'}">${won(r.net)}</td>
-      <td class="mono">${won(r.avg)}</td>
-      <td class="c mono ${r.net>=0?'pos':'neg'}">${status}</td>
-    </tr>`);
-});
-document.getElementById('b2bMembers').innerHTML=b2bMembersList.map(x=>`<span class="chip hi">${x}</span>`).join('');
-document.getElementById('generalMembers').innerHTML=generalMembersList.map(x=>`<span class="chip">${x}</span>`).join('');
-
-const groupCompareRows=contractRows.map(r=>({
-  label:r.label,
-  count:r.count,
-  perf:r.perf,
-  net:r.net,
-  avg:r.avg
-}));
 const groupCompareBody=document.querySelector('#groupCompareTbl tbody');
-groupCompareRows.forEach(r=>groupCompareBody.insertAdjacentHTML('beforeend',`<tr><td><span class="nm">${r.label}</span></td><td class="c mono">${r.count}</td><td class="c mono">${r.perf.toLocaleString()}</td><td class="mono ${r.net>=0?'pos':'neg'}">${won(r.net)}</td><td class="mono">${won(r.avg)}</td></tr>`));
+const b2bSchemeBody=document.querySelector('#b2bSchemeTbl tbody');
+const generalSegCards=document.getElementById('generalSegCards');
+const contractOverviewSummary=document.getElementById('contractOverviewSummary');
+const b2bMembersCard=document.getElementById('b2bMembersCard');
+const generalMembersCard=document.getElementById('generalMembersCard');
+const contractStructureGrid=document.getElementById('contractStructureGrid');
+const contractStructureSummary=document.getElementById('contractStructureSummary');
+const contractViewButtons=document.querySelectorAll('.contract-view-btn');
+const contractPanels=document.querySelectorAll('.contract-panel');
+
+function getGeneralSegRows(){
+  return [
+    {label:'구간 1 · 고실적·고수익', members:generalMembersList.filter(d=>scat.find(x=>x.n===d).p>=20 && scat.find(x=>x.n===d).net>=2000000)},
+    {label:'구간 2 · 고실적·저수익', members:generalMembersList.filter(d=>scat.find(x=>x.n===d).p>=20 && scat.find(x=>x.n===d).net<2000000)},
+    {label:'구간 3 · 저실적·고수익', members:generalMembersList.filter(d=>scat.find(x=>x.n===d).p<20 && scat.find(x=>x.n===d).net>=2000000)},
+    {label:'구간 4 · 저실적·저수익', members:generalMembersList.filter(d=>scat.find(x=>x.n===d).p<20 && scat.find(x=>x.n===d).net<2000000)}
+  ];
+}
+
+function renderContractView(view){
+  contractViewButtons.forEach(btn=>btn.classList.toggle('on', btn.dataset.view===view));
+  contractPanels.forEach(panel=>{
+    const allowed=panel.dataset.contractPanel.split(' ');
+    panel.classList.toggle('is-hidden', !allowed.includes(view));
+  });
+
+  const rows=view==='general'? [contractRows.find(r=>r.label==='일반 대리점')] : view==='b2b' ? [contractRows.find(r=>r.label==='B2B 대리점')] : contractRows;
+  contractBody.innerHTML=rows.filter(Boolean).map(r=>{
+    const status=r.net>=0?`흑자 (${r.profit}개사)`:`적자 (${r.loss}개사)`;
+    return `<tr><td><span class="nm">${r.label}</span></td><td class="c mono">${r.count}</td><td class="c mono">${r.perf.toLocaleString()}</td><td class="mono ${r.net>=0?'pos':'neg'}">${won(r.net)}</td><td class="mono">${won(r.avg)}</td><td class="c mono ${r.net>=0?'pos':'neg'}">${status}</td></tr>`;
+  }).join('');
+
+  b2bMembersCard.classList.toggle('is-hidden', view==='general');
+  generalMembersCard.classList.toggle('is-hidden', view==='b2b');
+  document.getElementById('b2bMembers').innerHTML=(view==='general' ? [] : b2bMembersList).map(x=>`<span class="chip hi">${x}</span>`).join('');
+  document.getElementById('generalMembers').innerHTML=(view==='b2b' ? [] : generalMembersList).map(x=>`<span class="chip">${x}</span>`).join('');
+
+  if(view==='general'){
+    contractOverviewSummary.innerHTML=`<ul><li><b>일반 대리점</b>은 대리점 수가 많지만, 실적이 분산돼 평균 수익성은 상대적으로 낮게 나타날 가능성이 큽니다.</li><li><b>4개 구간 분류</b>를 보면, 고실적·저수익 구간과 저실적·저수익 구간이 특히 관리 포인트가 됩니다.</li></ul>`;
+  } else if(view==='b2b'){
+    contractOverviewSummary.innerHTML=`<ul><li><b>B2B 대리점</b>은 스킴별로 수익성이 불균형하게 쏠려 있어, 스킴 구조가 결과를 크게 좌우합니다.</li><li><b>일반 대리점 계약</b>과 <b>위탁운영</b>, <b>ALL 위탁운영</b>의 차이를 보면, 어떤 스킴이 더 집중도가 높은지 바로 확인할 수 있습니다.</li></ul>`;
+  } else {
+    contractOverviewSummary.innerHTML=`<ul><li><b>B2B 대리점</b>은 상대적으로 실적과 순매출이 쏠려 있고, 수익성 집중도가 높은 편입니다.</li><li><b>일반 대리점</b>은 대리점 수는 많지만, 개별 실적이 분산돼 있어 평균 수익성은 더 낮게 나타날 가능성이 큽니다.</li></ul>`;
+  }
+
+  if(view==='all'){
+    groupCompareBody.innerHTML=contractRows.map(r=>`<tr><td><span class="nm">${r.label}</span></td><td class="c mono">${r.count}</td><td class="c mono">${r.perf.toLocaleString()}</td><td class="mono ${r.net>=0?'pos':'neg'}">${won(r.net)}</td><td class="mono">${won(r.avg)}</td></tr>`).join('');
+    contractStructureGrid.classList.remove('is-hidden');
+    contractStructureSummary.classList.add('is-hidden');
+  } else {
+    groupCompareBody.innerHTML='';
+    contractStructureGrid.classList.add('is-hidden');
+    const target=contractRows.find(r=>view==='general'?r.label==='일반 대리점':r.label==='B2B 대리점');
+    const members=view==='general'?generalMembersList:b2bMembersList;
+    contractStructureSummary.classList.remove('is-hidden');
+    contractStructureSummary.innerHTML=`<h3>${view==='general'?'일반 대리점만 보기':'B2B 대리점만 보기'}</h3><div class="cap">선택된 분류 기준 · 원</div><div class="contract-summary"><div class="mini"><span>대리점 수</span><strong>${target.count}</strong></div><div class="mini"><span>총 실적</span><strong>${target.perf.toLocaleString()}건</strong></div><div class="mini"><span>총 순매출</span><strong>${won(target.net)}</strong></div><div class="mini"><span>대리점당 평균</span><strong>${won(target.avg)}</strong></div></div><div class="chips" style="margin-top:10px">${members.map(x=>`<span class="chip ${view==='general'?'':'hi'}">${x}</span>`).join('')}</div>`;
+  }
+
+  if(view==='all' || view==='b2b'){
+    b2bSchemeBody.innerHTML=b2bSchemeRows.map(r=>{
+      const items=scat.filter(d=>r.members.includes(d.n));
+      const perf=items.reduce((sum,d)=>sum+d.p,0);
+      const net=items.reduce((sum,d)=>sum+d.net,0);
+      const avg=items.length ? Math.round(net/items.length) : 0;
+      return `<tr><td><span class="nm">${r.label}</span></td><td class="c mono">${items.length}</td><td class="c mono">${perf.toLocaleString()}</td><td class="mono ${net>=0?'pos':'neg'}">${won(net)}</td><td class="mono">${won(avg)}</td></tr>`;
+    }).join('');
+  } else {
+    b2bSchemeBody.innerHTML='';
+  }
+
+  if(view==='all' || view==='general'){
+    const generalSegRows=getGeneralSegRows();
+    generalSegCards.innerHTML=generalSegRows.map(r=>{
+      const perf=r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).p,0);
+      const net=r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).net,0);
+      const members=r.members.length ? r.members.map(x=>`<span class="chip">${x}</span>`).join('') : '<span class="chip">없음</span>';
+      return `<div class="seg-card"><div class="seg-title">${r.label}</div><div class="seg-meta">대리점 ${r.members.length}곳 · 실적 ${perf.toLocaleString()}건 · 순매출 ${won(net)}</div><div class="seg-members">${members}</div></div>`;
+    }).join('');
+  } else {
+    generalSegCards.innerHTML='';
+  }
+}
 
 const b2bSchemeRows=[
  {label:'일반 대리점 계약', members:['비에이치소프트']},
  {label:'위탁운영 계약', members:['우리편','샘랩','엠제이통신']},
  {label:'ALL 위탁운영', members:['푸딘코','어시스트핏']}
 ];
-const b2bSchemeBody=document.querySelector('#b2bSchemeTbl tbody');
-b2bSchemeRows.forEach(r=>{
-  const items=scat.filter(d=>r.members.includes(d.n));
-  const perf=items.reduce((sum,d)=>sum+d.p,0);
-  const net=items.reduce((sum,d)=>sum+d.net,0);
-  const avg=items.length ? Math.round(net/items.length) : 0;
-  b2bSchemeBody.insertAdjacentHTML('beforeend',`<tr><td><span class="nm">${r.label}</span></td><td class="c mono">${items.length}</td><td class="c mono">${perf.toLocaleString()}</td><td class="mono ${net>=0?'pos':'neg'}">${won(net)}</td><td class="mono">${won(avg)}</td></tr>`);
-});
-
-const generalSegRows=[
- {label:'구간 1 · 고실적·고수익', members:generalMembersList.filter(d=>scat.find(x=>x.n===d).p>=20 && scat.find(x=>x.n===d).net>=2000000)},
- {label:'구간 2 · 고실적·저수익', members:generalMembersList.filter(d=>scat.find(x=>x.n===d).p>=20 && scat.find(x=>x.n===d).net<2000000)},
- {label:'구간 3 · 저실적·고수익', members:generalMembersList.filter(d=>scat.find(x=>x.n===d).p<20 && scat.find(x=>x.n===d).net>=2000000)},
- {label:'구간 4 · 저실적·저수익', members:generalMembersList.filter(d=>scat.find(x=>x.n===d).p<20 && scat.find(x=>x.n===d).net<2000000)}
-];
-const generalSegCards=document.getElementById('generalSegCards');
-generalSegCards.innerHTML=generalSegRows.map(r=>{
-  const perf=r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).p,0);
-  const net=r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).net,0);
-  const members=r.members.length ? r.members.map(x=>`<span class="chip">${x}</span>`).join('') : '<span class="chip">없음</span>';
-  return `<div class="seg-card"><div class="seg-title">${r.label}</div><div class="seg-meta">대리점 ${r.members.length}곳 · 실적 ${perf.toLocaleString()}건 · 순매출 ${won(net)}</div><div class="seg-members">${members}</div></div>`;
-}).join('');
 
 const groupCompareData=[
  {label:'B2B 대리점', perf:contractRows[0].perf, net:contractRows[0].net},
@@ -793,8 +844,10 @@ const costDetailData=[{label:'장비 원가',value:134304242},{label:'프로모�
 _charts.push(new Chart(revenueDetailChart,{type:'doughnut',data:{labels:revenueDetailData.map(d=>d.label),datasets:[{data:revenueDetailData.map(d=>d.value),backgroundColor:['#4a9de0','#1f9d73','#8a97a8','#f2a93b','#d1503f'],borderColor:'#ffffff',borderWidth:2}]},options:{cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:10,font:{size:10.5}}},tooltip:{callbacks:{label:c=>' '+c.label+': '+won(c.raw)+'원'}}}}}));
 _charts.push(new Chart(costDetailChart,{type:'doughnut',data:{labels:costDetailData.map(d=>d.label),datasets:[{data:costDetailData.map(d=>d.value),backgroundColor:['#e06b5c','#4a9de0','#f2a93b'],borderColor:'#ffffff',borderWidth:2}]},options:{cutout:'58%',plugins:{legend:{position:'bottom',labels:{boxWidth:11,padding:10,font:{size:10.5}}},tooltip:{callbacks:{label:c=>' '+c.label+': '+won(c.raw)+'원'}}}}}));
 
-const generalSegData=generalSegRows.map(r=>({label:r.label, perf:r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).p,0), net:r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).net,0)}));
+const generalSegData=getGeneralSegRows().map(r=>({label:r.label, perf:r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).p,0), net:r.members.reduce((s,d)=>s+scat.find(x=>x.n===d).net,0)}));
 _charts.push(new Chart(generalSegChart,{type:'bar',data:{labels:generalSegData.map(d=>d.label),datasets:[{label:'총 실적',data:generalSegData.map(d=>d.perf),backgroundColor:'#4a9de0'},{label:'총 순매출',data:generalSegData.map(d=>d.net),backgroundColor:'#1f9d73'}]},options:{plugins:{legend:{position:'top'},tooltip:{callbacks:{label:c=>c.dataset.label+' '+(c.dataset.label.includes('실적')?c.raw.toLocaleString()+'건':won(c.raw)+'원')}}},scales:{y:{ticks:{callback:v=>typeof v==='number' && Math.abs(v)>=1e6?won(v):v}}}}}));
+renderContractView('all');
+contractViewButtons.forEach(btn=>btn.addEventListener('click',()=>renderContractView(btn.dataset.view)));
 _charts.push(new Chart(scatterChart,{type:'scatter',data:{datasets:[
  {label:'흑자',data:scat.filter(d=>d.net>=0).map(d=>({x:d.p,y:d.net,n:d.n})),backgroundColor:'#1f9d73',pointRadius:5,pointHoverRadius:7},
  {label:'적자',data:scat.filter(d=>d.net<0).map(d=>({x:d.p,y:d.net,n:d.n})),backgroundColor:'#d1503f',pointRadius:5,pointHoverRadius:7}
