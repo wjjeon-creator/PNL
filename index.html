@@ -81,7 +81,9 @@
     padding:0 10px;
     margin-bottom:8px;
   }
-  .month-nav{list-style:none;margin:0 0 20px;padding:0;}
+  /* min-height:0 lets the list shrink and scroll on short viewports instead of
+     pushing the theme toggle out of the 100vh sidebar. */
+  .month-nav{list-style:none;margin:0 0 20px;padding:0;overflow-y:auto;min-height:0;}
   .month-item{margin-bottom:4px;}
   .month-btn{
     width:100%;
@@ -339,7 +341,7 @@
     body{flex-direction:column;}
     .sidebar{width:100%;height:auto;position:relative;flex-direction:row;align-items:center;gap:12px;}
     .brand-title,.nav-label,.sidebar-note{display:none;}
-    .month-nav{display:flex;gap:8px;margin:0;}
+    .month-nav{display:flex;gap:8px;margin:0;overflow-x:auto;overflow-y:visible;}
     .sidebar-foot{margin:0 0 0 auto;padding:0;border:none;}
     .main{padding:24px 18px 60px;}
     .card-grid,.insight-grid,.chart-grid{grid-template-columns:1fr;}
@@ -363,16 +365,11 @@
         <span>6월</span><span class="badge">완료</span>
       </button>
     </li>
-    <li class="month-item">
-      <button class="month-btn" data-month="jul">
-        <span>7월</span><span class="badge">준비중</span>
-      </button>
-    </li>
   </ul>
 
   <div class="sidebar-foot">
     <button class="theme-toggle" id="themeToggle">🌙 다크 모드</button>
-    <div class="sidebar-note">7월 데이터 전달 시 6월과 동일한 구조로 채워집니다.</div>
+    <div class="sidebar-note">7~12월은 데이터 전달 시 6월과 동일한 구조로 채워집니다.</div>
   </div>
 </aside>
 
@@ -708,60 +705,94 @@
     </div>
   </div>
 
-  <!-- ================= JULY (SKELETON) ================= -->
-  <div id="panel-jul" class="month-panel" style="display:none;">
-    <div class="page-eyebrow">2026 · 07 MONTHLY</div>
-    <h1 class="page-title">7월 대리점 수익성 대시보드</h1>
-    <div class="page-sub">7월 대리점별 상세 · 상생 프로모션 충족률</div>
-    <div class="meta-row">
-      <span>단위 <b>원 (VAT 제외)</b></span>
-      <span>구조는 6월과 동일 · 데이터 입력 대기</span>
-    </div>
-
-    <div class="subtabs" data-scope="jul">
-      <button class="subtab-btn active" data-sub="summary"><span class="snum">1</span>7월 대리점 수익성 요약</button>
-      <button class="subtab-btn" data-sub="detail"><span class="snum">2</span>7월 대리점 상세</button>
-      <button class="subtab-btn" data-sub="promo"><span class="snum">3</span>상생 프로모션 충족률</button>
-    </div>
-
-    <div class="callout">7월 데이터는 6월과 동일한 구조로 반영될 예정입니다. 실적·수익·비용 수치와 대리점별 상세를 전달해주시면 이 화면에 그대로 채워 넣을게요.</div>
-
-    <div class="subpanel active" data-sub="summary">
-      <section class="block">
-        <div class="block-head"><h3 class="block-title">7월 수익성 요약</h3></div>
-        <div class="card-grid">
-          <div class="stat-card"><div class="stat-label">7월 실적 (승인)</div><div class="stat-value">—</div><div class="stat-foot">데이터 입력 대기</div></div>
-          <div class="stat-card"><div class="stat-label">순이익</div><div class="stat-value">—</div><div class="stat-foot">데이터 입력 대기</div></div>
-          <div class="stat-card"><div class="stat-label">ROI</div><div class="stat-value">—</div><div class="stat-foot">데이터 입력 대기</div></div>
-          <div class="stat-card"><div class="stat-label">건당 순이익</div><div class="stat-value">—</div><div class="stat-foot">데이터 입력 대기</div></div>
-        </div>
-      </section>
-      <section class="block">
-        <div class="block-head"><h3 class="block-title">7월 수익성 분석 (전체 내역)</h3></div>
-        <div class="placeholder-card">총비용 · 총수익 항목별 표 — <b>데이터 전달 시 반영</b></div>
-      </section>
-      <section class="block">
-        <div class="block-head"><h3 class="block-title">수익·비용 구성</h3></div>
-        <div class="placeholder-card">수익 / 비용 구성 도넛 차트 — <b>데이터 전달 시 반영</b></div>
-      </section>
-    </div>
-
-    <div class="subpanel" data-sub="detail">
-      <section class="block">
-        <div class="block-head"><h3 class="block-title">7월 대리점 상세</h3></div>
-        <div class="placeholder-card">핵심 인사이트, 순매출 상위 / 적자 대리점, 실적 대비 순매출 산점도 — <b>데이터 전달 시 반영</b></div>
-      </section>
-    </div>
-
-    <div class="subpanel" data-sub="promo">
-      <section class="block">
-        <div class="block-head"><h3 class="block-title">상생 프로모션 충족률</h3></div>
-        <div class="placeholder-card">조건 달성 퍼널, 대리점별 충족 현황, 프로모션 수익 구조, 충족률 구간 분포 — <b>데이터 전달 시 반영</b></div>
-      </section>
-    </div>
-  </div>
+  <!-- ====== JULY–DECEMBER (skeletons, generated from PENDING_MONTHS) ====== -->
 
 </main>
+
+<!-- Month skeletons are built here, ahead of the Chart.js block, so the month
+     tabs still render if the chart CDN is unreachable. -->
+<script>
+/* ------------------- pending months (7월 ~ 12월) ------------------- */
+const PENDING_MONTHS = [
+  { key:'jul', num:7,  badge:'준비중',      lead:'7월 정산이 마감되면 6월과 동일한 구조로 채워집니다. 실적·수익·비용 수치와 대리점별 상세를 전달해주시면 이 화면에 그대로 반영됩니다.' },
+  { key:'aug', num:8,  badge:'데이터 대기' },
+  { key:'sep', num:9,  badge:'데이터 대기' },
+  { key:'oct', num:10, badge:'데이터 대기' },
+  { key:'nov', num:11, badge:'데이터 대기' },
+  { key:'dec', num:12, badge:'데이터 대기' },
+];
+
+function monthNavItem(m) {
+  return '<li class="month-item">'
+    + '<button class="month-btn" data-month="' + m.key + '">'
+    + '<span>' + m.num + '월</span><span class="badge">' + m.badge + '</span>'
+    + '</button></li>';
+}
+
+function monthPanel(m) {
+  const mm = String(m.num).padStart(2, '0');
+  const n = m.num;
+  const lead = m.lead || (n + '월 데이터를 전달해주시면 6월과 동일한 구조로 채워 넣습니다.');
+  const wait = '데이터 입력 대기';
+  return ''
+  + '<div id="panel-' + m.key + '" class="month-panel" style="display:none;">'
+  +   '<div class="page-eyebrow">2026 · ' + mm + ' MONTHLY</div>'
+  +   '<h1 class="page-title">' + n + '월 대리점 수익성 대시보드</h1>'
+  +   '<div class="page-sub">' + n + '월 대리점별 상세 · 상생 프로모션 충족률</div>'
+  +   '<div class="meta-row">'
+  +     '<span>단위 <b>원 (VAT 제외)</b></span>'
+  +     '<span>구조는 6월과 동일 · ' + wait + '</span>'
+  +   '</div>'
+
+  +   '<div class="subtabs" data-scope="' + m.key + '">'
+  +     '<button class="subtab-btn active" data-sub="summary"><span class="snum">1</span>' + n + '월 대리점 수익성 요약</button>'
+  +     '<button class="subtab-btn" data-sub="detail"><span class="snum">2</span>' + n + '월 대리점 상세</button>'
+  +     '<button class="subtab-btn" data-sub="promo"><span class="snum">3</span>상생 프로모션 충족률</button>'
+  +   '</div>'
+
+  +   '<div class="callout">' + lead + '</div>'
+
+  +   '<div class="subpanel active" data-sub="summary">'
+  +     '<section class="block">'
+  +       '<div class="block-head"><h3 class="block-title">' + n + '월 수익성 요약</h3></div>'
+  +       '<div class="card-grid">'
+  +         '<div class="stat-card"><div class="stat-label">' + n + '월 실적 (승인)</div><div class="stat-value">—</div><div class="stat-foot">' + wait + '</div></div>'
+  +         '<div class="stat-card"><div class="stat-label">순이익</div><div class="stat-value">—</div><div class="stat-foot">' + wait + '</div></div>'
+  +         '<div class="stat-card"><div class="stat-label">ROI</div><div class="stat-value">—</div><div class="stat-foot">' + wait + '</div></div>'
+  +         '<div class="stat-card"><div class="stat-label">건당 순이익</div><div class="stat-value">—</div><div class="stat-foot">' + wait + '</div></div>'
+  +       '</div>'
+  +     '</section>'
+  +     '<section class="block">'
+  +       '<div class="block-head"><h3 class="block-title">' + n + '월 수익성 분석 (전체 내역)</h3></div>'
+  +       '<div class="placeholder-card">총비용 · 총수익 항목별 표 — <b>데이터 전달 시 반영</b></div>'
+  +     '</section>'
+  +     '<section class="block">'
+  +       '<div class="block-head"><h3 class="block-title">수익·비용 구성</h3></div>'
+  +       '<div class="placeholder-card">수익 / 비용 구성 도넛 차트 — <b>데이터 전달 시 반영</b></div>'
+  +     '</section>'
+  +   '</div>'
+
+  +   '<div class="subpanel" data-sub="detail">'
+  +     '<section class="block">'
+  +       '<div class="block-head"><h3 class="block-title">' + n + '월 대리점 상세</h3></div>'
+  +       '<div class="placeholder-card">핵심 인사이트, 순매출 상위 / 적자 대리점, 실적 대비 순매출 산점도 — <b>데이터 전달 시 반영</b></div>'
+  +     '</section>'
+  +   '</div>'
+
+  +   '<div class="subpanel" data-sub="promo">'
+  +     '<section class="block">'
+  +       '<div class="block-head"><h3 class="block-title">상생 프로모션 충족률</h3></div>'
+  +       '<div class="placeholder-card">조건 달성 퍼널, 대리점별 충족 현황, 프로모션 수익 구조, 충족률 구간 분포 — <b>데이터 전달 시 반영</b></div>'
+  +     '</section>'
+  +   '</div>'
+  + '</div>';
+}
+
+document.getElementById('monthNav').insertAdjacentHTML('beforeend',
+  PENDING_MONTHS.map(monthNavItem).join(''));
+document.querySelector('main.main').insertAdjacentHTML('beforeend',
+  PENDING_MONTHS.map(monthPanel).join(''));
+</script>
 
 <script>
 Chart.register(ChartDataLabels);
