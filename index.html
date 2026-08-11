@@ -367,11 +367,16 @@
         <span>6월</span><span class="badge">완료</span>
       </button>
     </li>
+    <li class="month-item">
+      <button class="month-btn" data-month="jul">
+        <span>7월</span><span class="badge">완료</span>
+      </button>
+    </li>
   </ul>
 
   <div class="sidebar-foot">
     <button class="theme-toggle" id="themeToggle">🌙 다크 모드</button>
-    <div class="sidebar-note">7~12월은 데이터 전달 시 6월과 동일한 구조로 채워집니다.</div>
+    <div class="sidebar-note">8~12월은 데이터 전달 시 6월과 동일한 구조로 채워집니다.</div>
   </div>
 </aside>
 
@@ -707,7 +712,130 @@
     </div>
   </div>
 
-  <!-- ====== JULY–DECEMBER (skeletons, generated from PENDING_MONTHS) ====== -->
+  <div id="panel-jul" class="month-panel" style="display:none;">
+    <div class="page-eyebrow">2026 · 07 MONTHLY</div>
+    <h1 class="page-title">7월 대리점 수익성 대시보드</h1>
+    <div class="page-sub">7월 대리점별 상세 · 상생 프로모션 충족률</div>
+    <div class="meta-row">
+      <span>단위 <b>원 (VAT 제외)</b></span>
+      <span>집계 대리점 <b>119개사</b> · 활성 <b>40개사</b></span>
+      <span>인건비 제외</span>
+    </div>
+
+    <div class="subtabs" data-scope="jul">
+      <button class="subtab-btn active" data-sub="summary"><span class="snum">1</span>7월 대리점 수익성 요약</button>
+      <button class="subtab-btn" data-sub="detail"><span class="snum">2</span>7월 대리점 상세</button>
+      <button class="subtab-btn" data-sub="promo"><span class="snum">3</span>상생 프로모션 충족률</button>
+    </div>
+
+    <!-- ---- Sub 1: 수익성 요약 ---- -->
+    <div class="subpanel active" data-sub="summary">
+      <div class="callout">
+        <ul>
+          <li>7월 실적은 <b>306건</b>으로 6월(411건) 대비 <b>25.5% 감소</b>했지만, 순이익은 <b>73.2M</b>(6월 37.0M 대비 +97.8%), ROI는 <b>91.46%</b>(6월 27.03%에서 +64.4%p)로 크게 개선됐습니다.</li>
+          <li>개선 원인은 비용 구조입니다. <b>무상임대(프론트) 비용이 33.0M로 6월(106.9M) 대비 크게 줄어든 반면</b>, 상생 프로모션(34.5M)·밴피(8.8M) 등 수익 항목은 유지되며 총비용이 총수익보다 훨씬 큰 폭으로 감소했습니다.</li>
+        </ul>
+      </div>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">7월 수익성 요약</h3>
+          <span class="block-desc">요약 시트 · 전사 집계</span>
+        </div>
+        <div class="card-grid">
+          <div class="stat-card">
+            <div class="stat-label">7월 실적 (승인)</div>
+            <div class="stat-value">306건</div>
+            <div class="stat-foot">6월 411건 · <span class="neg">−25.5%</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">순이익</div>
+            <div class="stat-value pos">73,216,902</div>
+            <div class="stat-foot">6월 37,010,728 · <span class="pos">+97.8%</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">ROI</div>
+            <div class="stat-value pos">91.46%</div>
+            <div class="stat-foot">6월 27.03% · <span class="pos">+64.4%p</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">건당 순이익</div>
+            <div class="stat-value">23.9만원</div>
+            <div class="stat-foot">73.22M ÷ 306건 = 239,271원</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">7월 수익성 분석 (전체 내역)</h3>
+          <span class="block-desc">총비용 · 총수익 항목별 · 요약 시트 기반</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <tbody>
+              <tr class="total"><td>실적</td><td class="num">306 건</td></tr>
+              <tr class="total hl"><td>순이익</td><td class="num pos">73,216,902</td></tr>
+              <tr class="total"><td>ROI</td><td class="num">91.46%</td></tr>
+
+              <tr class="total"><td>총 비용</td><td class="num neg">80,051,639</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;프로모션</td><td class="num">15,070,000</td></tr>
+              <tr class="leaf"><td>프로모션 보상금</td><td class="num">13,850,000</td></tr>
+              <tr class="leaf"><td>마케팅 지원금</td><td class="num">1,220,000</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;장비 원가</td><td class="num">62,477,639</td></tr>
+              <tr class="leaf"><td>무상임대 (프론트만)</td><td class="num">33,020,000</td></tr>
+              <tr class="leaf"><td>CMS 장비 (감가)</td><td class="num">29,457,639</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;물류비</td><td class="num">2,504,000</td></tr>
+
+              <tr class="total"><td>총 수익</td><td class="num pos">153,268,541</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;토스수수료</td><td class="num">59,782,540</td></tr>
+              <tr class="leaf"><td>설치수수료</td><td class="num">47,350,000</td></tr>
+              <tr class="leaf"><td>청약수수료</td><td class="num">4,110,000</td></tr>
+              <tr class="leaf"><td>유지수수료</td><td class="num">8,322,540</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;토스프로모션</td><td class="num">59,470,000</td></tr>
+              <tr class="leaf"><td>(토플) 프론트 설치 12만원</td><td class="num">24,960,000</td></tr>
+              <tr class="leaf"><td>상생 프로모션</td><td class="num">34,510,000</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;밴피</td><td class="num">8,767,341</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;CMS (구CMS + NEW CMS)</td><td class="num">23,283,660</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;장비판매대금 (중고)</td><td class="num">1,965,000</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note">
+          <b>실적</b> 306건은 7월 승인건수 합계 · <b>순이익</b> 73,216,902원 = 총수익 153,268,541 − 총비용 80,051,639 · <b>ROI</b> 91.46% = 순이익 ÷ 총비용<br>
+          * 인건비 확인 불가로 제외 · <b>밴피·상생 프로모션은 원자료 실측값</b>(6월과 달리 추정치 아님)
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">수익·비용 구성</h3>
+          <span class="block-desc">항목별 비중</span>
+        </div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h4>총수익 구성</h4>
+            <div class="sub">153.27M · 토스수수료가 39%</div>
+            <div class="chart-box"><canvas id="chartRevenueJul"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h4>총비용 구성</h4>
+            <div class="sub">80.05M · 장비 원가(무상임대+CMS감가)가 78%</div>
+            <div class="chart-box"><canvas id="chartCostJul"></canvas></div>
+          </div>
+        </div>
+        <div class="note">* 비중은 각 조각에 직접 표기했습니다. 정확한 금액은 위 <b>수익성 분석 표</b>를 참고하세요.</div>
+      </section>
+    </div>
+
+    <!-- ---- Sub 2: 대리점 상세 (Task 3에서 채움) ---- -->
+    <div class="subpanel" data-sub="detail"></div>
+
+    <!-- ---- Sub 3: 상생 프로모션 충족률 (Task 4에서 채움) ---- -->
+    <div class="subpanel" data-sub="promo"></div>
+  </div>
+
+  <!-- ====== AUGUST–DECEMBER (skeletons, generated from PENDING_MONTHS) ====== -->
 
 </main>
 
@@ -716,7 +844,6 @@
 <script>
 /* ------------------- pending months (7월 ~ 12월) ------------------- */
 const PENDING_MONTHS = [
-  { key:'jul', num:7,  badge:'준비중',      lead:'7월 정산이 마감되면 6월과 동일한 구조로 채워집니다. 실적·수익·비용 수치와 대리점별 상세를 전달해주시면 이 화면에 그대로 반영됩니다.' },
   { key:'aug', num:8,  badge:'데이터 대기' },
   { key:'sep', num:9,  badge:'데이터 대기' },
   { key:'oct', num:10, badge:'데이터 대기' },
@@ -1075,6 +1202,18 @@ const BUILDERS = {
     el,
     ['무상임대 (프론트)','CMS 감가','물류비','프로모션'],
     [106860000, 27444242, 1940700, 700000],
+    P().cat.slice(0, 4)
+  ),
+  chartRevenueJul: el => donut(
+    el,
+    ['토스수수료','토스프로모션','CMS','밴피','장비판매대금'],
+    [59782540, 59470000, 23283660, 8767341, 1965000],
+    P().cat
+  ),
+  chartCostJul: el => donut(
+    el,
+    ['무상임대 (프론트)','CMS 감가','물류비','프로모션'],
+    [33020000, 29457639, 2504000, 15070000],
     P().cat.slice(0, 4)
   ),
   chartTopNet: el => hBar(el, TOP_NET.map(d => d.n), TOP_NET.map(d => d.net), P().pos, false),
