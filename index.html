@@ -1038,20 +1038,6 @@
           </div>
         </div>
       </section>
-
-      <section class="block">
-        <div class="block-head">
-          <h3 class="block-title">보상 티어 정책</h3>
-          <span class="block-desc">계약 유형 × 설치 구간별 추가 지급액 · 참고용</span>
-        </div>
-        <div class="table-wrap">
-          <table id="tblRewardTiersJul">
-            <thead><tr><th>구분</th><th>대리점 정보</th><th>설치 구간</th><th class="num">추가 금액 (건당)</th></tr></thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <div class="note">* 이 표는 참고용입니다. 기본 지급(건당 30,000원, 조건 미달성 시에도 지급)에 조건 달성 시 설치 구간별 추가 지급이 더해지는 구조라, 위 <b>대리점별 충족 현황</b>의 "최대 보상금"은 이 표로 재계산하지 않고 원자료 값을 그대로 사용합니다.</div>
-      </section>
     </div>
   </div>
 
@@ -1275,16 +1261,6 @@ const STAGES_JUL = [
   {name:'조건 달성',           label:['조건 달성'],             num:493}
 ];
 
-/* 참고용 보상 정책 표 — 재계산에 쓰지 않음 (전역 제약 참조) */
-const REWARD_TIERS_JUL = [
-  {type:'(우수)위탁운영대리점', target:'우리편', rows:[['101~150','30,000'],['151~200','50,000'],['201~','70,000']]},
-  {type:'(우수)위탁운영대리점', target:'엠제이통신(아정당)', rows:[['51~100','20,000'],['101~150','30,000'],['151~','40,000']]},
-  {type:'(우수)협력대리점', target:'미르네프로', rows:[['101~150','50,000'],['151~200','70,000'],['201~','100,000']]},
-  {type:'(우수)협력대리점', target:'제이투시스템', rows:[['51~100','50,000'],['101~150','70,000'],['151~','100,000']]},
-  {type:'(우수)협력대리점', target:'비에이치소프트', rows:[['51~100','20,000'],['101~150','30,000'],['151~','40,000']]},
-  {type:'일반위탁대리점', target:'샘랩·지앤비·푸딘코 등', rows:[['5~10','30,000'],['11~20','50,000'],['21대 이상','70,000']]},
-  {type:'일반협력대리점', target:'일반협력대리점 전체', rows:[['5~15','50,000'],['16~30','70,000'],['30~','100,000']]}
-];
 
 /* --------------------------- static tables --------------------------- */
 /* 옆 막대 차트가 이미 크기를 보여주므로 표에는 숫자만 — 중복 인코딩 제거 */
@@ -1445,23 +1421,6 @@ document.getElementById('ctHiJul').textContent = `100% 완전 달성 (${FULL_LIS
 document.getElementById('ctLoJul').textContent = `50% 이하 저조 (${LOW_LIST_JUL.length}개사)`;
 document.getElementById('chipsHiJul').innerHTML = FULL_LIST_JUL.map(n => `<span class="chip hi">${n}</span>`).join('');
 document.getElementById('chipsLoJul').innerHTML = LOW_LIST_JUL.map(n => `<span class="chip lo">${n}</span>`).join('');
-
-(function renderRewardTiersJul(){
-  const rows = REWARD_TIERS_JUL.flatMap(tier =>
-    tier.rows.map(([range, amount]) => `
-      <tr>
-        <td>${tier.type}</td>
-        <td>${tier.target}</td>
-        <td>${range}</td>
-        <td class="num">${amount}</td>
-      </tr>`)
-  ).join('');
-  const baseRow = `
-    <tr class="total">
-      <td>기본 지급 (전체)</td><td>건당</td><td>—</td><td class="num">30,000 (조건 미달성 시에도 지급)</td>
-    </tr>`;
-  document.querySelector('#tblRewardTiersJul tbody').innerHTML = rows + baseRow;
-})();
 
 (function renderPromo(){
   const cls = r => r >= 100 ? 'full' : r >= 50 ? 'mid' : r > 0 ? 'low' : 'zero';
