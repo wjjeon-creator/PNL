@@ -948,10 +948,10 @@
           </div>
           <div class="chart-card">
             <h4>계약 유형별 집계</h4>
-            <div class="sub">대리점 수 · 순매출 · 비중</div>
+            <div class="sub">대리점 수 · 설치수 · 순매출 · 비중</div>
             <div class="table-wrap">
               <table id="tblContractTypeJul">
-                <thead><tr><th>계약 유형</th><th class="num">대리점 수</th><th class="num">순매출 합계</th><th class="num">대리점당 평균</th><th class="num">비중</th></tr></thead>
+                <thead><tr><th>계약 유형</th><th class="num">대리점 수</th><th class="num">설치수</th><th class="num">순매출 합계</th><th class="num">대리점당 평균</th><th class="num">비중</th></tr></thead>
                 <tbody></tbody>
               </table>
             </div>
@@ -1307,9 +1307,10 @@ const STAGES_JUL = [
 function groupByContractType(list) {
   const map = new Map();
   list.forEach(d => {
-    if (!map.has(d.type)) map.set(d.type, { type: d.type, count: 0, sum: 0 });
+    if (!map.has(d.type)) map.set(d.type, { type: d.type, count: 0, installs: 0, sum: 0 });
     const g = map.get(d.type);
     g.count++;
+    g.installs += d.p;
     g.sum += d.net;
   });
   const total = list.reduce((a, d) => a + d.net, 0);
@@ -1329,6 +1330,7 @@ const CONTRACT_TYPE_GROUPS_JUL = groupByContractType(CONTRACT_TYPE_JUL);
     <tr>
       <td>${g.type}</td>
       <td class="num">${g.count}</td>
+      <td class="num">${g.installs}</td>
       <td class="num ${g.sum >= 0 ? 'pos' : 'neg'}">${g.sum >= 0 ? '' : '−'}${won(Math.abs(g.sum))}</td>
       <td class="num ${g.avg >= 0 ? 'pos' : 'neg'}">${g.avg >= 0 ? '' : '−'}${won(Math.abs(g.avg))}</td>
       <td class="num">${shareStable ? g.share.toFixed(1) + '%' : '—'}</td>
