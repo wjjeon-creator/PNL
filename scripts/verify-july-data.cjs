@@ -21,8 +21,9 @@ function extractConst(name) {
 const EXPECTED = {
   dealerCount: 119,
   activeCount: 40,
-  contractTypeNetSum: 42798706,
-  topNetFirst: { n: '엠제이통신', net: 18403942 },
+  // 2026-08-11: 무상임대(프론트만) 원자료 수정(33,020,000 → 79,560,000) 반영 후 재계산
+  contractTypeNetSum: -3741294,
+  topNetFirst: { n: '엠제이통신', net: 8263942 },
   negNetFirst: { n: '코스모스컴퍼니', net: -3730424 },
   promo: { count: 44, i: 600, t: 569, p: 509, a: 493, m: 34510000 },
   distribution: { '80%+': 29, '50~80%': 8, '30~50%': 3, '<30%': 4 },
