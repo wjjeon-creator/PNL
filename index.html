@@ -8,6 +8,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <style>
   :root{
+    color-scheme:dark;
     --bg:#0F1417;
     --surface:#171D21;
     --surface-2:#1D2428;
@@ -23,6 +24,7 @@
     --radius:10px;
   }
   [data-theme="light"]{
+    color-scheme:light;
     --bg:#F5F6F4;
     --surface:#FFFFFF;
     --surface-2:#EFF1EF;
@@ -1081,7 +1083,7 @@
           <div class="sub">선택한 계약 유형의 순매출 합계 기준 · 원</div>
           <div class="chart-box"><canvas id="chartScenarioJul"></canvas></div>
         </div>
-        <div class="note">* 대리점당 평균은 실측 데이터 기반이지만, 표본이 적은 유형((우수)위탁운영 2곳, (우수)협력 3곳, 일반위탁 4곳)의 신규 대리점 성과는 이 평균과 다를 수 있습니다.</div>
+        <div class="note" id="scenarioCaveatJul"></div>
       </section>
     </div>
   </div>
@@ -1216,6 +1218,9 @@ const won = v => {
   if (a >= 1e4) return Math.round(v / 1e4).toLocaleString() + '만';
   return Math.round(v).toLocaleString();
 };
+function fmtSigned(v){
+  return (v >= 0 ? '' : '−') + won(Math.abs(v));
+}
 
 /* ------------------------------ data ------------------------------ */
 const TOP_NET = [
@@ -1433,10 +1438,10 @@ const CONTRACT_TYPE_GROUPS_JUL = groupByContractType(CONTRACT_TYPE_JUL);
   const el = document.getElementById('strategyInsightJul');
   if (runnerUp) {
     const multiple = (top.avg / runnerUp.avg).toFixed(1);
-    el.innerHTML = `<b>${top.type}</b>이 대리점당 평균 <b>${won(top.avg)}</b>로, 다음으로 높은 <b>${runnerUp.type}</b>(${won(runnerUp.avg)}) 대비 <b>${multiple}배</b> 높습니다. `
+    el.innerHTML = `<b>${top.type}</b>이 대리점당 평균 <b>${fmtSigned(top.avg)}</b>로, 다음으로 높은 <b>${runnerUp.type}</b>(${fmtSigned(runnerUp.avg)}) 대비 <b>${multiple}배</b> 높습니다. `
       + `다만 이 유형은 현재 <b>${top.count}곳</b>뿐이라 표본이 작다는 점은 감안해야 합니다.`;
   } else {
-    el.innerHTML = `<b>${top.type}</b>이 대리점당 평균 <b>${won(top.avg)}</b>로 가장 높습니다. `
+    el.innerHTML = `<b>${top.type}</b>이 대리점당 평균 <b>${fmtSigned(top.avg)}</b>로 가장 높습니다. `
       + `다만 이 유형은 현재 <b>${top.count}곳</b>뿐이라 표본이 작다는 점은 감안해야 합니다.`;
   }
 })();
@@ -1455,9 +1460,10 @@ function calcScenario(){
   const select = document.getElementById('scenarioType');
   select.innerHTML = CONTRACT_TYPE_GROUPS_JUL.map(g => `<option value="${g.type}">${g.type}</option>`).join('');
 
-  function fmtSigned(v){
-    return (v >= 0 ? '' : '−') + won(Math.abs(v));
-  }
+  const smallSamples = CONTRACT_TYPE_GROUPS_JUL.filter(g => g.count < 10)
+    .map(g => `${g.type} ${g.count}곳`).join(', ');
+  document.getElementById('scenarioCaveatJul').textContent =
+    `* 대리점당 평균은 실측 데이터 기반이지만, 표본이 적은 유형(${smallSamples})의 신규 대리점 성과는 이 평균과 다를 수 있습니다.`;
 
   function update(){
     const { g, count, increase, after } = calcScenario();
