@@ -1,6 +1,6 @@
 # 7월 대시보드 채우기 + 계약 유형별 수익성 인사이트
 
-Status: Approved (brainstorm), pending implementation
+Status: Implemented
 Source data: `'26년 7월 대리점 수익성 분석.xlsx` (사용자 Downloads 폴더, 2026-08-11 전달)
 
 ## 배경
