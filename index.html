@@ -944,8 +944,89 @@
       </section>
     </div>
 
-    <!-- ---- Sub 3: 상생 프로모션 충족률 (Task 4에서 채움) ---- -->
-    <div class="subpanel" data-sub="promo"></div>
+    <!-- ---- Sub 3: 상생 프로모션 충족률 ---- -->
+    <div class="subpanel" data-sub="promo">
+      <div class="callout">상생 프로모션 <b>조건 달성 퍼널</b>과 대리점별 충족 현황, 구간별 분포입니다. 조건은 <b>토스페이 청약 + 통합결제창 5건 이상</b>입니다. 집계 기간은 <b>5/18~6/30</b>(누적)로, 위 대리점 상세의 7월 실적과는 별개 기간입니다.</div>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">조건 달성 퍼널</h3>
+          <span class="block-desc">설치 → 청약 → 결제 → 조건 달성</span>
+        </div>
+        <div class="funnel-strip" id="funnelStripJul"></div>
+
+        <div class="chart-card" style="margin-bottom:14px">
+          <h4>단계별 잔존 건수</h4>
+          <div class="sub">막대 길이 = 해당 단계까지 남은 건수 · 설치 600건 기준</div>
+          <div class="chart-box" style="height:230px"><canvas id="chartStageFunnelJul"></canvas></div>
+        </div>
+
+        <div class="kpi-flow">
+          <div class="kpi-box"><div class="v pos">34,510,000원</div><div class="l">확보 (조건 달성) · 493건 · 달성률 82.2%</div></div>
+          <div class="kpi-box"><div class="v warn">16,050,000원</div><div class="l">미충족 (관리 필요) · 107건 · 미달 17.8%</div></div>
+        </div>
+        <div class="progress"><div class="done" style="width:82.2%"></div><div class="todo" style="width:17.8%"></div></div>
+        <div class="callout">청약(569) → 결제(509) 구간에서 <b>60건이 이탈</b>해 가장 큰 감소 구간입니다. 6월(65.7%)보다 충족률이 <b>16.5%p 개선</b>됐습니다.</div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">대리점별 충족 현황</h3>
+          <span class="block-desc">44개사 · 충족률 내림차순</span>
+        </div>
+        <div class="table-wrap scroll">
+          <table id="tblPromoJul">
+            <thead><tr>
+              <th>대리점</th>
+              <th class="num">설치수</th><th class="num">토스페이 청약</th><th class="num">통합결제 5건↑</th>
+              <th class="num">조건 달성</th><th class="num">충족률</th><th class="num">최대 보상금</th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="note">* <b>최대 보상금</b>은 원자료의 계산값을 그대로 표시했습니다 (추정 아님).</div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">충족률 구간 분포</h3>
+          <span class="block-desc">44개사 · 구간별 대리점 수</span>
+        </div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h4>충족률 구간별 대리점 수</h4>
+            <div class="sub">막대 = 대리점 수 (전체 44개사)</div>
+            <div class="chart-box tall"><canvas id="chartFunnelDistJul"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h4>구간 명단</h4>
+            <div class="sub">양극화 구조 확인</div>
+            <div class="chip-group">
+              <div class="ct" id="ctHiJul">100% 완전 달성</div>
+              <div class="chips" id="chipsHiJul"></div>
+            </div>
+            <div class="chip-group">
+              <div class="ct" id="ctLoJul">50% 이하 저조</div>
+              <div class="chips" id="chipsLoJul"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">보상 티어 정책</h3>
+          <span class="block-desc">계약 유형 × 설치 구간별 추가 지급액 · 참고용</span>
+        </div>
+        <div class="table-wrap">
+          <table id="tblRewardTiersJul">
+            <thead><tr><th>구분</th><th>대리점 정보</th><th>설치 구간</th><th class="num">추가 금액 (건당)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="note">* 이 표는 참고용입니다. 기본 지급(건당 30,000원, 조건 미달성 시에도 지급)에 조건 달성 시 설치 구간별 추가 지급이 더해지는 구조라, 위 <b>대리점별 충족 현황</b>의 "최대 보상금"은 이 표로 재계산하지 않고 원자료 값을 그대로 사용합니다.</div>
+      </section>
+    </div>
   </div>
 
   <!-- ====== AUGUST–DECEMBER (skeletons, generated from PENDING_MONTHS) ====== -->
@@ -1251,6 +1332,72 @@ const CONTRACT_TYPE_GROUPS_JUL = groupByContractType(CONTRACT_TYPE_JUL);
     + `<b>${genOp.type}</b> ${genOp.count}곳은 오히려 순손실(−${won(Math.abs(genOp.sum))})입니다.`;
 })();
 
+(function renderPromoJul(){
+  const cls = r => r >= 100 ? 'full' : r >= 50 ? 'mid' : r > 0 ? 'low' : 'zero';
+  const sum = k => PROMO_JUL.reduce((a, d) => a + d[k], 0);
+  const rows = PROMO_JUL.map(d => `
+    <tr>
+      <td>${d.n}</td>
+      <td class="num">${d.i}</td><td class="num">${d.t}</td><td class="num">${d.p}</td><td class="num">${d.a}</td>
+      <td class="num"><span class="pill ${cls(d.r)}">${d.r.toFixed(1)}%</span></td>
+      <td class="num">${d.m > 0 ? d.m.toLocaleString() : '—'}</td>
+    </tr>`).join('');
+  const tot = `
+    <tr class="total">
+      <td>총합계 (${PROMO_JUL.length}개사)</td>
+      <td class="num">${sum('i')}</td><td class="num">${sum('t')}</td><td class="num">${sum('p')}</td><td class="num">${sum('a')}</td>
+      <td class="num"><span class="pill mid">${(sum('a') / sum('i') * 100).toFixed(1)}%</span></td>
+      <td class="num">${sum('m').toLocaleString()}</td>
+    </tr>`;
+  document.querySelector('#tblPromoJul tbody').innerHTML = rows + tot;
+})();
+
+(function renderFunnelStripJul(){
+  const base = STAGES_JUL[0].num;
+  let html = '';
+  STAGES_JUL.forEach((s, i) => {
+    if (i > 0) html += `<div class="funnel-drop">−${(STAGES_JUL[i - 1].num - s.num).toLocaleString()}건 →</div>`;
+    const last = i === STAGES_JUL.length - 1;
+    html += `<div class="funnel-pill">
+      <div class="n"${last ? ' style="color:var(--accent)"' : ''}>${s.num.toLocaleString()}건</div>
+      <div class="l">${s.name}</div>
+      <div class="p">설치 대비 ${(s.num / base * 100).toFixed(1)}%</div>
+    </div>`;
+  });
+  document.getElementById('funnelStripJul').innerHTML = html;
+})();
+
+/* 구간 명단·분포는 PROMO_JUL 원자료에서 직접 집계 */
+const FULL_LIST_JUL = PROMO_JUL.filter(d => d.r >= 100).map(d => d.n);
+const LOW_LIST_JUL  = PROMO_JUL.filter(d => d.r <= 50).map(d => d.n);
+const DIST_JUL = [
+  {label:'80% 이상', n: PROMO_JUL.filter(d => d.r >= 80).length},
+  {label:'50~80%',  n: PROMO_JUL.filter(d => d.r >= 50 && d.r < 80).length},
+  {label:'30~50%',  n: PROMO_JUL.filter(d => d.r >= 30 && d.r < 50).length},
+  {label:'30% 미만', n: PROMO_JUL.filter(d => d.r < 30).length}
+];
+document.getElementById('ctHiJul').textContent = `100% 완전 달성 (${FULL_LIST_JUL.length}개사)`;
+document.getElementById('ctLoJul').textContent = `50% 이하 저조 (${LOW_LIST_JUL.length}개사)`;
+document.getElementById('chipsHiJul').innerHTML = FULL_LIST_JUL.map(n => `<span class="chip hi">${n}</span>`).join('');
+document.getElementById('chipsLoJul').innerHTML = LOW_LIST_JUL.map(n => `<span class="chip lo">${n}</span>`).join('');
+
+(function renderRewardTiersJul(){
+  const rows = REWARD_TIERS_JUL.flatMap(tier =>
+    tier.rows.map(([range, amount]) => `
+      <tr>
+        <td>${tier.type}</td>
+        <td>${tier.target}</td>
+        <td>${range}</td>
+        <td class="num">${amount}</td>
+      </tr>`)
+  ).join('');
+  const baseRow = `
+    <tr class="total">
+      <td>기본 지급 (전체)</td><td>건당</td><td>—</td><td class="num">30,000 (조건 미달성 시에도 지급)</td>
+    </tr>`;
+  document.querySelector('#tblRewardTiersJul tbody').innerHTML = rows + baseRow;
+})();
+
 (function renderPromo(){
   const cls = r => r >= 100 ? 'full' : r >= 50 ? 'mid' : r > 0 ? 'low' : 'zero';
   const sum = k => PROMO.reduce((a, d) => a + d[k], 0);
@@ -1526,6 +1673,62 @@ const BUILDERS = {
       plugins:{
         legend:{ display:false },
         tooltip:{ callbacks:{ label: c => ' ' + c.raw + '개사 / ' + PROMO.length + '개사' } },
+        datalabels:{ display:true, anchor:'end', align:'end', offset:4, color:ink(), font:{weight:700, size:11}, formatter: v => v + '개사' }
+      },
+      scales:{
+        x:{ grid:{ color:gridLine() }, border:{ display:false }, ticks:{ color:inkDim(), font:{size:11}, precision:0 } },
+        y:{ grid:{ display:false }, border:{ display:false }, ticks:{ color:inkDim(), font:{size:12} } }
+      }
+    }
+  }),
+
+  chartStageFunnelJul: el => new Chart(el, {
+    type:'bar',
+    data:{
+      labels: STAGES_JUL.map(s => s.label),
+      datasets:[{
+        label:'잔존 건수',
+        data: STAGES_JUL.map(s => s.num),
+        backgroundColor: [...P().ord].reverse(),
+        borderRadius:4,
+        barPercentage:.7
+      }]
+    },
+    options:{
+      maintainAspectRatio:false,
+      layout:{ padding:{ top:26 } },
+      plugins:{
+        legend:{ display:false },
+        tooltip:{ callbacks:{
+          label: c => ' ' + c.raw.toLocaleString() + '건 · 설치 대비 ' + (c.raw / STAGES_JUL[0].num * 100).toFixed(1) + '%',
+          afterLabel: c => c.dataIndex === 0 ? '' : '이전 단계 대비 −' + (STAGES_JUL[c.dataIndex - 1].num - c.raw).toLocaleString() + '건'
+        } },
+        datalabels:{
+          display:true, anchor:'end', align:'top', offset:4,
+          color: ink(), font:{ weight:700, size:11 },
+          formatter: (v, c) => v.toLocaleString() + '건 (' + (v / STAGES_JUL[0].num * 100).toFixed(1) + '%)'
+        }
+      },
+      scales:{
+        x:{ grid:{ display:false }, border:{ display:false }, ticks:{ color:inkDim(), font:{size:11.5} } },
+        y:{ grid:{ color:gridLine() }, border:{ display:false }, ticks:{ color:inkDim(), font:{size:11} } }
+      }
+    }
+  }),
+
+  chartFunnelDistJul: el => new Chart(el, {
+    type:'bar',
+    data:{
+      labels: DIST_JUL.map(d => d.label),
+      datasets:[{ label:'대리점 수', data: DIST_JUL.map(d => d.n), backgroundColor:P().ord, borderRadius:4, barPercentage:.7 }]
+    },
+    options:{
+      indexAxis:'y',
+      maintainAspectRatio:false,
+      layout:{ padding:{ right:46 } },
+      plugins:{
+        legend:{ display:false },
+        tooltip:{ callbacks:{ label: c => ' ' + c.raw + '개사 / ' + PROMO_JUL.length + '개사' } },
         datalabels:{ display:true, anchor:'end', align:'end', offset:4, color:ink(), font:{weight:700, size:11}, formatter: v => v + '개사' }
       },
       scales:{
