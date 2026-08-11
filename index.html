@@ -1390,6 +1390,21 @@ const CONTRACT_TYPE_GROUPS_JUL = groupByContractType(CONTRACT_TYPE_JUL);
   }).join('');
 })();
 
+(function renderStrategyInsightJul(){
+  const ranked = [...CONTRACT_TYPE_GROUPS_JUL].sort((a, b) => b.avg - a.avg);
+  const top = ranked[0];
+  const runnerUp = ranked.slice(1).find(g => g.avg > 0);
+  const el = document.getElementById('strategyInsightJul');
+  if (runnerUp) {
+    const multiple = (top.avg / runnerUp.avg).toFixed(1);
+    el.innerHTML = `<b>${top.type}</b>이 대리점당 평균 <b>${won(top.avg)}</b>로, 다음으로 높은 <b>${runnerUp.type}</b>(${won(runnerUp.avg)}) 대비 <b>${multiple}배</b> 높습니다. `
+      + `다만 이 유형은 현재 <b>${top.count}곳</b>뿐이라 표본이 작다는 점은 감안해야 합니다.`;
+  } else {
+    el.innerHTML = `<b>${top.type}</b>이 대리점당 평균 <b>${won(top.avg)}</b>로 가장 높습니다. `
+      + `다만 이 유형은 현재 <b>${top.count}곳</b>뿐이라 표본이 작다는 점은 감안해야 합니다.`;
+  }
+})();
+
 (function renderPromoJul(){
   const cls = r => r >= 100 ? 'full' : r >= 50 ? 'mid' : r > 0 ? 'low' : 'zero';
   const sum = k => PROMO_JUL.reduce((a, d) => a + d[k], 0);
