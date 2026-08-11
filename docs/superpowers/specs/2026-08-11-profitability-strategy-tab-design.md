@@ -1,6 +1,6 @@
 # 7월 "수익성 개선 전략" 탭 신설
 
-Status: Approved (brainstorm), pending implementation
+Status: Implemented
 
 ## 배경
 
