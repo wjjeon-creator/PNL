@@ -828,8 +828,121 @@
       </section>
     </div>
 
-    <!-- ---- Sub 2: 대리점 상세 (Task 3에서 채움) ---- -->
-    <div class="subpanel" data-sub="detail"></div>
+    <!-- ---- Sub 2: 대리점 상세 ---- -->
+    <div class="subpanel" data-sub="detail">
+      <div class="callout">7월에 <b>설치 실적이 있는 40개 대리점</b>을 수익성(순매출)과 설치 건수 기준으로 분석했습니다. <b>순매출</b> = 대리점이 벌어들인 수익에서 장비원가 등 원가를 뺀 실제 손익.</div>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">핵심 인사이트</h3>
+          <span class="block-desc">7월 상세 데이터에서 직접 계산</span>
+        </div>
+        <div class="insight-grid">
+          <div class="insight-card">
+            <h4>계약 대리점 3곳 중 1곳만 실제 활동</h4>
+            <p>계약된 <b>119개사 중 7월에 설치 실적이 있는 곳은 40개사(34%)</b>뿐. 6월(118개사 중 39개사, 33%)과 거의 같은 비율입니다.</p>
+          </div>
+          <div class="insight-card">
+            <h4>수익이 소수 대리점에 쏠려 있음</h4>
+            <p>활동 40개사 순매출의 <b>85%를 상위 3개사</b>가 차지(엠제이통신·우리편·현은시스템). 6월보다 더 좁은 상위 3곳 집중 구조입니다.</p>
+          </div>
+          <div class="insight-card">
+            <h4>계약 유형이 실적 순위보다 수익성을 잘 설명</h4>
+            <p>설치 건수 1위는 <b>우리편(56건)</b>이 아니라 <b>비에이치소프트(68건)</b>지만, 순매출은 우리편이 6.6배 많습니다. 아래 <b>계약 유형별 수익성</b>에서 그 이유를 다룹니다.</p>
+          </div>
+          <div class="insight-card">
+            <h4>활동 대리점 10곳 중 4곳이 적자</h4>
+            <p>실적 있는 40개사 중 <b>16개사(40%)가 적자</b>. 전체 대리점(119개사) 기준으로는 31개사가 적자입니다.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">수익성 상위 대리점</h3>
+          <span class="block-desc">순매출 상위 10개사</span>
+        </div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h4>순매출 상위 대리점</h4>
+            <div class="sub">순매출 기준 · 원</div>
+            <div class="chart-box tall"><canvas id="chartTopNetJul"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h4>실적 대비 순매출 효율</h4>
+            <div class="sub">건수 · 순매출 · 건당</div>
+            <div class="table-wrap">
+              <table id="tblTopNetJul">
+                <thead><tr><th>대리점</th><th class="num">실적</th><th class="num">순매출</th><th class="num">건당</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">수익성 하위 대리점 (적자)</h3>
+          <span class="block-desc">순매출 마이너스 · 하위 10개사</span>
+        </div>
+        <div class="callout warn"><b>전체 119개사 중 31개사가 순매출 마이너스</b>입니다. 아래는 손실 규모가 가장 큰 10곳입니다.</div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h4>순매출 적자 대리점</h4>
+            <div class="sub">순매출 마이너스 · 원</div>
+            <div class="chart-box tall"><canvas id="chartNegNetJul"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h4>적자 대리점 상세</h4>
+            <div class="sub">실적 · 순매출</div>
+            <div class="table-wrap">
+              <table id="tblNegNetJul">
+                <thead><tr><th>대리점</th><th class="num">실적</th><th class="num">순매출</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">실적 대비 순매출 분포</h3>
+          <span class="block-desc">활성 40개사 · 실적(X) · 순매출(Y)</span>
+        </div>
+        <div class="chart-card">
+          <div class="chart-box tall"><canvas id="chartScatterJul"></canvas></div>
+        </div>
+        <div class="note">* 가로축은 설치 건수, 세로축은 순매출. <b>0선 아래는 적자</b>입니다.</div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">계약 유형별 수익성</h3>
+          <span class="block-desc">4개 유형 · 순매출 기준 · 119개사 전체</span>
+        </div>
+        <div class="callout" id="contractTypeInsight"></div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h4>유형별 순매출 비교</h4>
+            <div class="sub">순매출 합계 vs 대리점당 평균 · 원</div>
+            <div class="chart-box tall"><canvas id="chartContractTypeJul"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h4>계약 유형별 집계</h4>
+            <div class="sub">대리점 수 · 순매출 · 비중</div>
+            <div class="table-wrap">
+              <table id="tblContractTypeJul">
+                <thead><tr><th>계약 유형</th><th class="num">대리점 수</th><th class="num">순매출 합계</th><th class="num">대리점당 평균</th><th class="num">비중</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="note">* 별도 탭 없이 이 섹션 하나로 계약 유형별 차이를 보여줍니다. 뷰 전환 버튼이나 대리점명 나열은 넣지 않았습니다 — 2026-07-29에 삭제된 "계약 유형별 상세" 탭이 구조만 있고 결론이 약하다는 지적을 받았기 때문입니다.</div>
+      </section>
+    </div>
 
     <!-- ---- Sub 3: 상생 프로모션 충족률 (Task 4에서 채움) ---- -->
     <div class="subpanel" data-sub="promo"></div>
@@ -1084,6 +1197,60 @@ const REWARD_TIERS_JUL = [
     </tr>`).join('');
 })();
 
+(function renderTopNetJul(){
+  document.querySelector('#tblTopNetJul tbody').innerHTML = TOP_NET_JUL.map((d, i) => `
+    <tr class="${i < 3 ? 'r' + (i + 1) : ''}">
+      <td><span class="rank">${i + 1}</span>${d.n}</td>
+      <td class="num">${d.p}</td>
+      <td class="num pos">${won(d.net)}</td>
+      <td class="num">${Math.round(d.net / d.p).toLocaleString()}</td>
+    </tr>`).join('');
+})();
+
+(function renderNegNetJul(){
+  document.querySelector('#tblNegNetJul tbody').innerHTML = NEG_NET_JUL.map(d => `
+    <tr>
+      <td>${d.n}</td>
+      <td class="num">${d.p}</td>
+      <td class="num neg">−${won(Math.abs(d.net))}</td>
+    </tr>`).join('');
+})();
+
+/* ---- 계약 유형별 수익성 — 그룹 집계는 런타임 계산, 하드코딩 금지 ---- */
+function groupByContractType(list) {
+  const map = new Map();
+  list.forEach(d => {
+    if (!map.has(d.type)) map.set(d.type, { type: d.type, count: 0, sum: 0 });
+    const g = map.get(d.type);
+    g.count++;
+    g.sum += d.net;
+  });
+  const total = list.reduce((a, d) => a + d.net, 0);
+  return [...map.values()]
+    .map(g => ({ ...g, avg: g.sum / g.count, share: (g.sum / total) * 100 }))
+    .sort((a, b) => b.sum - a.sum);
+}
+const CONTRACT_TYPE_GROUPS_JUL = groupByContractType(CONTRACT_TYPE_JUL);
+
+(function renderContractTypeJul(){
+  document.querySelector('#tblContractTypeJul tbody').innerHTML = CONTRACT_TYPE_GROUPS_JUL.map(g => `
+    <tr>
+      <td>${g.type}</td>
+      <td class="num">${g.count}</td>
+      <td class="num ${g.sum >= 0 ? 'pos' : 'neg'}">${g.sum >= 0 ? '' : '−'}${won(Math.abs(g.sum))}</td>
+      <td class="num ${g.avg >= 0 ? 'pos' : 'neg'}">${g.avg >= 0 ? '' : '−'}${won(Math.abs(g.avg))}</td>
+      <td class="num">${g.share.toFixed(1)}%</td>
+    </tr>`).join('');
+
+  const wtOp = CONTRACT_TYPE_GROUPS_JUL.find(g => g.type === '(우수)위탁운영대리점');
+  const general = CONTRACT_TYPE_GROUPS_JUL.find(g => g.type === '일반협력대리점');
+  const genOp = CONTRACT_TYPE_GROUPS_JUL.find(g => g.type === '일반위탁대리점');
+  document.getElementById('contractTypeInsight').innerHTML =
+    `<b>${wtOp.type}</b> ${wtOp.count}곳이 전체 순매출의 <b>${wtOp.share.toFixed(0)}%</b>를 차지합니다. `
+    + `반면 ${general.count}곳인 <b>${general.type}</b>은 합쳐도 ${general.share.toFixed(0)}%뿐이고, `
+    + `<b>${genOp.type}</b> ${genOp.count}곳은 오히려 순손실(−${won(Math.abs(genOp.sum))})입니다.`;
+})();
+
 (function renderPromo(){
   const cls = r => r >= 100 ? 'full' : r >= 50 ? 'mid' : r > 0 ? 'low' : 'zero';
   const sum = k => PROMO.reduce((a, d) => a + d[k], 0);
@@ -1191,6 +1358,25 @@ function hBar(el, labels, data, color, negative){
   });
 }
 
+function groupedBar(el, labels, datasets){
+  return new Chart(el, {
+    type:'bar',
+    data:{ labels, datasets },
+    options:{
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{ position:'top', labels:{ color:inkDim(), boxWidth:10, font:{size:11} } },
+        tooltip:{ callbacks:{ label: c => ' ' + c.dataset.label + ' ' + won(c.raw) + '원' } },
+        datalabels:{ display:false }
+      },
+      scales:{
+        x:{ grid:{ display:false }, border:{ display:false }, ticks:{ color:inkDim(), font:{size:10.5} } },
+        y:{ grid:{ color:gridLine() }, border:{ display:false }, ticks:{ color:inkDim(), font:{size:11}, callback: v => won(v) } }
+      }
+    }
+  });
+}
+
 const BUILDERS = {
   chartRevenueJun: el => donut(
     el,
@@ -1216,6 +1402,47 @@ const BUILDERS = {
     [33020000, 29457639, 2504000, 15070000],
     P().cat.slice(0, 4)
   ),
+  chartTopNetJul: el => hBar(el, TOP_NET_JUL.map(d => d.n), TOP_NET_JUL.map(d => d.net), P().pos, false),
+  chartNegNetJul: el => hBar(el, NEG_NET_JUL.map(d => d.n), NEG_NET_JUL.map(d => d.net), P().neg, true),
+
+  chartScatterJul: el => new Chart(el, {
+    type:'scatter',
+    data:{ datasets:[
+      { label:'흑자',
+        data: SCATTER_JUL.filter(d => d.net >= 0).map(d => ({x:d.p, y:d.net, n:d.n})),
+        backgroundColor:P().pos, pointRadius:6, pointHoverRadius:8,
+        pointBorderColor:surface(), pointBorderWidth:2 },
+      { label:'적자',
+        data: SCATTER_JUL.filter(d => d.net < 0).map(d => ({x:d.p, y:d.net, n:d.n})),
+        backgroundColor:P().neg, pointStyle:'triangle', pointRadius:7, pointHoverRadius:9,
+        pointBorderColor:surface(), pointBorderWidth:2 }
+    ]},
+    options:{
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{ position:'top', labels:{ color:inkDim(), boxWidth:10, usePointStyle:true, font:{size:11} } },
+        tooltip:{ callbacks:{ label: c => ' ' + c.raw.n + ' · 실적 ' + c.raw.x + '건 · 순매출 ' + won(c.raw.y) + '원' } }
+      },
+      scales:{
+        x:{ title:{ display:true, text:'7월 실적 (건)', color:inkDim(), font:{size:11} },
+            grid:{ color:gridLine() }, border:{ display:false },
+            ticks:{ color:inkDim(), font:{size:11} } },
+        y:{ title:{ display:true, text:'순매출 (원)', color:inkDim(), font:{size:11} },
+            grid:{ color: c => c.tick.value === 0 ? inkDim() : gridLine() }, border:{ display:false },
+            ticks:{ color:inkDim(), font:{size:11}, callback: v => won(v) } }
+      }
+    }
+  }),
+
+  chartContractTypeJul: el => groupedBar(
+    el,
+    CONTRACT_TYPE_GROUPS_JUL.map(g => g.type),
+    [
+      { label:'순매출 합계', data: CONTRACT_TYPE_GROUPS_JUL.map(g => g.sum), backgroundColor: P().cat[0], borderRadius:4 },
+      { label:'대리점당 평균', data: CONTRACT_TYPE_GROUPS_JUL.map(g => g.avg), backgroundColor: P().cat[1], borderRadius:4 }
+    ]
+  ),
+
   chartTopNet: el => hBar(el, TOP_NET.map(d => d.n), TOP_NET.map(d => d.net), P().pos, false),
   chartNegNet: el => hBar(el, NEG_NET.map(d => d.n), NEG_NET.map(d => d.net), P().neg, true),
 
