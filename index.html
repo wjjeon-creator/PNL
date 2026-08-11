@@ -211,6 +211,14 @@
   .type-group summary .meta{color:var(--text-dim);font-weight:500;font-size:12px;}
   .type-group[open] summary{border-bottom:1px solid var(--border);}
   .type-group .table-wrap{border:none;border-radius:0;}
+
+  .calc-form{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;}
+  .calc-form label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--text-dim);font-weight:600;}
+  .calc-form select,.calc-form input[type=number]{
+    background:var(--surface);border:1px solid var(--border);border-radius:8px;
+    padding:9px 12px;color:var(--text);font-size:13px;font-family:inherit;min-width:200px;
+  }
+  .calc-form select:focus,.calc-form input[type=number]:focus{outline:none;border-color:var(--accent);}
   table th{
     text-align:left;background:var(--surface-2);color:var(--text-dim);
     font-weight:600;font-size:12px;padding:10px 14px;border-bottom:1px solid var(--border);
@@ -1053,6 +1061,28 @@
         <div class="callout">회사 전체 협력대리점 채널의 월별 목표 대비 설치 달성률도 연초 100% 안팎에서 7월 83%로 낮아진 상태입니다. 신규 대리점 확보 여력이 줄어드는 만큼, 확보한다면 수익성 높은 유형에 집중하는 편이 효율적입니다.</div>
         <a class="sheet-link" href="https://docs.google.com/spreadsheets/d/1eaL8EU0DkwaacEfjr86hIx20UVawgbwDVx2n307Vd1E/edit?gid=220365718#gid=220365718" target="_blank" rel="noopener">📄 채널세일즈 대시보드 보기 (Google Sheets) ↗</a>
       </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">계약 유형 확대 시나리오 계산기</h3>
+          <span class="block-desc">유형 선택 + 늘릴 대리점 수 입력 → 예상 순매출 증가</span>
+        </div>
+        <div class="calc-form">
+          <label>계약 유형
+            <select id="scenarioType"></select>
+          </label>
+          <label>늘릴 대리점 수
+            <input type="number" id="scenarioCount" min="0" step="1" value="1">
+          </label>
+        </div>
+        <div class="card-grid" id="scenarioStats"></div>
+        <div class="chart-card" style="margin-top:14px">
+          <h4>시나리오 적용 전/후 순매출 비교</h4>
+          <div class="sub">선택한 계약 유형의 순매출 합계 기준 · 원</div>
+          <div class="chart-box"><canvas id="chartScenarioJul"></canvas></div>
+        </div>
+        <div class="note">* 대리점당 평균은 실측 데이터 기반이지만, 표본이 적은 유형((우수)위탁운영 2곳, (우수)협력 3곳, 일반위탁 4곳)의 신규 대리점 성과는 이 평균과 다를 수 있습니다.</div>
+      </section>
     </div>
   </div>
 
@@ -1151,6 +1181,12 @@ Chart.defaults.set('plugins.datalabels', { display:false });
 
 const isDark = () => document.documentElement.getAttribute('data-theme') !== 'light';
 const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+// Declared early (before any of the IIFEs below run) so code that touches
+// charts.* during initial render — e.g. renderScenarioCalculatorJul's first
+// update() call — reads an existing (possibly empty) object instead of
+// throwing a temporal-dead-zone ReferenceError on a `const` declared later.
+const charts = {};
 
 /* ---------------------------------------------------------------
    Palette — validated with the dataviz validator (validate_palette.js)
@@ -1405,6 +1441,61 @@ const CONTRACT_TYPE_GROUPS_JUL = groupByContractType(CONTRACT_TYPE_JUL);
   }
 })();
 
+function calcScenario(){
+  const type = document.getElementById('scenarioType').value;
+  const rawCount = Math.floor(Number(document.getElementById('scenarioCount').value));
+  const count = Number.isFinite(rawCount) ? Math.max(0, rawCount) : 0;
+  const g = CONTRACT_TYPE_GROUPS_JUL.find(x => x.type === type) || CONTRACT_TYPE_GROUPS_JUL[0];
+  const increase = g.avg * count;
+  const after = g.sum + increase;
+  return { g, count, increase, after };
+}
+
+(function renderScenarioCalculatorJul(){
+  const select = document.getElementById('scenarioType');
+  select.innerHTML = CONTRACT_TYPE_GROUPS_JUL.map(g => `<option value="${g.type}">${g.type}</option>`).join('');
+
+  function fmtSigned(v){
+    return (v >= 0 ? '' : '−') + won(Math.abs(v));
+  }
+
+  function update(){
+    const { g, count, increase, after } = calcScenario();
+    document.getElementById('scenarioStats').innerHTML = `
+      <div class="stat-card">
+        <div class="stat-label">현재 대리점 수</div>
+        <div class="stat-value">${g.count}곳</div>
+        <div class="stat-foot">설치수 ${g.installs}건</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">현재 순매출 합계</div>
+        <div class="stat-value ${g.sum >= 0 ? 'pos' : 'neg'}">${fmtSigned(g.sum)}</div>
+        <div class="stat-foot">대리점당 평균 ${fmtSigned(g.avg)}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">${count}곳 추가 시 예상 증가액</div>
+        <div class="stat-value ${increase >= 0 ? 'pos' : 'neg'}">${fmtSigned(increase)}</div>
+        <div class="stat-foot">대리점당 평균 × ${count}곳</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">시나리오 적용 후 순매출</div>
+        <div class="stat-value ${after >= 0 ? 'pos' : 'neg'}">${fmtSigned(after)}</div>
+        <div class="stat-foot">현재 ${fmtSigned(g.sum)} + 증가분</div>
+      </div>`;
+
+    if (charts.chartScenarioJul) {
+      charts.chartScenarioJul.data.labels = [g.type];
+      charts.chartScenarioJul.data.datasets[0].data = [g.sum];
+      charts.chartScenarioJul.data.datasets[1].data = [after];
+      charts.chartScenarioJul.update();
+    }
+  }
+
+  select.addEventListener('change', update);
+  document.getElementById('scenarioCount').addEventListener('input', update);
+  update();
+})();
+
 (function renderPromoJul(){
   const cls = r => r >= 100 ? 'full' : r >= 50 ? 'mid' : r > 0 ? 'low' : 'zero';
   const sum = k => PROMO_JUL.reduce((a, d) => a + d[k], 0);
@@ -1646,6 +1737,18 @@ const BUILDERS = {
     ]
   ),
 
+  chartScenarioJul: el => {
+    const { g, after } = calcScenario();
+    return groupedBar(
+      el,
+      [g.type],
+      [
+        { label:'현재', data:[g.sum], backgroundColor: P().cat[0], borderRadius:4 },
+        { label:'시나리오 적용 후', data:[after], backgroundColor: P().cat[1], borderRadius:4 }
+      ]
+    );
+  },
+
   chartTopNet: el => hBar(el, TOP_NET.map(d => d.n), TOP_NET.map(d => d.net), P().pos, false),
   chartNegNet: el => hBar(el, NEG_NET.map(d => d.n), NEG_NET.map(d => d.net), P().neg, true),
 
@@ -1795,7 +1898,6 @@ const BUILDERS = {
   })
 };
 
-const charts = {};
 function buildVisibleCharts(){
   Object.keys(BUILDERS).forEach(id => {
     if (charts[id]) return;
