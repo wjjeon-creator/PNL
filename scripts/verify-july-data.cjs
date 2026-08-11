@@ -21,10 +21,11 @@ function extractConst(name) {
 const EXPECTED = {
   dealerCount: 119,
   activeCount: 40,
-  // 2026-08-11: 무상임대(프론트만) 원자료 수정(33,020,000 → 79,560,000) 반영 후 재계산
-  contractTypeNetSum: -3741294,
-  topNetFirst: { n: '엠제이통신', net: 8263942 },
-  negNetFirst: { n: '코스모스컴퍼니', net: -3730424 },
+  // 2026-08-11 2차 수정: 대리점별 상세 분석 시트에 물류비·상생 프로모션 배분이 누락돼 있던 것을
+  // 반영. 이제 119개사 순매출 합계(26,676,902)가 요약 시트 순이익과 정확히 일치한다.
+  contractTypeNetSum: 26676902,
+  topNetFirst: { n: '엠제이통신', net: 11469942 },
+  negNetFirst: { n: '그린정보통신', net: -2540195 },
   promo: { count: 44, i: 600, t: 569, p: 509, a: 493, m: 34510000 },
   distribution: { '80%+': 29, '50~80%': 8, '30~50%': 3, '<30%': 4 },
 };
