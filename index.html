@@ -396,11 +396,16 @@
         <span>7월</span><span class="badge">완료</span>
       </button>
     </li>
+    <li class="month-item">
+      <button class="month-btn" data-month="aug">
+        <span>8월</span><span class="badge">완료</span>
+      </button>
+    </li>
   </ul>
 
   <div class="sidebar-foot">
     <button class="theme-toggle" id="themeToggle">☀️ 라이트 모드</button>
-    <div class="sidebar-note">8~12월은 데이터 전달 시 6월과 동일한 구조로 채워집니다.</div>
+    <div class="sidebar-note">9~12월은 데이터 전달 시 6월과 동일한 구조로 채워집니다.</div>
   </div>
 </aside>
 
@@ -1088,16 +1093,332 @@
     </div>
   </div>
 
-  <!-- ====== AUGUST–DECEMBER (skeletons, generated from PENDING_MONTHS) ====== -->
+  <!-- ================= AUGUST ================= -->
+  <div id="panel-aug" class="month-panel" style="display:none;">
+    <div class="page-eyebrow">2026 · 08 MONTHLY</div>
+    <h1 class="page-title">8월 대리점 수익성 대시보드</h1>
+    <div class="page-sub">8월 대리점별 상세 · 상생 프로모션 충족률</div>
+    <div class="meta-row">
+      <span>단위 <b>원 (VAT 제외)</b></span>
+      <span>집계 대리점 <b>119개사</b> · 활성 <b>36개사</b></span>
+      <span>인건비 제외</span>
+    </div>
+
+    <div class="subtabs" data-scope="aug">
+      <button class="subtab-btn active" data-sub="summary"><span class="snum">1</span>8월 대리점 수익성 요약</button>
+      <button class="subtab-btn" data-sub="detail"><span class="snum">2</span>8월 대리점 상세</button>
+      <button class="subtab-btn" data-sub="promo"><span class="snum">3</span>상생 프로모션 충족률</button>
+    </div>
+
+    <!-- ---- Sub 1: 수익성 요약 ---- -->
+    <div class="subpanel active" data-sub="summary">
+      <a class="sheet-link" href="https://docs.google.com/spreadsheets/d/1uFZfXqk7fthMpLXGZ-HfG6rI4tJ2ASkUVGcTNuR11gU/edit?gid=840472486#gid=840472486" target="_blank" rel="noopener">📄 전체 raw data 보기 (Google Sheets) ↗</a>
+
+      <div class="callout">
+        <ul>
+          <li>8월 실적은 <b>406건</b>으로 7월(306건) 대비 <b>32.7% 증가</b>했지만, 총비용이 <b>195.33M</b>으로 7월(125.37M) 대비 <b>55.8% 급증</b>(무상임대 79.56M→105.56M, 프로모션 13.85M→54.96M)한 반면 총수익은 <b>142.29M</b>으로 7월(153.27M) 대비 오히려 <b>7.2% 감소</b>해, 순이익이 +27.90M에서 <b>−56.43M로 적자 전환</b>했습니다(ROI 22.25%→−28.89%).</li>
+          <li>적자 전환의 핵심은 그동안 유일한 흑자 유형이었던 <b>(우수)위탁운영대리점</b>(우리편·엠제이통신)의 반전입니다 — 우리편 −16.44M, 엠제이통신 −8.80M로 대리점 손실 1·3위를 차지했고, 원자료 특이사항에는 <b>엠제이통신 계약 변경으로 CMS1 건수가 감소</b>해 CMS 매출이 줄었다는 메모가 남아 있습니다. 설치 1위(87건)인 비에이치소프트도 −10.92M 적자로, 활동 36개사 중 흑자는 7곳(19%)뿐입니다.</li>
+        </ul>
+      </div>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">8월 수익성 요약</h3>
+          <span class="block-desc">요약 시트 · 전사 집계</span>
+        </div>
+        <div class="card-grid">
+          <div class="stat-card">
+            <div class="stat-label">8월 실적 (승인)</div>
+            <div class="stat-value">406건</div>
+            <div class="stat-foot">7월 306건 · <span class="pos">+32.7%</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">순이익</div>
+            <div class="stat-value neg">−56,427,809</div>
+            <div class="stat-foot">7월 +27,896,902 · 적자 전환</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">ROI</div>
+            <div class="stat-value neg">−28.89%</div>
+            <div class="stat-foot">7월 22.25% · <span class="neg">−51.14%p</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">건당 순이익</div>
+            <div class="stat-value neg">−13.9만원</div>
+            <div class="stat-foot">−56.43M ÷ 406건 = −138,985원</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">8월 수익성 분석 (전체 내역)</h3>
+          <span class="block-desc">총비용 · 총수익 항목별 · 요약 시트 기반</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <tbody>
+              <tr class="total"><td>실적</td><td class="num">406 건</td></tr>
+              <tr class="total hl"><td>순이익</td><td class="num neg">−56,427,809</td></tr>
+              <tr class="total"><td>ROI</td><td class="num neg">−28.89%</td></tr>
+
+              <tr class="total"><td>총 비용</td><td class="num neg">195,329,025</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;프로모션</td><td class="num">54,960,000</td></tr>
+              <tr class="leaf"><td>프로모션 보상금</td><td class="num">54,960,000</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;장비 원가</td><td class="num">137,725,965</td></tr>
+              <tr class="leaf"><td>무상임대 (프론트만)</td><td class="num">105,560,000</td></tr>
+              <tr class="leaf"><td>CMS 장비 (감가)</td><td class="num">32,165,965</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;물류비</td><td class="num">2,643,060</td></tr>
+
+              <tr class="total"><td>총 수익</td><td class="num pos">142,285,333</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;토스수수료</td><td class="num">82,197,550</td></tr>
+              <tr class="leaf"><td>설치수수료</td><td class="num">67,350,000</td></tr>
+              <tr class="leaf"><td>청약수수료</td><td class="num">9,060,000</td></tr>
+              <tr class="leaf"><td>유지수수료</td><td class="num">5,787,550</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;토스플레이스 프로모션</td><td class="num">25,331,230</td></tr>
+              <tr class="leaf"><td>(토플) 프론트 설치 12만원</td><td class="num">24,960,000</td></tr>
+              <tr class="leaf"><td>(토플) 포스앱 설치 10만원</td><td class="num">100,000</td></tr>
+              <tr class="leaf"><td>(토플) 페이스페이</td><td class="num">271,230</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;밴피 (추정 E)</td><td class="num">9,882,076</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;CMS (구CMS + NEW CMS)</td><td class="num">20,264,476</td></tr>
+              <tr class="subtle"><td>&nbsp;&nbsp;장비판매대금 (중고)</td><td class="num">4,610,000</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note">
+          <b>실적</b> 406건은 8월 승인건수 합계 · <b>순이익</b> −56,427,809원 = 총수익 142,285,333 − 총비용 195,329,025 · <b>ROI</b> −28.89% = 순이익 ÷ 총비용<br>
+          * 인건비 확인 불가로 제외 · 밴피는 추정치(E)<br>
+          * 수익성 분석 미포함: CRM 영업 제휴 수수료 +654,500원, 뉴비즈 수수료 +1,921,753원<br>
+          * 원자료 특이사항: CMS1 금액 감소 원인은 엠제이통신 계약 변경으로 인한 CMS1 건수 감소(아이샵케어 CMS 금액 감소)입니다.
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">수익·비용 구성</h3>
+          <span class="block-desc">항목별 비중</span>
+        </div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h4>총수익 구성</h4>
+            <div class="sub">142.29M · 토스수수료가 58%</div>
+            <div class="chart-box"><canvas id="chartRevenueAug"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h4>총비용 구성</h4>
+            <div class="sub">195.33M · 장비 원가(무상임대+CMS감가)가 71%</div>
+            <div class="chart-box"><canvas id="chartCostAug"></canvas></div>
+          </div>
+        </div>
+        <div class="note">* 비중은 각 조각에 직접 표기했습니다. 정확한 금액은 위 <b>수익성 분석 표</b>를 참고하세요.</div>
+      </section>
+    </div>
+
+    <!-- ---- Sub 2: 대리점 상세 ---- -->
+    <div class="subpanel" data-sub="detail">
+      <div class="callout">8월에 <b>설치 실적이 있는 36개 대리점</b>을 수익성(순매출)과 설치 건수 기준으로 분석했습니다. <b>순매출</b> = 대리점이 벌어들인 수익에서 장비원가 등 원가를 뺀 실제 손익.</div>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">핵심 인사이트</h3>
+          <span class="block-desc">8월 상세 데이터에서 직접 계산</span>
+        </div>
+        <div class="insight-grid">
+          <div class="insight-card">
+            <h4>계약 대리점 3곳 중 1곳도 안 되게 활동</h4>
+            <p>계약된 <b>119개사 중 8월에 설치 실적이 있는 곳은 36개사(30.3%)</b>뿐. 7월(119개사 중 40개사, 33.6%)보다 활동 비율이 더 줄었습니다.</p>
+          </div>
+          <div class="insight-card">
+            <h4>설치 1위가 오히려 최대 손실권</h4>
+            <p>설치 건수 1위는 <b>비에이치소프트(87건)</b>지만 순매출은 <b>−10.92M</b>으로 활동 대리점 중 두 번째로 큰 손실입니다. 순매출 1위는 겨우 3건을 기록한 <b>케이씨정보통신(+1.59M)</b>입니다.</p>
+          </div>
+          <div class="insight-card">
+            <h4>흑자는 활동 대리점의 5곳 중 1곳뿐</h4>
+            <p>활동 36개사 중 순매출이 플러스인 곳은 <b>7곳(19%)</b>뿐이며, 그마저도 <b>상위 3개사(케이씨정보통신·미르네프로·경인포스시스템)가 흑자 합계의 91%</b>를 차지합니다.</p>
+          </div>
+          <div class="insight-card">
+            <h4>활동 대리점 10곳 중 8곳이 적자</h4>
+            <p>실적 있는 36개사 중 <b>29개사(80.6%)가 적자</b>. 전체 대리점(119개사) 기준으로는 <b>55개사</b>가 적자입니다.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">수익성 상위 대리점</h3>
+          <span class="block-desc">순매출 상위 10개사</span>
+        </div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h4>순매출 상위 대리점</h4>
+            <div class="sub">순매출 기준 · 원</div>
+            <div class="chart-box tall"><canvas id="chartTopNetAug"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h4>실적 대비 순매출 효율</h4>
+            <div class="sub">건수 · 순매출 · 건당</div>
+            <div class="table-wrap">
+              <table id="tblTopNetAug">
+                <thead><tr><th>대리점</th><th class="num">실적</th><th class="num">순매출</th><th class="num">건당</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">수익성 하위 대리점 (적자)</h3>
+          <span class="block-desc">순매출 마이너스 · 하위 10개사</span>
+        </div>
+        <div class="callout warn"><b>전체 119개사 중 55개사가 순매출 마이너스</b>입니다. 아래는 손실 규모가 가장 큰 10곳입니다.</div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h4>순매출 적자 대리점</h4>
+            <div class="sub">순매출 마이너스 · 원</div>
+            <div class="chart-box tall"><canvas id="chartNegNetAug"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h4>적자 대리점 상세</h4>
+            <div class="sub">실적 · 순매출</div>
+            <div class="table-wrap">
+              <table id="tblNegNetAug">
+                <thead><tr><th>대리점</th><th class="num">실적</th><th class="num">순매출</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">실적 대비 순매출 분포</h3>
+          <span class="block-desc">활성 36개사 · 실적(X) · 순매출(Y)</span>
+        </div>
+        <div class="chart-card">
+          <div class="chart-box tall"><canvas id="chartScatterAug"></canvas></div>
+        </div>
+        <div class="note">* 가로축은 설치 건수, 세로축은 순매출. <b>0선 아래는 적자</b>입니다.</div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">계약 유형별 수익성</h3>
+          <span class="block-desc">4개 유형 · 순매출 기준 · 119개사 전체</span>
+        </div>
+        <div class="callout" id="contractTypeInsightAug"></div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h4>유형별 순매출 비교</h4>
+            <div class="sub">순매출 합계 vs 대리점당 평균 · 원</div>
+            <div class="chart-box tall"><canvas id="chartContractTypeAug"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h4>계약 유형별 집계</h4>
+            <div class="sub">대리점 수 · 설치수 · 순매출 · 비중</div>
+            <div class="table-wrap">
+              <table id="tblContractTypeAug">
+                <thead><tr><th>계약 유형</th><th class="num">대리점 수</th><th class="num">설치수</th><th class="num">순매출 합계</th><th class="num">대리점당 평균</th><th class="num">비중</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="note">* 별도 탭 없이 이 섹션 하나로 계약 유형별 차이를 보여줍니다. 대리점명·순위는 아래 <b>유형별 대리점 명단</b>에서 확인할 수 있습니다.<br>* <b>비중(%)</b>은 계약 119개사 순매출 합계가 플러스일 때만 표시됩니다 — 8월은 전체 합계가 마이너스라 비중 대신 유형별 절대 손실액으로 비교합니다.</div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">유형별 대리점 명단</h3>
+          <span class="block-desc">계약 유형별 · 순매출 내림차순 · 클릭해서 펼치기</span>
+        </div>
+        <div id="contractTypeDealerGroupsAug"></div>
+        <div class="note">* 각 유형 안에서 순매출이 높은 순으로 정렬했습니다. <b>실적</b>이 0인데 순매출이 0이 아닌 대리점은 이번 달 설치 없이 발생한 조정분(환불·정산 등)입니다.</div>
+      </section>
+    </div>
+
+    <!-- ---- Sub 3: 상생 프로모션 충족률 ---- -->
+    <div class="subpanel" data-sub="promo">
+      <div class="callout">상생 프로모션 <b>조건 달성 퍼널</b>과 대리점별 충족 현황, 구간별 분포입니다. 조건은 <b>토스페이 청약 + 통합결제창 1건 이상</b>입니다(7월의 5건 이상에서 완화). 집계 기간은 <b>7/1~9/6</b>(누적)로, 위 대리점 상세의 8월 실적과는 별개 기간입니다.</div>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">조건 달성 퍼널</h3>
+          <span class="block-desc">설치 → 청약 → 결제 → 조건 달성</span>
+        </div>
+        <div class="funnel-strip" id="funnelStripAug"></div>
+
+        <div class="chart-card" style="margin-bottom:14px">
+          <h4>단계별 잔존 건수</h4>
+          <div class="sub">막대 길이 = 해당 단계까지 남은 건수 · 설치 590건 기준</div>
+          <div class="chart-box" style="height:230px"><canvas id="chartStageFunnelAug"></canvas></div>
+        </div>
+
+        <div class="kpi-flow">
+          <div class="kpi-box"><div class="v">70,800,000원</div><div class="l">100% 달성 시 총 금액 · 590건 전체 기준</div></div>
+          <div class="kpi-box"><div class="v pos">51,840,000원</div><div class="l">확보한 금액 · 432건 · 달성률 73.22%</div></div>
+        </div>
+        <div class="progress"><div class="done" style="width:73.22%"></div><div class="todo" style="width:26.78%"></div></div>
+        <div class="callout">결제(501) → 조건 달성(432) 구간에서 <b>69건이 이탈</b>해 가장 큰 감소 구간입니다. 7월(82.2%)보다 충족률이 <b>8.98%p 하락</b>했습니다.</div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">대리점별 충족 현황</h3>
+          <span class="block-desc">44개사 · 충족률 내림차순</span>
+        </div>
+        <div class="table-wrap scroll">
+          <table id="tblPromoAug">
+            <thead><tr>
+              <th>대리점</th>
+              <th class="num">설치수</th><th class="num">토스페이 청약</th><th class="num">통합결제 1건↑</th>
+              <th class="num">조건 달성</th><th class="num">충족률</th><th class="num">최대 보상금</th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="note">* <b>최대 보상금</b>은 원자료의 계산값을 그대로 표시했습니다 (추정 아님).</div>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <h3 class="block-title">충족률 구간 분포</h3>
+          <span class="block-desc">44개사 · 구간별 대리점 수</span>
+        </div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <h4>충족률 구간별 대리점 수</h4>
+            <div class="sub">막대 = 대리점 수 (전체 44개사)</div>
+            <div class="chart-box tall"><canvas id="chartFunnelDistAug"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h4>구간 명단</h4>
+            <div class="sub">양극화 구조 확인</div>
+            <div class="chip-group">
+              <div class="ct" id="ctHiAug">100% 완전 달성</div>
+              <div class="chips" id="chipsHiAug"></div>
+            </div>
+            <div class="chip-group">
+              <div class="ct" id="ctLoAug">50% 이하 저조</div>
+              <div class="chips" id="chipsLoAug"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ====== SEPTEMBER–DECEMBER (skeletons, generated from PENDING_MONTHS) ====== -->
 
 </main>
 
 <!-- Month skeletons are built here, ahead of the Chart.js block, so the month
      tabs still render if the chart CDN is unreachable. -->
 <script>
-/* ------------------- pending months (7월 ~ 12월) ------------------- */
+/* ------------------- pending months (9월 ~ 12월) ------------------- */
 const PENDING_MONTHS = [
-  { key:'aug', num:8,  badge:'데이터 대기' },
   { key:'sep', num:9,  badge:'데이터 대기' },
   { key:'oct', num:10, badge:'데이터 대기' },
   { key:'nov', num:11, badge:'데이터 대기' },
@@ -1315,6 +1636,34 @@ const STAGES_JUL = [
   {name:'토스페이 청약 완료',   label:['토스페이','청약 완료'],    num:569},
   {name:'통합결제창 5건 이상',  label:['통합결제창','5건 이상'],   num:509},
   {name:'조건 달성',           label:['조건 달성'],             num:493}
+];
+
+/* ================================================================
+   AUGUST DATA — sourced from '26년 8월 대리점 수익성 분석.xlsx
+   (sheets: 요약 / 8월 대리점 상세 분석 / 상생 프로모션 충족률(%))
+   All aggregates below are computed at render time from these
+   per-dealer arrays — never hardcode a sum/percentage separately.
+================================================================ */
+/* 8월 실적/순매출 열 기준 — 119개사 전체(활성/휴면 포함). 순매출 합계(-56,427,809)가
+   요약 시트 순이익과 정확히 일치한다. */
+const TOP_NET_AUG = [{n:"케이씨정보통신",p:3,net:1587778},{n:"미르네프로",p:28,net:1434546},{n:"경인포스시스템",p:3,net:1160469},{n:"제이투시스템",p:2,net:258288},{n:"원정보통신",p:6,net:97451},{n:"씨앤씨(CNC)일신",p:5,net:35785},{n:"부일정보",p:1,net:12060},{n:"스타포스",p:2,net:-2990},{n:"제이에이치넷",p:1,net:-63708},{n:"포스트렌드",p:2,net:-78036}];
+
+const NEG_NET_AUG = [{n:"우리편",p:41,net:-16443403},{n:"비에이치소프트",p:87,net:-10921875},{n:"엠제이통신",p:56,net:-8803416},{n:"우성포스",p:46,net:-8002199},{n:"그린정보통신",p:13,net:-2728719},{n:"지앤비시스템",p:8,net:-1142235},{n:"가나정보통신",p:6,net:-1137646},{n:"샘랩",p:5,net:-1128800},{n:"에스정보",p:5,net:-1012213},{n:"화인정보통신",p:7,net:-844845}];
+
+/* 활성(실적>0) 36개사 전체 — 산점도용 */
+const SCATTER_AUG = [{n:"비에이치소프트",p:87,net:-10921875},{n:"미르네프로",p:28,net:1434546},{n:"우리편",p:41,net:-16443403},{n:"엠제이통신",p:56,net:-8803416},{n:"제이투시스템",p:2,net:258288},{n:"현은시스템",p:38,net:-660525},{n:"샘랩",p:5,net:-1128800},{n:"케이씨정보통신",p:3,net:1587778},{n:"코스모스컴퍼니",p:4,net:-451114},{n:"스피드",p:8,net:-684715},{n:"화인정보통신",p:7,net:-844845},{n:"그린정보통신",p:13,net:-2728719},{n:"이레페이",p:2,net:-526533},{n:"페이닷",p:4,net:-715241},{n:"현페이먼트",p:4,net:-293259},{n:"어시스트핏",p:2,net:-647486},{n:"원정보통신",p:6,net:97451},{n:"신우정보통신",p:1,net:-183601},{n:"한울정보",p:2,net:-691589},{n:"제이엔디아이정보통신",p:1,net:-230258},{n:"미르컴퍼니",p:7,net:-308405},{n:"포스트렌드",p:2,net:-78036},{n:"우성포스",p:46,net:-8002199},{n:"씨앤씨(CNC)일신",p:5,net:35785},{n:"가나정보통신",p:6,net:-1137646},{n:"디에스이엔씨",p:2,net:-510186},{n:"오토뱅킹서비스",p:1,net:-140000},{n:"경인포스시스템",p:3,net:1160469},{n:"지앤비시스템",p:8,net:-1142235},{n:"부일정보",p:1,net:12060},{n:"은성피엔피(애드포인트)",p:1,net:-308133},{n:"스타포스",p:2,net:-2990},{n:"우림정보통신",p:1,net:-194783},{n:"에스정보",p:5,net:-1012213},{n:"더존포스",p:1,net:-294325},{n:"제이에이치넷",p:1,net:-63708}];
+
+/* 계약 119개사 전체 (활성/휴면 포함) — 계약 유형별 집계는 런타임 계산 */
+const CONTRACT_TYPE_AUG = [{n:"비에이치소프트",type:"(우수)협력대리점",p:87,net:-10921875},{n:"미르네프로",type:"(우수)협력대리점",p:28,net:1434546},{n:"우리편",type:"(우수)위탁운영대리점",p:41,net:-16443403},{n:"엠제이통신",type:"(우수)위탁운영대리점",p:56,net:-8803416},{n:"제이투시스템",type:"(우수)협력대리점",p:2,net:258288},{n:"현은시스템",type:"일반협력대리점",p:38,net:-660525},{n:"샘랩",type:"일반위탁대리점",p:5,net:-1128800},{n:"케이씨정보통신",type:"일반협력대리점",p:3,net:1587778},{n:"전라정보통신",type:"일반협력대리점",p:0,net:81275},{n:"미니플레이스",type:"일반협력대리점",p:0,net:1650},{n:"코스모스컴퍼니",type:"일반협력대리점",p:4,net:-451114},{n:"스피드",type:"일반협력대리점",p:8,net:-684715},{n:"화인정보통신",type:"일반협력대리점",p:7,net:-844845},{n:"베라 영남총판",type:"일반협력대리점",p:0,net:-153690},{n:"케이알정보통신",type:"일반협력대리점",p:0,net:-76555},{n:"그린정보통신",type:"일반협력대리점",p:13,net:-2728719},{n:"페이플레이 안양센터",type:"일반협력대리점",p:0,net:-455883},{n:"더편한정보통신",type:"일반협력대리점",p:0,net:-16402},{n:"이레페이",type:"일반협력대리점",p:2,net:-526533},{n:"페이닷",type:"일반협력대리점",p:4,net:-715241},{n:"현페이먼트",type:"일반협력대리점",p:4,net:-293259},{n:"뱅크랜드",type:"일반협력대리점",p:0,net:-324827},{n:"어시스트핏",type:"일반위탁대리점",p:2,net:-647486},{n:"원정보통신",type:"일반협력대리점",p:6,net:97451},{n:"나나정보통신",type:"일반협력대리점",p:0,net:-22429},{n:"신우정보통신",type:"일반협력대리점",p:1,net:-183601},{n:"인터링크솔루션",type:"일반협력대리점",p:0,net:6347},{n:"트윈스정보통신",type:"일반협력대리점",p:0,net:-280638},{n:"나이스포스",type:"일반협력대리점",p:0,net:-95940},{n:"한울정보",type:"일반협력대리점",p:2,net:-691589},{n:"상생정보통신",type:"일반협력대리점",p:0,net:-4854},{n:"연합정보통신",type:"일반협력대리점",p:0,net:-50525},{n:"제일정보통신",type:"일반협력대리점",p:0,net:1005},{n:"제이엔디아이정보통신",type:"일반협력대리점",p:1,net:-230258},{n:"미르컴퍼니",type:"일반협력대리점",p:7,net:-308405},{n:"푸딘코",type:"일반위탁대리점",p:0,net:-293894},{n:"포스트렌드",type:"일반협력대리점",p:2,net:-78036},{n:"우성포스",type:"일반협력대리점",p:46,net:-8002199},{n:"이지정보기술",type:"일반협력대리점",p:0,net:-216192},{n:"씨앤씨(CNC)일신",type:"일반협력대리점",p:5,net:35785},{n:"럭키뱅크",type:"일반협력대리점",p:0,net:-6480},{n:"와이즈웹정보통신",type:"일반협력대리점",p:0,net:-35059},{n:"가나정보통신",type:"일반협력대리점",p:6,net:-1137646},{n:"동진카드시스템",type:"일반협력대리점",p:0,net:-7796},{n:"디에스이엔씨",type:"일반협력대리점",p:2,net:-510186},{n:"미래통신",type:"일반협력대리점",p:0,net:-23005},{n:"오토뱅킹서비스",type:"일반협력대리점",p:1,net:-140000},{n:"더블유에스솔루션",type:"일반협력대리점",p:0,net:1235},{n:"IMT정보통신",type:"일반협력대리점",p:0,net:7750},{n:"동아정보통신",type:"일반협력대리점",p:0,net:-29220},{n:"스타정보",type:"일반협력대리점",p:0,net:-54669},{n:"아트컨티뉴페이",type:"일반협력대리점",p:0,net:0},{n:"한국카드포스",type:"일반협력대리점",p:0,net:0},{n:"에이치지엠 원더라이팅",type:"일반협력대리점",p:0,net:8163},{n:"제이브로테크",type:"일반협력대리점",p:0,net:0},{n:"태은페이먼츠",type:"일반협력대리점",p:0,net:0},{n:"동양포스",type:"일반협력대리점",p:0,net:-129439},{n:"에이치페이",type:"일반협력대리점",p:0,net:0},{n:"(주)명인",type:"일반협력대리점",p:0,net:50350},{n:"탑정보통신",type:"일반협력대리점",p:0,net:56040},{n:"경인포스시스템",type:"일반협력대리점",p:3,net:1160469},{n:"토탈정보통신",type:"일반협력대리점",p:0,net:0},{n:"공룡통신(청평점)",type:"일반협력대리점",p:0,net:0},{n:"아이씨카드넷",type:"일반협력대리점",p:0,net:-13262},{n:"지앤비시스템",type:"일반위탁대리점",p:8,net:-1142235},{n:"티온컴퍼니",type:"일반위탁대리점",p:0,net:39000},{n:"소프트커머스",type:"일반협력대리점",p:0,net:-182627},{n:"현대테크원",type:"일반협력대리점",p:0,net:0},{n:"더플러스",type:"일반협력대리점",p:0,net:0},{n:"제이에스컴퍼니",type:"일반협력대리점",p:0,net:366},{n:"알크POS",type:"일반협력대리점",p:0,net:0},{n:"부일정보",type:"일반협력대리점",p:1,net:12060},{n:"TOP정보통신",type:"일반협력대리점",p:0,net:0},{n:"이지정보",type:"일반협력대리점",p:0,net:0},{n:"케이정보통신",type:"일반협력대리점",p:0,net:0},{n:"대영정보통신",type:"일반협력대리점",p:0,net:0},{n:"한국스마트정보",type:"일반협력대리점",p:0,net:0},{n:"대호통신포스",type:"일반협력대리점",p:0,net:0},{n:"이글통신",type:"일반협력대리점",p:0,net:0},{n:"디에이치시너지",type:"일반협력대리점",p:0,net:336806},{n:"미르주식회사",type:"일반협력대리점",p:0,net:31255},{n:"하나카드넷",type:"일반협력대리점",p:0,net:310},{n:"디온아이티",type:"일반협력대리점",p:0,net:0},{n:"케이투정보통신",type:"일반협력대리점",p:0,net:0},{n:"가람정보시스템",type:"일반협력대리점",p:0,net:0},{n:"비즈코리아",type:"일반협력대리점",p:0,net:0},{n:"알파시스템",type:"일반협력대리점",p:0,net:0},{n:"정인시스템",type:"일반협력대리점",p:0,net:21135},{n:"성우정보통신",type:"일반협력대리점",p:0,net:2020},{n:"은성피엔피(애드포인트)",type:"일반협력대리점",p:1,net:-308133},{n:"하나정보테크",type:"일반협력대리점",p:0,net:0},{n:"길정보통신",type:"일반협력대리점",p:0,net:0},{n:"다온정보통신",type:"일반협력대리점",p:0,net:0},{n:"주연정보통신",type:"일반협력대리점",p:0,net:0},{n:"태양정보통신",type:"일반협력대리점",p:0,net:-3990},{n:"로켓포스",type:"일반협력대리점",p:0,net:-8297},{n:"하나비즈케어",type:"일반협력대리점",p:0,net:0},{n:"울진정보통신",type:"일반협력대리점",p:0,net:0},{n:"IC정보통신",type:"일반협력대리점",p:0,net:0},{n:"스타포스",type:"일반협력대리점",p:2,net:-2990},{n:"대원포스",type:"일반협력대리점",p:0,net:0},{n:"엠씨포스",type:"일반협력대리점",p:0,net:0},{n:"비젼포스",type:"일반협력대리점",p:0,net:0},{n:"아이포스",type:"일반협력대리점",p:0,net:0},{n:"OK정보통신",type:"일반협력대리점",p:0,net:0},{n:"스카이정보통신",type:"일반협력대리점",p:0,net:0},{n:"보나네트웍스",type:"일반협력대리점",p:0,net:0},{n:"한사랑식판선생님",type:"일반협력대리점",p:0,net:-5495},{n:"뉴텍이엔에스",type:"일반협력대리점",p:0,net:0},{n:"나눔정보통신",type:"일반협력대리점",p:0,net:-7980},{n:"우림정보통신",type:"일반협력대리점",p:1,net:-194783},{n:"에스정보",type:"일반협력대리점",p:5,net:-1012213},{n:"더존포스",type:"일반협력대리점",p:1,net:-294325},{n:"토브제이",type:"일반협력대리점",p:0,net:210},{n:"하나포스",type:"일반협력대리점",p:0,net:0},{n:"제이에이치넷",type:"일반협력대리점",p:1,net:-63708},{n:"디에스케이컴퍼니",type:"일반협력대리점",p:0,net:-11970},{n:"지엠씨",type:"일반협력대리점",p:0,net:0},{n:"에스앤피단말기연합",type:"일반협력대리점",p:0,net:2250}];
+
+/* i=설치수, t=토스페이 청약, p=통합결제 1건↑(8월부터 조건 완화), a=조건 달성, r=충족률(%), m=최대 보상금 정책 (원자료 실측, 재계산 금지) */
+const PROMO_AUG = [{n:"미르네프로",i:47,t:47,p:47,a:47,r:100,m:5640000},{n:"스피드",i:10,t:10,p:10,a:10,r:100,m:1200000},{n:"화인정보통신",i:10,t:10,p:10,a:10,r:100,m:1200000},{n:"미르컴퍼니",i:8,t:8,p:8,a:8,r:100,m:960000},{n:"경인포스시스템",i:5,t:5,p:5,a:5,r:100,m:600000},{n:"케이알정보통신",i:4,t:4,p:4,a:4,r:100,m:480000},{n:"현페이먼트",i:4,t:4,p:4,a:4,r:100,m:480000},{n:"케이씨정보통신",i:3,t:3,p:3,a:3,r:100,m:360000},{n:"신우정보통신",i:3,t:3,p:3,a:3,r:100,m:360000},{n:"스타정보",i:2,t:2,p:2,a:2,r:100,m:240000},{n:"어시스트핏",i:1,t:1,p:1,a:1,r:100,m:120000},{n:"인터링크솔루션",i:1,t:1,p:1,a:1,r:100,m:120000},{n:"푸딘코",i:1,t:1,p:1,a:1,r:100,m:120000},{n:"이지정보기술",i:1,t:1,p:1,a:1,r:100,m:120000},{n:"오토뱅킹서비스",i:1,t:1,p:1,a:1,r:100,m:120000},{n:"부일정보",i:1,t:1,p:1,a:1,r:100,m:120000},{n:"우림정보통신",i:1,t:1,p:1,a:1,r:100,m:120000},{n:"더존포스",i:1,t:1,p:1,a:1,r:100,m:120000},{n:"토브제이",i:1,t:1,p:1,a:1,r:100,m:120000},{n:"제이에이치넷",i:1,t:1,p:1,a:1,r:100,m:120000},{n:"우리편",i:64,t:63,p:62,a:58,r:90.6,m:6960000},{n:"가나정보통신",i:10,t:10,p:9,a:9,r:90,m:1080000},{n:"엠제이통신",i:82,t:80,p:81,a:72,r:87.8,m:8640000},{n:"원정보통신",i:8,t:8,p:7,a:7,r:87.5,m:840000},{n:"코스모스컴퍼니",i:6,t:5,p:6,a:5,r:83.3,m:600000},{n:"페이닷",i:6,t:6,p:6,a:5,r:83.3,m:600000},{n:"씨앤씨(CNC)일신",i:6,t:6,p:5,a:5,r:83.3,m:600000},{n:"그린정보통신",i:17,t:15,p:15,a:14,r:82.4,m:1680000},{n:"현은시스템",i:57,t:48,p:52,a:45,r:78.9,m:5400000},{n:"한울정보",i:3,t:2,p:2,a:2,r:66.7,m:240000},{n:"디에스이엔씨",i:3,t:3,p:3,a:2,r:66.7,m:240000},{n:"스타포스",i:3,t:3,p:3,a:2,r:66.7,m:240000},{n:"에스정보",i:8,t:6,p:7,a:5,r:62.5,m:600000},{n:"지앤비시스템",i:11,t:8,p:10,a:6,r:54.5,m:720000},{n:"비에이치소프트",i:125,t:119,p:85,a:66,r:52.8,m:7920000},{n:"제이엔디아이정보통신",i:2,t:1,p:2,a:1,r:50,m:120000},{n:"샘랩",i:16,t:13,p:11,a:7,r:43.8,m:840000},{n:"이레페이",i:3,t:2,p:3,a:1,r:33.3,m:120000},{n:"우성포스",i:46,t:24,p:25,a:14,r:30.4,m:1680000},{n:"제이투시스템",i:3,t:3,p:0,a:0,r:0,m:0},{n:"포스트렌드",i:2,t:2,p:0,a:0,r:0,m:0},{n:"페이플레이 안양센터",i:1,t:0,p:1,a:0,r:0,m:0},{n:"소프트커머스",i:1,t:1,p:0,a:0,r:0,m:0},{n:"은성피엔피(애드포인트)",i:1,t:0,p:0,a:0,r:0,m:0}];
+
+const STAGES_AUG = [
+  {name:'설치수',             label:['설치수'],                num:590},
+  {name:'토스페이 청약 완료',   label:['토스페이','청약 완료'],    num:534},
+  {name:'통합결제창 1건 이상',  label:['통합결제창','1건 이상'],   num:501},
+  {name:'조건 달성',           label:['조건 달성'],             num:432}
 ];
 
 
@@ -1550,6 +1899,128 @@ document.getElementById('ctHiJul').textContent = `100% 완전 달성 (${FULL_LIS
 document.getElementById('ctLoJul').textContent = `50% 이하 저조 (${LOW_LIST_JUL.length}개사)`;
 document.getElementById('chipsHiJul').innerHTML = FULL_LIST_JUL.map(n => `<span class="chip hi">${n}</span>`).join('');
 document.getElementById('chipsLoJul').innerHTML = LOW_LIST_JUL.map(n => `<span class="chip lo">${n}</span>`).join('');
+
+(function renderTopNetAug(){
+  document.querySelector('#tblTopNetAug tbody').innerHTML = TOP_NET_AUG.map((d, i) => `
+    <tr class="${i < 3 ? 'r' + (i + 1) : ''}">
+      <td><span class="rank">${i + 1}</span>${d.n}</td>
+      <td class="num">${d.p}</td>
+      <td class="num ${d.net >= 0 ? 'pos' : 'neg'}">${d.net >= 0 ? '' : '−'}${won(Math.abs(d.net))}</td>
+      <td class="num">${Math.round(d.net / d.p).toLocaleString()}</td>
+    </tr>`).join('');
+})();
+
+(function renderNegNetAug(){
+  document.querySelector('#tblNegNetAug tbody').innerHTML = NEG_NET_AUG.map(d => `
+    <tr>
+      <td>${d.n}</td>
+      <td class="num">${d.p}</td>
+      <td class="num neg">−${won(Math.abs(d.net))}</td>
+    </tr>`).join('');
+})();
+
+/* ---- 계약 유형별 수익성 — 8월은 전체 합계가 마이너스라 shareStable=false 분기를 탄다 ---- */
+const CONTRACT_TYPE_GROUPS_AUG = groupByContractType(CONTRACT_TYPE_AUG);
+
+(function renderContractTypeAug(){
+  const totalNet = CONTRACT_TYPE_AUG.reduce((a, d) => a + d.net, 0);
+  const shareStable = totalNet > 0;
+
+  document.querySelector('#tblContractTypeAug tbody').innerHTML = CONTRACT_TYPE_GROUPS_AUG.map(g => `
+    <tr>
+      <td>${g.type}</td>
+      <td class="num">${g.count}</td>
+      <td class="num">${g.installs}</td>
+      <td class="num ${g.sum >= 0 ? 'pos' : 'neg'}">${g.sum >= 0 ? '' : '−'}${won(Math.abs(g.sum))}</td>
+      <td class="num ${g.avg >= 0 ? 'pos' : 'neg'}">${g.avg >= 0 ? '' : '−'}${won(Math.abs(g.avg))}</td>
+      <td class="num">${shareStable ? g.share.toFixed(1) + '%' : '—'}</td>
+    </tr>`).join('');
+
+  const byAvgDesc = [...CONTRACT_TYPE_GROUPS_AUG].sort((a, b) => b.avg - a.avg);
+  const best = byAvgDesc[0];
+  const worst = byAvgDesc[byAvgDesc.length - 1];
+  const allNegative = CONTRACT_TYPE_GROUPS_AUG.every(g => g.sum < 0);
+
+  document.getElementById('contractTypeInsightAug').innerHTML = shareStable
+    ? `<b>${best.type}</b> ${best.count}곳이 대리점당 평균 <b>${fmtSigned(best.avg)}</b>로 가장 높습니다.`
+    : allNegative
+      ? `<b>계약 ${CONTRACT_TYPE_AUG.length}개사 전체가 순매출 마이너스</b>(합계 ${fmtSigned(totalNet)})로 전환됐습니다. 대리점당 평균 손실이 가장 큰 유형은 <b>${worst.type}</b>(${fmtSigned(worst.avg)}, ${worst.count}곳 — 우리편·엠제이통신 단 2곳의 대형 손실 때문)이고, 상대적으로 손실이 가장 작은 유형은 <b>${best.type}</b>(${fmtSigned(best.avg)}, ${best.count}곳)입니다. 7월까지 유일한 흑자 유형이던 <b>${worst.type}</b>이 8월 최대 손실 유형으로 반전됐습니다.`
+      : `<b>${best.type}</b> ${best.count}곳의 대리점당 평균이 <b>${fmtSigned(best.avg)}</b>로 가장 높고, 계약 ${CONTRACT_TYPE_AUG.length}개사 전체 순매출 합계는 ${fmtSigned(totalNet)}입니다.`;
+})();
+
+(function renderContractTypeDealerGroupsAug(){
+  document.getElementById('contractTypeDealerGroupsAug').innerHTML = CONTRACT_TYPE_GROUPS_AUG.map(g => {
+    const dealers = CONTRACT_TYPE_AUG.filter(d => d.type === g.type).sort((a, b) => b.net - a.net);
+    const rows = dealers.map(d => `
+      <tr>
+        <td>${d.n}</td>
+        <td class="num">${d.p > 0 ? d.p : '—'}</td>
+        <td class="num ${d.net >= 0 ? 'pos' : 'neg'}">${d.net >= 0 ? '' : '−'}${won(Math.abs(d.net))}</td>
+      </tr>`).join('');
+    return `
+      <details class="type-group"${dealers.length <= 5 ? ' open' : ''}>
+        <summary>
+          <span>${g.type} (${g.count}곳)</span>
+          <span class="meta">순매출 합계 <b class="${g.sum >= 0 ? 'pos' : 'neg'}">${g.sum >= 0 ? '' : '−'}${won(Math.abs(g.sum))}</b></span>
+        </summary>
+        <div class="table-wrap${dealers.length > 10 ? ' scroll' : ''}">
+          <table>
+            <thead><tr><th>대리점</th><th class="num">실적</th><th class="num">순매출</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </details>`;
+  }).join('');
+})();
+
+(function renderPromoAug(){
+  const cls = r => r >= 100 ? 'full' : r >= 50 ? 'mid' : r > 0 ? 'low' : 'zero';
+  const sum = k => PROMO_AUG.reduce((a, d) => a + d[k], 0);
+  const rows = PROMO_AUG.map(d => `
+    <tr>
+      <td>${d.n}</td>
+      <td class="num">${d.i}</td><td class="num">${d.t}</td><td class="num">${d.p}</td><td class="num">${d.a}</td>
+      <td class="num"><span class="pill ${cls(d.r)}">${d.r.toFixed(1)}%</span></td>
+      <td class="num">${d.m > 0 ? d.m.toLocaleString() : '—'}</td>
+    </tr>`).join('');
+  const tot = `
+    <tr class="total">
+      <td>총합계 (${PROMO_AUG.length}개사)</td>
+      <td class="num">${sum('i')}</td><td class="num">${sum('t')}</td><td class="num">${sum('p')}</td><td class="num">${sum('a')}</td>
+      <td class="num"><span class="pill mid">${(sum('a') / sum('i') * 100).toFixed(1)}%</span></td>
+      <td class="num">${sum('m').toLocaleString()}</td>
+    </tr>`;
+  document.querySelector('#tblPromoAug tbody').innerHTML = rows + tot;
+})();
+
+(function renderFunnelStripAug(){
+  const base = STAGES_AUG[0].num;
+  let html = '';
+  STAGES_AUG.forEach((s, i) => {
+    if (i > 0) html += `<div class="funnel-drop">−${(STAGES_AUG[i - 1].num - s.num).toLocaleString()}건 →</div>`;
+    const last = i === STAGES_AUG.length - 1;
+    html += `<div class="funnel-pill">
+      <div class="n"${last ? ' style="color:var(--accent)"' : ''}>${s.num.toLocaleString()}건</div>
+      <div class="l">${s.name}</div>
+      <div class="p">설치 대비 ${(s.num / base * 100).toFixed(1)}%</div>
+    </div>`;
+  });
+  document.getElementById('funnelStripAug').innerHTML = html;
+})();
+
+/* 구간 명단·분포는 PROMO_AUG 원자료에서 직접 집계 */
+const FULL_LIST_AUG = PROMO_AUG.filter(d => d.r >= 100).map(d => d.n);
+const LOW_LIST_AUG  = PROMO_AUG.filter(d => d.r <= 50).map(d => d.n);
+const DIST_AUG = [
+  {label:'80% 이상', n: PROMO_AUG.filter(d => d.r >= 80).length},
+  {label:'50~80%',  n: PROMO_AUG.filter(d => d.r >= 50 && d.r < 80).length},
+  {label:'30~50%',  n: PROMO_AUG.filter(d => d.r >= 30 && d.r < 50).length},
+  {label:'30% 미만', n: PROMO_AUG.filter(d => d.r < 30).length}
+];
+document.getElementById('ctHiAug').textContent = `100% 완전 달성 (${FULL_LIST_AUG.length}개사)`;
+document.getElementById('ctLoAug').textContent = `50% 이하 저조 (${LOW_LIST_AUG.length}개사)`;
+document.getElementById('chipsHiAug').innerHTML = FULL_LIST_AUG.map(n => `<span class="chip hi">${n}</span>`).join('');
+document.getElementById('chipsLoAug').innerHTML = LOW_LIST_AUG.map(n => `<span class="chip lo">${n}</span>`).join('');
 
 (function renderPromo(){
   const cls = r => r >= 100 ? 'full' : r >= 50 ? 'mid' : r > 0 ? 'low' : 'zero';
@@ -1894,6 +2365,115 @@ const BUILDERS = {
       plugins:{
         legend:{ display:false },
         tooltip:{ callbacks:{ label: c => ' ' + c.raw + '개사 / ' + PROMO_JUL.length + '개사' } },
+        datalabels:{ display:true, anchor:'end', align:'end', offset:4, color:ink(), font:{weight:700, size:11}, formatter: v => v + '개사' }
+      },
+      scales:{
+        x:{ grid:{ color:gridLine() }, border:{ display:false }, ticks:{ color:inkDim(), font:{size:11}, precision:0 } },
+        y:{ grid:{ display:false }, border:{ display:false }, ticks:{ color:inkDim(), font:{size:12} } }
+      }
+    }
+  }),
+
+  chartRevenueAug: el => donut(
+    el,
+    ['토스수수료','토스플레이스 프로모션','CMS','밴피 (추정 E)','장비판매대금'],
+    [82197550, 25331230, 20264476, 9882076, 4610000],
+    P().cat
+  ),
+  chartCostAug: el => donut(
+    el,
+    ['무상임대 (프론트)','CMS 감가','물류비','프로모션'],
+    [105560000, 32165965, 2643060, 54960000],
+    P().cat.slice(0, 4)
+  ),
+  chartTopNetAug: el => hBar(el, TOP_NET_AUG.map(d => d.n), TOP_NET_AUG.map(d => d.net), P().pos, false),
+  chartNegNetAug: el => hBar(el, NEG_NET_AUG.map(d => d.n), NEG_NET_AUG.map(d => d.net), P().neg, true),
+
+  chartScatterAug: el => new Chart(el, {
+    type:'scatter',
+    data:{ datasets:[
+      { label:'흑자',
+        data: SCATTER_AUG.filter(d => d.net >= 0).map(d => ({x:d.p, y:d.net, n:d.n})),
+        backgroundColor:P().pos, pointRadius:6, pointHoverRadius:8,
+        pointBorderColor:surface(), pointBorderWidth:2 },
+      { label:'적자',
+        data: SCATTER_AUG.filter(d => d.net < 0).map(d => ({x:d.p, y:d.net, n:d.n})),
+        backgroundColor:P().neg, pointStyle:'triangle', pointRadius:7, pointHoverRadius:9,
+        pointBorderColor:surface(), pointBorderWidth:2 }
+    ]},
+    options:{
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{ position:'top', labels:{ color:inkDim(), boxWidth:10, usePointStyle:true, font:{size:11} } },
+        tooltip:{ callbacks:{ label: c => ' ' + c.raw.n + ' · 실적 ' + c.raw.x + '건 · 순매출 ' + won(c.raw.y) + '원' } }
+      },
+      scales:{
+        x:{ title:{ display:true, text:'8월 실적 (건)', color:inkDim(), font:{size:11} },
+            grid:{ color:gridLine() }, border:{ display:false },
+            ticks:{ color:inkDim(), font:{size:11} } },
+        y:{ title:{ display:true, text:'순매출 (원)', color:inkDim(), font:{size:11} },
+            grid:{ color: c => c.tick.value === 0 ? inkDim() : gridLine() }, border:{ display:false },
+            ticks:{ color:inkDim(), font:{size:11}, callback: v => won(v) } }
+      }
+    }
+  }),
+
+  chartContractTypeAug: el => groupedBar(
+    el,
+    CONTRACT_TYPE_GROUPS_AUG.map(g => g.type),
+    [
+      { label:'순매출 합계', data: CONTRACT_TYPE_GROUPS_AUG.map(g => g.sum), backgroundColor: P().cat[0], borderRadius:4 },
+      { label:'대리점당 평균', data: CONTRACT_TYPE_GROUPS_AUG.map(g => g.avg), backgroundColor: P().cat[1], borderRadius:4 }
+    ]
+  ),
+
+  chartStageFunnelAug: el => new Chart(el, {
+    type:'bar',
+    data:{
+      labels: STAGES_AUG.map(s => s.label),
+      datasets:[{
+        label:'잔존 건수',
+        data: STAGES_AUG.map(s => s.num),
+        backgroundColor: [...P().ord].reverse(),
+        borderRadius:4,
+        barPercentage:.7
+      }]
+    },
+    options:{
+      maintainAspectRatio:false,
+      layout:{ padding:{ top:26 } },
+      plugins:{
+        legend:{ display:false },
+        tooltip:{ callbacks:{
+          label: c => ' ' + c.raw.toLocaleString() + '건 · 설치 대비 ' + (c.raw / STAGES_AUG[0].num * 100).toFixed(1) + '%',
+          afterLabel: c => c.dataIndex === 0 ? '' : '이전 단계 대비 −' + (STAGES_AUG[c.dataIndex - 1].num - c.raw).toLocaleString() + '건'
+        } },
+        datalabels:{
+          display:true, anchor:'end', align:'top', offset:4,
+          color: ink(), font:{ weight:700, size:11 },
+          formatter: (v, c) => v.toLocaleString() + '건 (' + (v / STAGES_AUG[0].num * 100).toFixed(1) + '%)'
+        }
+      },
+      scales:{
+        x:{ grid:{ display:false }, border:{ display:false }, ticks:{ color:inkDim(), font:{size:11.5} } },
+        y:{ grid:{ color:gridLine() }, border:{ display:false }, ticks:{ color:inkDim(), font:{size:11} } }
+      }
+    }
+  }),
+
+  chartFunnelDistAug: el => new Chart(el, {
+    type:'bar',
+    data:{
+      labels: DIST_AUG.map(d => d.label),
+      datasets:[{ label:'대리점 수', data: DIST_AUG.map(d => d.n), backgroundColor:P().ord, borderRadius:4, barPercentage:.7 }]
+    },
+    options:{
+      indexAxis:'y',
+      maintainAspectRatio:false,
+      layout:{ padding:{ right:46 } },
+      plugins:{
+        legend:{ display:false },
+        tooltip:{ callbacks:{ label: c => ' ' + c.raw + '개사 / ' + PROMO_AUG.length + '개사' } },
         datalabels:{ display:true, anchor:'end', align:'end', offset:4, color:ink(), font:{weight:700, size:11}, formatter: v => v + '개사' }
       },
       scales:{
